@@ -8,25 +8,29 @@
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
         :root {
-            --bg-base: #050505;
-            --bg-panel: rgba(15, 15, 17, 0.85);
-            --bg-elevated: rgba(255, 255, 255, 0.05);
-            --bg-input: rgba(255, 255, 255, 0.08);
+            --bg-glass-panel: rgba(255, 255, 255, 0.15);
+            --bg-glass-elevated: rgba(255, 255, 255, 0.25);
+            --bg-glass-input: rgba(255, 255, 255, 0.1);
             --text-primary: #FFFFFF;
-            --text-secondary: rgba(255, 255, 255, 0.6);
-            --text-tertiary: rgba(255, 255, 255, 0.4);
-            --accent-yellow: #FFD60A;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            --text-tertiary: rgba(255, 255, 255, 0.6);
             --accent-blue: #0A84FF;
             --success: #30D158;
             --danger: #FF453A;
-            --border-light: rgba(255, 255, 255, 0.1);
+            --accent-yellow: #FFD60A;
+            --border-light: rgba(255, 255, 255, 0.3);
+            --border-highlight: inset 0 1px 1px rgba(255, 255, 255, 0.4);
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: var(--bg-base);
+            background: url('https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?q=80&w=2070&auto=format&fit=crop') no-repeat center center fixed; 
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
             color: var(--text-primary);
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
@@ -38,18 +42,6 @@
             position: relative;
         }
 
-        /* Background Spheres */
-        .bg-sphere {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(100px);
-            z-index: -1;
-            opacity: 0.4;
-        }
-        .sphere-1 { width: 600px; height: 600px; background: var(--accent-blue); top: -200px; left: -200px; }
-        .sphere-2 { width: 500px; height: 500px; background: var(--accent-yellow); bottom: -150px; right: -150px; }
-        .sphere-3 { width: 400px; height: 400px; background: #FF2D55; top: 40%; left: 50%; transform: translate(-50%, -50%); opacity: 0.15; }
-
         .hidden { display: none !important; }
 
         /* Navbar */
@@ -59,13 +51,19 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 10px;
+            padding: 16px 24px;
+            background: var(--bg-glass-panel);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--border-light);
+            border-radius: 100px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1), var(--border-highlight);
         }
-        .nav-logo { font-size: 20px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.02em; cursor: pointer; }
-        .nav-logo span { color: var(--accent-yellow); }
+        .nav-logo { font-size: 20px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.02em; cursor: pointer; text-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        .nav-logo span { color: var(--text-primary); }
         .nav-links { display: flex; gap: 24px; }
         .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 600; transition: color 0.2s; cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em; }
-        .nav-links a:hover { color: var(--accent-yellow); }
+        .nav-links a:hover { color: var(--text-primary); }
         @media (max-width: 600px) { .nav-links { gap: 16px; } .nav-links a { font-size: 12px; } }
 
         #app-wrapper {
@@ -82,30 +80,30 @@
         }
 
         .panel {
-            background-color: var(--bg-panel);
+            background-color: var(--bg-glass-panel);
             backdrop-filter: blur(20px) saturate(150%);
             -webkit-backdrop-filter: blur(20px) saturate(150%);
             border: 1px solid var(--border-light);
             border-radius: 24px;
             padding: 40px;
             position: relative;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1), var(--border-highlight);
         }
 
         @media (max-width: 820px) {
             .panel { padding: 32px 24px; border-radius: 20px; }
         }
 
-        h1 { font-size: 48px; font-weight: 800; letter-spacing: -0.03em; text-align: center; margin-bottom: 12px; color: var(--text-primary); line-height: 1.1; }
-        h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 16px; }
+        h1 { font-size: 48px; font-weight: 800; letter-spacing: -0.03em; text-align: center; margin-bottom: 12px; color: var(--text-primary); line-height: 1.1; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 16px; text-shadow: 0 1px 2px rgba(0,0,0,0.1); }
         h3 { font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
-        p { font-size: 16px; color: var(--text-secondary); line-height: 1.5; text-align: center; margin-bottom: 32px; }
+        p { font-size: 16px; color: var(--text-secondary); line-height: 1.5; text-align: center; margin-bottom: 32px; text-shadow: 0 1px 2px rgba(0,0,0,0.1); }
 
         .tabular { font-variant-numeric: tabular-nums; }
 
         input[type="text"], input[type="number"], select {
             width: 100%;
-            background-color: var(--bg-input);
+            background-color: var(--bg-glass-input);
             border: 1px solid var(--border-light);
             border-radius: 12px;
             padding: 14px 16px;
@@ -117,13 +115,15 @@
             transition: border-color 0.15s, background-color 0.15s;
             -webkit-appearance: none;
             appearance: none;
+            backdrop-filter: blur(5px);
         }
 
         input:focus, select:focus {
             outline: none;
-            background-color: rgba(255, 255, 255, 0.12);
-            border-color: var(--accent-blue);
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
         }
+        input::placeholder { color: var(--text-tertiary); }
 
         select {
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path fill="%23ffffff" d="M6 9L1 4h10z"/></svg>');
@@ -131,59 +131,62 @@
             background-position: right 16px center;
             cursor: pointer;
         }
-        select option { background-color: #1c1c1e; color: #fff; }
+        select option { background-color: #222; color: #fff; }
 
         button {
             width: 100%;
             padding: 14px 24px;
-            border: none;
+            border: 1px solid var(--border-light);
             border-radius: 12px;
             font-family: inherit;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: background-color 0.2s, transform 0.1s;
-            background-color: var(--bg-elevated);
+            background-color: var(--bg-glass-elevated);
             color: var(--text-primary);
-            border: 1px solid var(--border-light);
             line-height: 1.2;
             text-transform: uppercase;
             letter-spacing: 0.03em;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1), var(--border-highlight);
         }
 
-        button:hover { background-color: rgba(255, 255, 255, 0.12); border-color: rgba(255,255,255,0.2); }
+        button:hover { background-color: rgba(255, 255, 255, 0.35); border-color: rgba(255,255,255,0.5); }
         button:active { transform: scale(0.98); }
         button:disabled { opacity: 0.4; cursor: not-allowed; }
 
-        .btn-primary { background-color: var(--accent-blue); color: #fff; border: none; }
-        .btn-primary:hover { background-color: #0077ed; }
-        .btn-danger { background-color: var(--danger); color: #fff; border: none; }
-        .btn-danger:hover { background-color: #e0342a; }
-        .btn-gold { background-color: var(--accent-yellow); color: #000; border: none; }
-        .btn-gold:hover { background-color: #e6c000; }
+        .btn-primary { background-color: rgba(10, 132, 255, 0.8); border: none; color: #fff; box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3); }
+        .btn-primary:hover { background-color: rgba(10, 132, 255, 0.9); }
+        .btn-danger { background-color: rgba(255, 69, 58, 0.8); border: none; color: #fff; box-shadow: 0 4px 15px rgba(255, 69, 58, 0.3); }
+        .btn-danger:hover { background-color: rgba(255, 69, 58, 0.9); }
+        .btn-gold { background-color: rgba(255, 214, 10, 0.8); border: none; color: #000; box-shadow: 0 4px 15px rgba(255, 214, 10, 0.3); }
+        .btn-gold:hover { background-color: rgba(255, 214, 10, 0.9); }
+        .btn-ghost { background: transparent; border: 1px solid var(--border-light); color: var(--text-secondary); box-shadow: none; }
+        .btn-ghost:hover { background: rgba(255,255,255,0.1); color: #fff; }
 
         .menu-cta { display: flex; gap: 12px; justify-content: center; margin-top: 8px; }
         .menu-cta button { width: auto; padding-left: 32px; padding-right: 32px; }
-        .form-row { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; background: var(--bg-input); border: 1px solid var(--border-light); border-radius: 12px; padding: 4px 16px 4px 16px; }
+        .form-row { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; background: var(--bg-glass-input); border: 1px solid var(--border-light); border-radius: 12px; padding: 4px 16px 4px 16px; }
         .form-row label { font-size: 13px; color: var(--text-secondary); width: 100px; font-weight: 500; }
         .form-row select { border: none; background: transparent; margin: 0; padding: 10px 0; flex: 1; background-position: right 0 center; }
         .form-row select:focus { box-shadow: none; background-color: transparent; }
         
         .lobby-info { text-align: center; margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--border-light); }
-        .room-code { font-size: 48px; font-weight: 800; color: var(--accent-yellow); letter-spacing: 0.05em; font-variant-numeric: tabular-nums; display: block; margin-top: 4px; text-shadow: 0 0 20px rgba(255, 214, 10, 0.3); }
+        .room-code { font-size: 48px; font-weight: 800; color: var(--text-primary); letter-spacing: 0.05em; font-variant-numeric: tabular-nums; display: block; margin-top: 4px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         
-        .list-container { background-color: var(--bg-input); border: 1px solid var(--border-light); border-radius: 16px; overflow: hidden; }
+        .list-container { background-color: var(--bg-glass-input); border: 1px solid var(--border-light); border-radius: 16px; overflow: hidden; }
         .list-item { padding: 16px 20px; font-size: 16px; color: var(--text-primary); border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; }
         .list-item:last-child { border-bottom: none; }
 
         .game-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--border-light); }
-        .timer-val { font-size: 64px; font-weight: 800; color: var(--text-primary); font-variant-numeric: tabular-nums; line-height: 1; letter-spacing: -0.04em; }
-        .timer-warning { color: var(--danger); text-shadow: 0 0 20px rgba(255, 69, 58, 0.4); }
+        .timer-val { font-size: 64px; font-weight: 800; color: var(--text-primary); font-variant-numeric: tabular-nums; line-height: 1; letter-spacing: -0.04em; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .timer-warning { color: var(--danger); }
         .game-subtitle { font-size: 14px; color: var(--text-secondary); margin-top: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
 
         .vote-grid { display: grid; grid-template-columns: 1fr; gap: 12px; max-width: 400px; margin: 0 auto; }
-        .vote-btn { padding: 18px; text-align: center; font-weight: 600; font-size: 17px; background-color: var(--bg-elevated); border: 1px solid var(--border-light); border-radius: 14px; color: var(--text-primary); }
-        .vote-btn:hover { background-color: rgba(255, 255, 255, 0.12); border-color: var(--accent-blue); color: var(--accent-blue); }
+        .vote-btn { padding: 18px; text-align: center; font-weight: 600; font-size: 17px; background-color: var(--bg-glass-elevated); border: 1px solid var(--border-light); border-radius: 14px; color: var(--text-primary); }
+        .vote-btn:hover { background-color: rgba(255, 255, 255, 0.35); border-color: rgba(255,255,255,0.5); }
 
         .stat-rank { font-size: 14px; color: var(--text-secondary); width: 24px; }
         .stat-name { color: var(--text-primary); font-size: 16px; font-weight: 600; flex: 1; padding-left: 12px; }
@@ -195,69 +198,69 @@
         @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-8px); } 50% { transform: translateX(8px); } 75% { transform: translateX(-4px); } 100% { transform: translateX(0); } }
 
         .balance-display { font-size: 14px; font-weight: 600; color: var(--text-secondary); margin-bottom: 32px; font-variant-numeric: tabular-nums; transition: color 0.2s; display: flex; align-items: baseline; gap: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
-        .balance-display .val { color: var(--accent-yellow); font-size: 36px; font-weight: 800; letter-spacing: -0.02em; text-shadow: 0 0 15px rgba(255, 214, 10, 0.3); }
+        .balance-display .val { color: var(--accent-yellow); font-size: 36px; font-weight: 800; letter-spacing: -0.02em; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         .balance-display.win .val { color: var(--success); text-shadow: 0 0 20px rgba(48, 209, 88, 0.5); }
-        .balance-display.loss .val { color: var(--danger); text-shadow: none; }
+        .balance-display.loss .val { color: var(--danger); }
 
-        .bet-controls { display: flex; justify-content: center; align-items: stretch; gap: 12px; margin-top: 32px; width: 100%; max-width: 440px; }
-        .bet-input { width: 120px; margin: 0; text-align: center; font-size: 18px; font-weight: 700; background-color: var(--bg-input); border: 1px solid var(--border-light); color: var(--accent-yellow); border-radius: 12px; }
+        .bet-controls { display: flex; justify-content: center; align-items: stretch; gap: 12px; margin-top: 32px; width: 100%; max-width: 600px; }
+        .bet-input { width: 120px; margin: 0; text-align: center; font-size: 18px; font-weight: 700; background-color: var(--bg-glass-input); border: 1px solid var(--border-light); color: var(--text-primary); border-radius: 12px; }
         .action-btn { width: auto; padding: 14px 24px; margin: 0; border-radius: 12px; }
         
         .cooldown { opacity: 0.5; pointer-events: none; }
-        .action-msg { font-size: 24px; font-weight: 800; min-height: 30px; margin-top: 24px; font-variant-numeric: tabular-nums; color: var(--text-secondary); letter-spacing: -0.02em; }
+        .action-msg { font-size: 24px; font-weight: 800; min-height: 30px; margin-top: 24px; font-variant-numeric: tabular-nums; color: var(--text-primary); letter-spacing: -0.02em; text-shadow: 0 1px 2px rgba(0,0,0,0.1); }
         .win-msg { color: var(--success); text-shadow: 0 0 15px rgba(48, 209, 88, 0.4); }
         .loss-msg { color: var(--danger); text-shadow: 0 0 15px rgba(255, 69, 58, 0.4); }
 
-        .slot-machine { display: flex; justify-content: center; gap: 16px; font-size: 48px; margin-bottom: 32px; background-color: rgba(0, 0, 0, 0.3); padding: 32px; border-radius: 20px; border: 1px solid var(--border-light); box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
+        .slot-machine { display: flex; justify-content: center; gap: 16px; font-size: 48px; margin-bottom: 32px; background-color: rgba(0, 0, 0, 0.2); padding: 32px; border-radius: 20px; border: 1px solid var(--border-light); box-shadow: inset 0 0 20px rgba(0,0,0,0.2); backdrop-filter: blur(10px); }
         .slot-reel { width: 70px; height: 60px; display: flex; align-items: center; justify-content: center; }
         .spinning { opacity: 0.5; animation: spin 0.1s linear infinite; }
         @keyframes spin { 0% { transform: translateY(-12px); } 50% { transform: translateY(12px); } 100% { transform: translateY(-12px); } }
 
         .card-container { display: flex; justify-content: center; gap: 12px; margin-bottom: 32px; min-height: 100px; flex-wrap: wrap; }
-        .card { width: 64px; height: 90px; background: linear-gradient(145deg, #ffffff, #e6e6e6); color: #000; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 24px; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.4); border: 1px solid rgba(0,0,0,0.1); }
+        .card { width: 64px; height: 90px; background: linear-gradient(145deg, #ffffff, #e6e6e6); color: #000; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 24px; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.5); }
         .card.red { color: var(--danger); }
         .card.hold { box-shadow: 0 0 0 3px var(--accent-blue), 0 4px 12px rgba(0,0,0,0.4); }
         
         .grid-tower { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 280px; margin-bottom: 32px; }
-        .grid-keno { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; max-width: 440px; margin-bottom: 32px; }
+        .grid-keno { display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px; max-width: 600px; margin-bottom: 32px; }
         .grid-mines { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 300px; margin: 0 auto 32px auto; }
-        .tile { background-color: var(--bg-elevated); border: 1px solid var(--border-light); padding: 14px 0; text-align: center; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 16px; color: var(--text-primary); transition: 0.1s; }
-        .tile:hover { background-color: rgba(255, 255, 255, 0.12); }
-        .tile.safe { background-color: var(--success); color: #000; border-color: transparent; box-shadow: 0 0 15px rgba(48, 209, 88, 0.3); }
-        .tile.bomb { background-color: var(--danger); color: #fff; border-color: transparent; box-shadow: 0 0 15px rgba(255, 69, 58, 0.3); }
-        .tile.selected { background-color: var(--accent-blue); color: #fff; border-color: transparent; box-shadow: 0 0 15px rgba(10, 132, 255, 0.3); }
-        .tile.hit { background-color: var(--success); color: #000; border-color: transparent; box-shadow: 0 0 15px rgba(48, 209, 88, 0.3); }
-        .tile.disabled { pointer-events: none; opacity: 0.4; }
+        .tile { background-color: var(--bg-glass-elevated); border: 1px solid var(--border-light); padding: 14px 0; text-align: center; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 16px; color: var(--text-primary); transition: 0.1s; box-shadow: 0 2px 8px rgba(0,0,0,0.1), var(--border-highlight); }
+        .tile:hover { background-color: rgba(255, 255, 255, 0.35); }
+        .tile.safe { background-color: rgba(48, 209, 88, 0.8); color: #000; border-color: transparent; box-shadow: 0 0 15px rgba(48, 209, 88, 0.3); }
+        .tile.bomb { background-color: rgba(255, 69, 58, 0.8); color: #fff; border-color: transparent; box-shadow: 0 0 15px rgba(255, 69, 58, 0.3); }
+        .tile.selected { background-color: rgba(10, 132, 255, 0.8); color: #fff; border-color: transparent; box-shadow: 0 0 15px rgba(10, 132, 255, 0.3); }
+        .tile.hit { background-color: rgba(48, 209, 88, 0.8); color: #000; border-color: transparent; box-shadow: 0 0 15px rgba(48, 209, 88, 0.3); }
+        .tile.disabled { pointer-events: none; opacity: 0.3; background: transparent; border-color: rgba(255,255,255,0.1); box-shadow: none; }
         .mine-tile { height: 50px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
 
         .plinko-board { display: flex; gap: 8px; margin-bottom: 32px; width: 100%; max-width: 440px; }
-        .plinko-mult { flex: 1; padding: 16px 0; background-color: var(--bg-elevated); border: 1px solid var(--border-light); border-radius: 12px; font-weight: 700; font-size: 16px; text-align: center; color: var(--text-primary); transition: 0.1s; }
-        .plinko-mult.active { background-color: var(--accent-yellow); color: #000; border-color: transparent; transform: scale(1.1); box-shadow: 0 0 20px rgba(255, 214, 10, 0.4); }
+        .plinko-mult { flex: 1; padding: 16px 0; background-color: var(--bg-glass-elevated); border: 1px solid var(--border-light); border-radius: 12px; font-weight: 700; font-size: 16px; text-align: center; color: var(--text-primary); transition: 0.1s; box-shadow: 0 2px 8px rgba(0,0,0,0.1), var(--border-highlight); }
+        .plinko-mult.active { background-color: rgba(255, 214, 10, 0.9); color: #000; border-color: transparent; transform: scale(1.1); box-shadow: 0 0 20px rgba(255, 214, 10, 0.4); }
         
         .roulette-board { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 32px; max-width: 440px; }
-        .roulette-tile { width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; border-radius: 50%; cursor: pointer; font-weight: 700; font-size: 14px; color: #fff; border: none; transition: 0.1s; }
-        .roul-red { background-color: var(--danger); }
-        .roul-black { background-color: #1c1c1e; border: 1px solid var(--border-light); }
-        .roul-green { background-color: var(--success); color: #fff; }
+        .roulette-tile { width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; border-radius: 50%; cursor: pointer; font-weight: 700; font-size: 14px; color: #fff; border: 1px solid var(--border-light); transition: 0.1s; backdrop-filter: blur(5px); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .roul-red { background-color: rgba(255, 69, 58, 0.8); }
+        .roul-black { background-color: rgba(0, 0, 0, 0.4); }
+        .roul-green { background-color: rgba(48, 209, 88, 0.8); }
         .roulette-tile.selected { box-shadow: 0 0 0 3px var(--accent-blue); }
         .roulette-tile.spinning { box-shadow: 0 0 0 3px var(--accent-yellow); }
 
-        .crash-display { font-size: 64px; font-weight: 800; margin-bottom: 32px; text-align: center; transition: color 0.2s; font-variant-numeric: tabular-nums; letter-spacing: -0.03em; }
-        .crash-display.crashed { color: var(--danger); text-shadow: 0 0 20px rgba(255, 69, 58, 0.4); }
+        .crash-display { font-size: 64px; font-weight: 800; margin-bottom: 32px; text-align: center; transition: color 0.2s; font-variant-numeric: tabular-nums; letter-spacing: -0.03em; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .crash-display.crashed { color: var(--danger); }
         
         .double-display { font-size: 100px; margin-bottom: 32px; text-align: center; transition: transform 0.1s; }
         .double-display.spinning { animation: spin 0.1s linear infinite; }
 
-        #bailout-ui { background-color: rgba(0, 0, 0, 0.3); border: 1px solid var(--danger); padding: 24px; border-radius: 16px; margin-top: 24px; text-align: center; }
+        #bailout-ui { background-color: rgba(0, 0, 0, 0.2); border: 1px solid var(--danger); padding: 24px; border-radius: 16px; margin-top: 24px; text-align: center; backdrop-filter: blur(10px); }
         .next-timer { font-size: 14px; color: var(--text-secondary); text-align: center; font-weight: 500; margin-top: 32px; }
 
-        #skip-round-btn { position: absolute; top: 24px; right: 24px; width: auto; padding: 8px 16px; font-size: 14px; font-weight: 600; background-color: var(--bg-elevated); border: 1px solid var(--border-light); color: var(--text-secondary); border-radius: 980px; backdrop-filter: blur(10px); }
-        #skip-round-btn:hover { background-color: rgba(255,255,255,0.12); color: var(--danger); border-color: var(--danger); }
+        #skip-round-btn { position: absolute; top: 24px; right: 24px; width: auto; padding: 8px 16px; font-size: 14px; font-weight: 600; background-color: var(--bg-glass-elevated); border: 1px solid var(--border-light); color: var(--text-secondary); border-radius: 980px; backdrop-filter: blur(10px); }
+        #skip-round-btn:hover { background-color: rgba(255,255,255,0.35); color: var(--danger); border-color: var(--danger); }
 
         /* Info Modal */
         #info-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.4);
             backdrop-filter: blur(15px) saturate(150%);
             -webkit-backdrop-filter: blur(15px) saturate(150%);
             z-index: 1000; display: flex; justify-content: center; align-items: center;
@@ -266,7 +269,9 @@
         }
         #info-overlay.active { opacity: 1; pointer-events: auto; }
         .info-modal-container {
-            background: var(--bg-panel);
+            background: var(--bg-glass-panel);
+            backdrop-filter: blur(30px) saturate(150%);
+            -webkit-backdrop-filter: blur(30px) saturate(150%);
             border: 1px solid var(--border-light);
             border-radius: 24px;
             max-width: 600px;
@@ -275,7 +280,7 @@
             overflow-y: auto;
             padding: 40px;
             position: relative;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3), var(--border-highlight);
             transform: scale(0.95);
             transition: transform 0.2s;
         }
@@ -283,26 +288,22 @@
         .close-modal-btn {
             position: absolute; top: 20px; right: 20px;
             width: auto; padding: 8px 16px;
-            background: var(--bg-elevated); border: 1px solid var(--border-light);
-            color: var(--text-secondary); border-radius: 980px;
+            background: var(--bg-glass-elevated); border: 1px solid var(--border-light);
+            color: var(--text-primary); border-radius: 980px;
             font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em;
         }
         .close-modal-btn:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
         .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
         @media (max-width: 600px) { .info-grid { grid-template-columns: 1fr; } }
-        .info-item { background: var(--bg-input); padding: 16px; border-radius: 12px; border: 1px solid var(--border-light); display: flex; flex-direction: column; gap: 4px; }
+        .info-item { background: var(--bg-glass-input); padding: 16px; border-radius: 12px; border: 1px solid var(--border-light); display: flex; flex-direction: column; gap: 4px; }
         .info-item strong { color: var(--accent-yellow); font-size: 16px; }
         .info-item span { color: var(--text-secondary); font-size: 14px; }
         .info-list { list-style: none; padding: 0; margin: 0 0 24px 0; }
-        .info-list li { background: var(--bg-input); margin-bottom: 8px; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-light); color: var(--text-secondary); font-size: 14px; }
+        .info-list li { background: var(--bg-glass-input); margin-bottom: 8px; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-light); color: var(--text-secondary); font-size: 14px; }
         .info-list li strong { color: var(--text-primary); margin-right: 8px; }
     </style>
 </head>
 <body>
-
-    <div class="bg-sphere sphere-1"></div>
-    <div class="bg-sphere sphere-2"></div>
-    <div class="bg-sphere sphere-3"></div>
 
     <nav class="navbar">
         <div class="nav-logo" onclick="navClick('Lobby')">Gamble<span>.</span></div>
@@ -484,7 +485,7 @@ function navClick(page) {
                    <div class="info-item"><strong>Tower</strong><span>Climb without hitting bombs.</span></div>
                    <div class="info-item"><strong>Roulette</strong><span>Red/Black, Even/Odd, or Numbers.</span></div>
                    <div class="info-item"><strong>Balatro</strong><span>5-card draw poker. Up to 15x for Straight Flush.</span></div>
-                   <div class="info-item"><strong>Keno</strong><span>Pick 5 numbers. Match up to 10 drawn. 50x max.</span></div>
+                   <div class="info-item"><strong>Keno</strong><span>Pick up to 10 numbers. Match up to 10 drawn. 500x max.</span></div>
                    <div class="info-item"><strong>Mines</strong><span>Find gems, avoid bombs. Cash out anytime.</span></div>
                    <div class="info-item"><strong>Crash</strong><span>Watch the multiplier rise. Cash out before it crashes!</span></div>
                    <div class="info-item"><strong>Double</strong><span>Red or Blue? Double your money or lose it all.</span></div>
@@ -1043,8 +1044,8 @@ function loadBlackjack(area) {
             <button class="btn-danger action-btn" onclick="document.getElementById('bj-bet').value=players[myId].cash; bjDeal(this)">ALL IN</button>
         </div>
         <div class="bet-controls hidden" id="bj-action-ui">
-            <button class="action-btn" onclick="bjHit()">HIT</button>
-            <button class="action-btn" onclick="bjStand()">STAND</button>
+            <button class="btn-ghost action-btn" onclick="bjHit()">HIT</button>
+            <button class="btn-ghost action-btn" onclick="bjStand()">STAND</button>
             <button class="btn-primary action-btn" onclick="bjDouble()">DOUBLE</button>
         </div>
     `;
@@ -1356,27 +1357,33 @@ let kenoDrawing = false;
 function loadKeno(area) {
     area.innerHTML += `
         ${getBalanceHTML()}
-        <h3 style="margin-bottom: 16px; text-align: left; color: var(--text-primary);">Select up to 5 numbers</h3>
+        <h3 style="margin-bottom: 16px; text-align: left; color: var(--text-primary);">Select up to 10 numbers</h3>
         <div class="grid-keno" id="keno-grid"></div>
         <div class="bet-controls">
             <input type="number" id="keno-bet" class="bet-input" value="10" min="1">
             <button id="keno-draw-btn" class="btn-primary action-btn" onclick="playKeno(this)">DRAW</button>
             <button class="btn-danger action-btn" onclick="document.getElementById('keno-bet').value=players[myId].cash; playKeno(document.getElementById('keno-draw-btn'))">ALL IN</button>
+            <button class="btn-ghost action-btn" onclick="clearKenoPicks()">CLEAR</button>
         </div>
     `;
     renderKenoGrid();
 }
-function renderKenoGrid() {
+function clearKenoPicks() {
     kenoPicks = [];
+    renderKenoGrid();
+    playSound('click');
+}
+function renderKenoGrid() {
     let grid = document.getElementById('keno-grid');
     if(!grid) return;
     grid.innerHTML = '';
     for(let i=1; i<=40; i++) {
         let t = document.createElement('div'); t.className='tile'; t.innerText = i; t.id='keno-'+i;
+        if (kenoPicks.includes(i)) t.classList.add('selected');
         t.onclick = () => {
             playSound('click');
             if(kenoPicks.includes(i)) { kenoPicks = kenoPicks.filter(p=>p!=i); t.classList.remove('selected'); }
-            else if (kenoPicks.length < 5) { kenoPicks.push(i); t.classList.add('selected'); }
+            else if (kenoPicks.length < 10) { kenoPicks.push(i); t.classList.add('selected'); }
         };
         grid.appendChild(t);
     }
@@ -1395,14 +1402,15 @@ function playKeno(btn) {
     let drawInt = setInterval(() => {
         if(drawn.length >= 10) {
             clearInterval(drawInt);
-            let payouts = [0, 0, 0, bet*2, bet*10, bet*50];
+            // Payouts for up to 10 picks: 0, 0, 0, 0, 0, 2x, 5x, 10x, 40x, 100x, 500x
+            let payouts = [0, 0, 0, 0, 0, bet*2, bet*5, bet*10, bet*40, bet*100, bet*500];
             let win = payouts[hits];
             if (win > 0) { 
-                if(hits >= 4) { setMsg(getWinMsg(`${hits} Hits`, addWinnings(win, true)), true); }
+                if(hits >= 8) { setMsg(getWinMsg(`${hits} Hits!`, addWinnings(win, true)), true); }
                 else { setMsg(getWinMsg(`${hits} Hits`, addWinnings(win)), true); }
             } else { setMsg(`${hits} Hits. Lost €${bet}`, false); playSound('lose'); }
             setTimeout(() => { 
-                renderKenoGrid(); 
+                renderKenoGrid(); // Restore board, saved picks remain selected
                 btn.disabled = false;
                 kenoDrawing = false;
             }, 2000);
@@ -1418,13 +1426,20 @@ function playKeno(btn) {
 }
 
 // 8. MINES
-let minesState = { active: false, bet: 0, bombs: 3, gems: 0, grid: [] };
+let minesState = { active: false, bet: 0, origBet: 0, bombs: 3, gems: 0, grid: [] };
 function loadMines(area) {
     area.innerHTML += `
         ${getBalanceHTML()}
         <div id="mines-grid" class="grid-mines"></div>
-        <div class="bet-controls" id="mines-bet-ui">
+        <div class="bet-controls" id="mines-bet-ui" style="flex-wrap: wrap; max-width: 320px;">
             <input type="number" id="mines-bet" class="bet-input" value="10" min="1">
+            <select id="mines-count" class="bet-input" style="width: 100px; margin:0;">
+                <option value="1">1 Mine</option>
+                <option value="3" selected>3 Mines</option>
+                <option value="5">5 Mines</option>
+                <option value="10">10 Mines</option>
+                <option value="24">24 Mines</option>
+            </select>
             <button class="btn-primary action-btn" onclick="minesStart(this)">START</button>
             <button class="btn-danger action-btn" onclick="document.getElementById('mines-bet').value=players[myId].cash; minesStart(this)">ALL IN</button>
         </div>
@@ -1432,7 +1447,7 @@ function loadMines(area) {
             <button id="mines-cashout-btn" class="btn-gold action-btn" onclick="minesCashout()">CASH OUT €<span id="mines-pot" class="tabular">0</span></button>
         </div>
     `;
-    minesState = { active: false, bet: 0, bombs: 3, gems: 0, grid: [] };
+    minesState = { active: false, bet: 0, origBet: 0, bombs: 3, gems: 0, grid: [] };
     renderMinesGrid();
 }
 function renderMinesGrid() {
@@ -1444,18 +1459,20 @@ function renderMinesGrid() {
         t.className = 'tile mine-tile';
         if (minesState.grid[i] === 'gem') { t.classList.add('safe'); t.innerText = '💎'; }
         else if (minesState.grid[i] === 'bomb') { t.classList.add('bomb'); t.innerText = '💥'; }
-        else { t.innerText = ''; }
-        
-        if (minesState.active && !minesState.grid[i]) t.onclick = () => minesPick(i);
-        if (!minesState.active) t.classList.add('disabled');
+        else { 
+            t.innerText = minesState.active ? '?' : ''; 
+            if (minesState.active) t.onclick = () => minesPick(i);
+            else t.classList.add('disabled');
+        }
         grid.appendChild(t);
     }
 }
 function minesStart(btn) {
     let bet = parseInt(document.getElementById('mines-bet').value);
     if (!validateBet(bet)) { setMsg("Invalid bet", false); playSound('lose'); return; }
+    let bombs = parseInt(document.getElementById('mines-count')?.value || 3);
     deductBet(bet);
-    minesState = { active: true, bet: bet, bombs: 3, gems: 0, grid: [] };
+    minesState = { active: true, bet: bet, origBet: bet, bombs: bombs, gems: 0, grid: [] };
     document.getElementById('mines-bet-ui').classList.add('hidden');
     document.getElementById('mines-action-ui').classList.remove('hidden');
     document.getElementById('mines-pot').innerText = minesState.bet;
@@ -1464,12 +1481,13 @@ function minesStart(btn) {
     renderMinesGrid();
 }
 function minesPick(idx) {
+    if (!minesState.active || minesState.grid[idx]) return;
     let isBomb = Math.random() < (minesState.bombs / (25 - minesState.gems));
     playSound('click');
     if (isBomb) {
         minesState.active = false;
         minesState.grid[idx] = 'bomb';
-        setMsg(`Boom! Lost €${minesState.bet}`, false);
+        setMsg(`Boom! Lost €${minesState.origBet}`, false);
         playSound('lose'); shakeScreen();
         document.getElementById('mines-bet-ui').classList.remove('hidden');
         document.getElementById('mines-action-ui').classList.add('hidden');
@@ -1477,11 +1495,19 @@ function minesPick(idx) {
     } else {
         minesState.grid[idx] = 'gem';
         minesState.gems++;
-        let mult = Math.pow(1.15, minesState.gems);
-        minesState.bet = Math.floor(minesState.bet * mult);
+        
+        // Calculate exact fair multiplier (0% house edge)
+        let totalTiles = 25;
+        let safeTiles = totalTiles - minesState.bombs;
+        let currentMult = 1;
+        for (let i = 0; i < minesState.gems; i++) {
+            currentMult *= (totalTiles - i) / (safeTiles - i);
+        }
+        
+        minesState.bet = Math.floor(minesState.origBet * currentMult);
         document.getElementById('mines-pot').innerText = minesState.bet;
         document.getElementById('mines-cashout-btn').disabled = false;
-        setMsg(`Safe! Multiplier: ${mult.toFixed(2)}x`, true);
+        setMsg(`Safe! Multiplier: ${currentMult.toFixed(2)}x`, true);
         playSound('win');
         renderMinesGrid();
     }
