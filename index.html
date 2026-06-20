@@ -454,13 +454,17 @@ function playSound(type) {
 // --- EFFECTS ---
 function flashSuccess() {
     const area = document.getElementById('game-area');
-    area.classList.add('flash-success');
-    setTimeout(()=>area.classList.remove('flash-success'), 500);
+    if(area) {
+        area.classList.add('flash-success');
+        setTimeout(()=>area.classList.remove('flash-success'), 500);
+    }
 }
 function shakeScreen() {
     const area = document.getElementById('game-area');
-    area.classList.add('shake');
-    setTimeout(()=>area.classList.remove('shake'), 300);
+    if(area) {
+        area.classList.add('shake');
+        setTimeout(()=>area.classList.remove('shake'), 300);
+    }
 }
 
 // --- NAV & MODAL ---
@@ -609,7 +613,10 @@ function handleData(data, senderId) {
         else if (data.type === 'vote_result') { startRound3Game(data.game); }
         else if (data.type === 'break_start') { showBreak(data.results, data.boostedPlayerId, data.nextRound); }
         else if (data.type === 'match_over') { showGameOver(data.players); }
-        else if (data.type === 'skip_update') { document.getElementById('skip-round-btn').innerText = `Skip (${data.count}/${data.total})`; }
+        else if (data.type === 'skip_update') { 
+            let btn = document.getElementById('skip-round-btn');
+            if(btn) btn.innerText = `Skip (${data.count}/${data.total})`; 
+        }
     }
 }
 
@@ -624,14 +631,19 @@ function showLobby() {
 }
 
 function updateLobbyUI() {
-    document.getElementById('player-count').innerText = Object.values(players).filter(p=>p.connected).length;
-    document.getElementById('max-players-display').innerText = maxPlayers;
-    document.getElementById('lobby-players').innerHTML = Object.values(players).map(p => `<div class="list-item">${p.name} ${p.connected ? '' : '(DC)'}</div>`).join('');
+    let countEl = document.getElementById('player-count');
+    let maxEl = document.getElementById('max-players-display');
+    let listEl = document.getElementById('lobby-players');
+    
+    if(countEl) countEl.innerText = Object.values(players).filter(p=>p.connected).length;
+    if(maxEl) maxEl.innerText = maxPlayers;
+    if(listEl) listEl.innerHTML = Object.values(players).map(p => `<div class="list-item">${p.name} ${p.connected ? '' : '(DC)'}</div>`).join('');
 }
 
 function startMatch() {
     playSound('click');
-    if(Object.values(players).filter(p=>p.connected).length < 2) return alert("Need at least 2 players!");
+    // Changed to < 1 for testing alone
+    if(Object.values(players).filter(p=>p.connected).length < 1) return alert("Need at least 1 player!");
     currentRound = 1;
     let gameChoices = [...ALL_GAMES].sort(() => 0.5 - Math.random()).slice(0, 3);
     broadcast({ type: 'start_match', players: players, round: currentRound, games: gameChoices });
@@ -650,7 +662,7 @@ function startRound(round, games) {
     
     const skipBtn = document.getElementById('skip-round-btn');
     if (skipBtn) { skipBtn.disabled = false; skipBtn.innerText = 'Skip Round'; }
-    document.getElementById('skip-round-btn').classList.add('hidden');
+    if (skipBtn) skipBtn.classList.add('hidden');
 
     if (round < 3) {
         document.getElementById('vote-instructions').innerText = "Select a game to start playing.";
@@ -681,9 +693,7 @@ function startRound(round, games) {
                 myGameChoice = game;
                 document.getElementById('voting-screen').classList.add('hidden');
                 document.getElementById('game-screen').classList.remove('hidden');
-                document.getElementById('skip-round-btn').classList.remove('hidden');
-                document.getElementById('skip-round-btn').disabled = false; 
-                document.getElementById('skip-round-btn').innerText = 'Skip Round';
+                if (skipBtn) { skipBtn.classList.remove('hidden'); skipBtn.disabled = false; skipBtn.innerText = 'Skip Round'; }
                 document.getElementById('current-game-title').innerText = `Playing: ${game}`;
                 loadMiniGame(game);
                 
@@ -699,8 +709,8 @@ function startRound(round, games) {
 
 function skipRound() {
     playSound('click');
-    document.getElementById('skip-round-btn').disabled = true;
-    document.getElementById('skip-round-btn').innerText = 'Vote Sent';
+    let btn = document.getElementById('skip-round-btn');
+    if(btn) { btn.disabled = true; btn.innerText = 'Vote Sent'; }
     broadcast({ type: 'skip_vote' });
     if(isHost) { if(players[myId] && !players[myId].votedSkip) { players[myId].votedSkip = true; skipVotes++; checkSkip(); } }
 }
@@ -754,9 +764,8 @@ function tallyVotes(games) {
 function startRound3Game(game) {
     document.getElementById('voting-screen').classList.add('hidden');
     document.getElementById('game-screen').classList.remove('hidden');
-    document.getElementById('skip-round-btn').classList.remove('hidden');
-    document.getElementById('skip-round-btn').disabled = false;
-    document.getElementById('skip-round-btn').innerText = 'Skip Round';
+    let btn = document.getElementById('skip-round-btn');
+    if(btn) { btn.classList.remove('hidden'); btn.disabled = false; btn.innerText = 'Skip Round'; }
     document.getElementById('current-game-title').innerText = `Playing: ${game}`;
     let timeLeft = 60;
     document.getElementById('game-timer').innerText = timeLeft;
@@ -779,8 +788,8 @@ function startRound3Game(game) {
 function endRound() {
     document.getElementById('game-screen').classList.add('hidden');
     document.getElementById('voting-screen').classList.add('hidden');
-    document.getElementById('skip-round-btn').classList.add('hidden');
-    document.getElementById('skip-round-btn').disabled = false;
+    let btn = document.getElementById('skip-round-btn');
+    if(btn) { btn.classList.add('hidden'); btn.disabled = false; }
     
     if (syncInterval) { clearInterval(syncInterval); syncInterval = null; }
     
@@ -838,6 +847,7 @@ function showGameOver(finalPlayers) {
 
 function updateLeaderboard() {
     let list = document.getElementById('leaderboard-list');
+    if(!list) return;
     let sorted = Object.values(players).filter(p=>p.connected).sort((a, b) => b.cash - a.cash);
     if(sorted.length === 0) return;
     list.innerHTML = sorted.map((p, i) => `
@@ -864,10 +874,12 @@ function updateLeaderboard() {
 function getBalanceHTML() { return `<div class="balance-display">Balance <span class="val">€${players[myId].cash}</span></div>`; }
 function updateGameBalance(isWin, isLoss) {
     const disp = document.getElementById('balance-display');
-    if(disp) disp.innerHTML = `Balance <span class="val">€${players[myId].cash}</span>`;
+    if(disp) {
+        disp.innerHTML = `Balance <span class="val">€${players[myId].cash}</span>`;
+        if (isWin) { disp.classList.add('win'); disp.classList.remove('loss'); setTimeout(()=>disp.classList.remove('win'), 500); }
+        if (isLoss) { disp.classList.add('loss'); disp.classList.remove('win'); setTimeout(()=>disp.classList.remove('loss'), 500); }
+    }
     updateLeaderboard();
-    if (isWin) { disp.classList.add('win'); disp.classList.remove('loss'); setTimeout(()=>disp.classList.remove('win'), 500); }
-    if (isLoss) { disp.classList.add('loss'); disp.classList.remove('win'); setTimeout(()=>disp.classList.remove('loss'), 500); }
 }
 function validateBet(amount) { let bet = parseInt(amount); if (isNaN(bet) || bet <= 0 || bet > players[myId].cash) return false; return true; }
 function deductBet(bet) { players[myId].cash -= bet; updateGameBalance(); broadcast({ type: 'bet_update', cash: players[myId].cash }); playSound('bet'); }
@@ -890,7 +902,12 @@ function getWinMsg(prefix, res) {
     return msg;
 }
 function triggerCooldown(btn, ms) { btn.disabled = true; btn.classList.add('cooldown'); setTimeout(() => { btn.disabled = false; btn.classList.remove('cooldown'); }, ms); }
-function setMsg(msg, isWin) { let el = document.getElementById('action-msg'); el.className = isWin ? 'action-msg win-msg' : 'action-msg loss-msg'; el.innerText = msg; }
+function setMsg(msg, isWin) { 
+    let el = document.getElementById('action-msg'); 
+    if(!el) return;
+    el.className = isWin ? 'action-msg win-msg' : 'action-msg loss-msg'; 
+    el.innerText = msg; 
+}
 
 function loadMiniGame(game) {
     let area = document.getElementById('game-area');
@@ -1267,7 +1284,7 @@ function loadKeno(area) {
             <button class="btn-ghost action-btn">CLEAR</button>
         </div>
     `;
-    document.getElementById('keno-draw-btn').onclick = (e) => playKeno(e.target);
+    document.getElementById('keno-draw-btn').onclick = (e) => playKeno(document.getElementById('keno-draw-btn'));
     document.querySelector('#keno-bet-ui .btn-danger').onclick = (e) => { document.getElementById('keno-bet').value = players[myId].cash; playKeno(document.getElementById('keno-draw-btn')); };
     document.querySelector('#keno-bet-ui .btn-ghost').onclick = clearKenoPicks;
     renderKenoGrid();
@@ -1445,23 +1462,24 @@ function crashStart(btn) {
     
     let el = document.getElementById('crash-mult');
     let line = document.getElementById('crash-line');
-    el.style.color = 'var(--text)'; el.classList.remove('crashed');
-    line.setAttribute('points', '0,100'); line.style.stroke = '#D4AF37';
+    if(el) { el.style.color = 'var(--text)'; el.classList.remove('crashed'); }
+    if(line) { line.setAttribute('points', '0,100'); line.style.stroke = '#D4AF37'; }
     
     setMsg('Cash out before it crashes!', true); playSound('tick');
     
     crashState.interval = setInterval(() => {
         crashState.mult += 0.02 + Math.random() * 0.03; 
-        el.innerText = crashState.mult.toFixed(2) + 'x';
+        if(el) el.innerText = crashState.mult.toFixed(2) + 'x';
         
         let x = Math.min(100, (crashState.mult - 1) * 25);
         let y = 100 - Math.min(100, (crashState.mult - 1) * 25);
         crashState.points += ` ${x},${y}`;
-        line.setAttribute('points', crashState.points);
+        if(line) line.setAttribute('points', crashState.points);
         
         if (crashState.mult >= crashState.point) {
-            clearInterval(crashState.interval); crashState.active = false; el.classList.add('crashed');
-            line.style.stroke = 'var(--danger)';
+            clearInterval(crashState.interval); crashState.active = false; 
+            if(el) el.classList.add('crashed');
+            if(line) line.style.stroke = 'var(--danger)';
             if (!crashState.cashed) { setMsg(`Crashed at ${crashState.point.toFixed(2)}x. Lost €${crashState.bet}`, false); playSound('bomb'); shakeScreen(); }
             document.getElementById('crash-bet-ui').classList.remove('hidden');
             document.getElementById('crash-action-ui').classList.add('hidden');
@@ -1471,7 +1489,8 @@ function crashStart(btn) {
 function crashCashout() {
     if(!crashState.active || crashState.cashed) return;
     crashState.cashed = true; let win = Math.floor(crashState.bet * crashState.mult);
-    document.getElementById('crash-cashout-btn').disabled = true;
+    let btn = document.getElementById('crash-cashout-btn');
+    if(btn) btn.disabled = true;
     setMsg(getWinMsg(`Cashed at ${crashState.mult.toFixed(2)}x`, addWinnings(win, true)), true);
 }
 
@@ -1497,21 +1516,18 @@ function doublePlay(choice) {
     if (!validateBet(bet)) { setMsg("Invalid bet", false); playSound('lose'); return; }
     deductBet(bet); doubleActive = true; doubleBet = bet; playSound('coinFlip');
     let coin = document.getElementById('double-coin');
-    coin.style.animation = 'none'; coin.offsetHeight; 
-    coin.style.animation = 'flipCoin 1s steps(8, end)';
+    if(coin) { coin.style.animation = 'none'; coin.offsetHeight; coin.style.animation = 'flipCoin 1s steps(8, end)'; }
     setMsg('Flipping...', true);
     setTimeout(() => {
-        coin.style.animation = 'none';
+        if(coin) coin.style.animation = 'none';
         let isRed = Math.random() < 0.5;
         let win = 0;
         if ((choice === 'red' && isRed) || (choice === 'blue' && !isRed)) {
             win = doubleBet * 2;
-            coin.innerText = isRed ? '🔴' : '🔵';
-            coin.style.color = isRed ? 'var(--danger)' : 'var(--accent)';
+            if(coin) { coin.innerText = isRed ? '🔴' : '🔵'; coin.style.color = isRed ? 'var(--danger)' : 'var(--accent)'; }
             setMsg(getWinMsg("Win!", addWinnings(win, true)), true);
         } else {
-            coin.innerText = isRed ? '🔴' : '🔵';
-            coin.style.color = isRed ? 'var(--danger)' : 'var(--accent)';
+            if(coin) { coin.innerText = isRed ? '🔴' : '🔵'; coin.style.color = isRed ? 'var(--danger)' : 'var(--accent)'; }
             setMsg(`Lost €${doubleBet}`, false); playSound('lose'); shakeScreen();
         }
         doubleActive = false;
