@@ -216,11 +216,16 @@
         @keyframes slideIn { 0% { transform: translateX(-100px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
 
         /* Cards */
-        .card-container { display: flex; justify-content: center; gap: 12px; margin: 0 auto 32px auto; flex-wrap: wrap; max-width: 440px; }
-        .card { width: 60px; height: 84px; background: #fff; color: #000; border-radius: 4px; display: flex; justify-content: center; align-items: center; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.1s; }
+        .card-container { display: flex; justify-content: center; gap: 12px; margin: 0 auto 32px auto; flex-wrap: wrap; max-width: 440px; min-height: 90px; }
+        .card { width: 60px; height: 84px; background: #fff; color: #000; border-radius: 4px; display: flex; justify-content: center; align-items: center; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.1s; animation: dealCard 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .card:hover { transform: translateY(-2px); }
         .card.red { color: var(--danger); }
         .card.hold { box-shadow: 0 0 0 2px var(--accent), 0 4px 12px rgba(0,0,0,0.3); transform: translateY(-2px); }
+        .card.back { background: #1a1a1a; color: #444; border: 1px solid #333; font-size: 32px; }
+        @keyframes dealCard { 
+            0% { transform: translateX(-150px) translateY(-20px) rotate(-15deg); opacity: 0; } 
+            100% { transform: translateX(0) translateY(0) rotate(0); opacity: 1; } 
+        }
         
         /* Grids - Bigger, wider, perfectly square (thick) */
         .grid-tower { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 360px; margin: 0 auto 32px auto; }
@@ -453,7 +458,7 @@ let gameInterval = null, breakInterval = null, voteInterval = null;
 let myGameChoice = null;
 let skipVotes = 0;
 
-// --- AUDIO ---
+// --- AUDIO ENGINE (Clicky Keyboard Sounds) ---
 let audioCtx = null;
 function initAudio() { if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
 function playTone(freq, duration, type='sine', vol=0.1, delay=0) {
@@ -467,20 +472,19 @@ function playTone(freq, duration, type='sine', vol=0.1, delay=0) {
 }
 function playSound(type) {
     initAudio();
-    if (type === 'click') playTone(600, 0.05, 'square', 0.03);
-    else if (type === 'hover') playTone(800, 0.02, 'sine', 0.01);
-    else if (type === 'spin') playTone(200, 0.2, 'sawtooth', 0.03);
-    else if (type === 'tick') playTone(1000, 0.03, 'square', 0.02);
-    else if (type === 'bet') { playTone(300, 0.05, 'triangle', 0.08); playTone(150, 0.1, 'triangle', 0.08, 0.05); }
+    if (type === 'click') { playTone(1200, 0.02, 'square', 0.04); playTone(800, 0.02, 'square', 0.03, 0.02); }
+    else if (type === 'hover') { playTone(1600, 0.01, 'sine', 0.02); }
+    else if (type === 'spin') { playTone(400, 0.1, 'sawtooth', 0.03); playTone(200, 0.1, 'sawtooth', 0.02, 0.05); }
+    else if (type === 'tick') { playTone(1000, 0.02, 'square', 0.02); }
+    else if (type === 'bet') { playTone(900, 0.03, 'triangle', 0.06); playTone(450, 0.05, 'triangle', 0.05, 0.03); }
     else if (type === 'win') { [523, 659, 784].forEach((f,i)=>playTone(f, 0.15, 'sine', 0.1, i*0.08)); }
     else if (type === 'jackpot') { 
-        // Massive Jackpot Sound
         [523, 659, 784, 1046, 1318].forEach((f,i)=>playTone(f, 0.3, 'sawtooth', 0.15, i*0.1)); 
         [659, 784, 988, 1318].forEach((f,i)=>playTone(f, 0.3, 'square', 0.1, i*0.15 + 0.2)); 
     }
     else if (type === 'lose') { playTone(200, 0.3, 'sawtooth', 0.08); playTone(100, 0.4, 'sawtooth', 0.08, 0.1); }
-    else if (type === 'card') playTone(800, 0.05, 'sine', 0.06);
-    else if (type === 'reelStop') playTone(400, 0.1, 'square', 0.08);
+    else if (type === 'card') { playTone(600, 0.04, 'sawtooth', 0.03); playTone(300, 0.06, 'sawtooth', 0.02, 0.04); }
+    else if (type === 'reelStop') { playTone(800, 0.05, 'square', 0.06); }
     else if (type === 'bomb') { playTone(100, 0.5, 'sawtooth', 0.2); playTone(50, 0.6, 'sawtooth', 0.2, 0.1); }
     else if (type === 'coinFlip') { playTone(1200, 0.05, 'triangle', 0.08); playTone(900, 0.05, 'triangle', 0.08, 0.1); }
 }
@@ -628,7 +632,7 @@ function handleData(data, senderId) {
             checkVotes(data.games);
         } else if (data.type === 'bet_update') {
             if(players[senderId]) players[senderId].cash = data.cash;
-            broadcast({ type: 'state_sync', players: players });
+            broadcast({ type: 'state_sync', players: players }); // Instant sync
         } else if (data.type === 'skip_vote') {
             if(players[senderId] && !players[senderId].votedSkip) {
                 players[senderId].votedSkip = true;
@@ -708,7 +712,7 @@ function startRound(round, games) {
     document.getElementById('voting-timer').classList.remove('timer-warning');
     document.getElementById('vote-instructions').innerText = "Select a game to start playing.";
     myGameChoice = null;
-    
+    skipVotes = 0; // Reset skip votes for the new round
     if(players[myId]) players[myId].pickedGame = null;
 
     let voteContainer = document.getElementById('vote-options');
@@ -723,7 +727,6 @@ function startRound(round, games) {
         if (timeLeft <= 0) { 
             clearInterval(voteInterval); 
             if(isHost) {
-                // Auto-assign random game if not picked
                 Object.keys(players).forEach(id => {
                     if(players[id].connected && !players[id].pickedGame) {
                         players[id].pickedGame = games[Math.floor(Math.random() * games.length)];
@@ -761,7 +764,6 @@ function checkPicks(forceStart=false) {
         clearInterval(voteInterval);
         let picks = {};
         activePlayerIds.forEach(id => {
-            // Ensure everyone has a game assigned
             if(!players[id].pickedGame) {
                 players[id].pickedGame = ALL_GAMES[Math.floor(Math.random() * ALL_GAMES.length)];
             }
@@ -891,6 +893,7 @@ function endRound() {
     if (gameInterval) clearInterval(gameInterval);
     
     if (isHost) {
+        skipVotes = 0; // FIX: Reset skip votes for the next round
         Object.values(players).forEach(p => { p.winBoost = 0; p.winPenalty = false; p.votedSkip = false; p.pickedGame = null; p.voted = null; });
         let sortedPlayers = Object.entries(players).filter(p=>p[1].connected).sort((a, b) => b[1].cash - a[1].cash);
         let winnerId = sortedPlayers[0][0];
@@ -902,7 +905,6 @@ function endRound() {
 }
 
 function showBreak(results, boostedPlayerId, nextRound) {
-    // Clear ALL intervals to prevent lingering timers (Fixes Mobile Skip Bug)
     if (gameInterval) clearInterval(gameInterval);
     if (voteInterval) clearInterval(voteInterval);
     if (breakInterval) clearInterval(breakInterval);
@@ -924,7 +926,6 @@ function showBreak(results, boostedPlayerId, nextRound) {
         document.getElementById('next-round-timer').innerText = `Next cycle in ${timeLeft}s`;
         if (timeLeft <= 0) {
             clearInterval(breakInterval);
-            // Auto bailout if 0 cash
             if (players[myId] && players[myId].cash <= 0) {
                 chooseBailout(50, false);
             }
@@ -944,7 +945,6 @@ function chooseBailout(amount, penalty) {
 }
 
 function showGameOver(finalPlayers) {
-    // Clear ALL intervals
     if (gameInterval) clearInterval(gameInterval);
     if (voteInterval) clearInterval(voteInterval);
     if (breakInterval) clearInterval(breakInterval);
@@ -1064,33 +1064,27 @@ function playSlots(btn) {
     const sym = ['💰', '💎', '🍒', '7️⃣', '💩'];
     let s1 = document.getElementById('s1'), s2 = document.getElementById('s2'), s3 = document.getElementById('s3');
     
-    // Final Results predetermined
     let r1 = sym[Math.floor(Math.random()*5)], r2 = sym[Math.floor(Math.random()*5)], r3 = sym[Math.floor(Math.random()*5)];
     
-    // Start spinning all
     s1.className = s2.className = s3.className = "slot-reel spinning";
     
-    // Reel 1 stops at 1s
     setTimeout(() => {
         s1.className = "slot-reel slot-slide-in";
         s1.innerText = r1;
         playSound('reelStop');
     }, 1000);
 
-    // Reel 2 stops at 2s
     setTimeout(() => {
         s2.className = "slot-reel slot-slide-in";
         s2.innerText = r2;
         playSound('reelStop');
     }, 2000);
 
-    // Reel 3 stops at 3s
     setTimeout(() => {
         s3.className = "slot-reel slot-slide-in";
         s3.innerText = r3;
         playSound('reelStop');
         
-        // Evaluate Win
         let win = 0;
         if (r1===r2 && r2===r3) {
             if (r1==='7️⃣') win = bet*50; else if (r1==='💎') win = bet*20; else win = bet*10;
@@ -1132,7 +1126,7 @@ function bjGetCard() { let r = Math.floor(Math.random()*52); let v = r%13+1; let
 function bjCalc(hand) { let sum=0, aces=0; hand.forEach(c=>{ if(c.v==1){aces++; sum+=11;} else sum+=c.v; }); while(sum>21 && aces>0){sum-=10; aces--;} return sum; }
 function bjRender() {
     document.getElementById('bj-player-cards').innerHTML = bjPlayer.map(c=>`<div class="card ${c.red?'red':''}">${c.v==1?'A':c.v}${c.s}</div>`).join('');
-    document.getElementById('bj-dealer-cards').innerHTML = bjDealer.map((c,i)=> i==1&&bjState=='playing'?`<div class="card">?</div>`:`<div class="card ${c.red?'red':''}">${c.v==1?'A':c.v}${c.s}</div>`).join('');
+    document.getElementById('bj-dealer-cards').innerHTML = bjDealer.map((c,i)=> i==1&&bjState=='playing'?`<div class="card back">?</div>`:`<div class="card ${c.red?'red':''}">${c.v==1?'A':c.v}${c.s}</div>`).join('');
     document.getElementById('bj-player-val').innerText = bjCalc(bjPlayer);
     document.getElementById('bj-dealer-val').innerText = bjState=='playing' ? '?' : bjCalc(bjDealer);
 }
@@ -1140,12 +1134,19 @@ function bjDeal(btn) {
     let bet = parseInt(document.getElementById('bj-bet').value);
     if (!validateBet(bet)) { setMsg("Invalid bet", false); playSound('lose'); return; }
     deductBet(bet); bjBet = bet; playSound('card');
-    bjPlayer = [bjGetCard(), bjGetCard()]; bjDealer = [bjGetCard(), bjGetCard()];
-    bjState = 'playing'; bjRender();
+    bjPlayer = []; bjDealer = []; bjState = 'playing';
     document.getElementById('bj-betting-ui').classList.add('hidden');
     document.getElementById('bj-action-ui').classList.remove('hidden');
-    setMsg('', true);
-    if (bjCalc(bjPlayer) == 21) bjStand();
+    
+    // Deal one by one
+    setTimeout(() => { bjPlayer.push(bjGetCard()); bjRender(); playSound('card'); }, 100);
+    setTimeout(() => { bjDealer.push(bjGetCard()); bjRender(); playSound('card'); }, 300);
+    setTimeout(() => { bjPlayer.push(bjGetCard()); bjRender(); playSound('card'); }, 500);
+    setTimeout(() => { 
+        bjDealer.push(bjGetCard()); bjRender(); playSound('card');
+        setMsg('', true);
+        if (bjCalc(bjPlayer) == 21) bjStand();
+    }, 700);
 }
 function bjHit() { bjPlayer.push(bjGetCard()); bjRender(); playSound('card'); if (bjCalc(bjPlayer) > 21) { bjState = 'betting'; setMsg(`Bust. Lost €${bjBet}`, false); playSound('lose'); shakeScreen(); document.getElementById('bj-betting-ui').classList.remove('hidden'); document.getElementById('bj-action-ui').classList.add('hidden'); } }
 function bjDouble() { if (players[myId].cash < bjBet) return alert("Not enough money to double!"); deductBet(bjBet); bjBet *= 2; bjPlayer.push(bjGetCard()); bjRender(); playSound('card'); if (bjCalc(bjPlayer) <= 21) bjStand(); else { bjState = 'betting'; setMsg(`Bust. Lost €${bjBet}`, false); playSound('lose'); shakeScreen(); document.getElementById('bj-betting-ui').classList.remove('hidden'); document.getElementById('bj-action-ui').classList.add('hidden'); } }
@@ -1371,11 +1372,20 @@ function pDeal(btn) {
     let bet = parseInt(document.getElementById('p-bet').value);
     if (!validateBet(bet)) { setMsg("Invalid bet", false); playSound('lose'); return; }
     deductBet(bet); pBet = bet; playSound('card');
-    pHand = [pGetCard(), pGetCard(), pGetCard(), pGetCard(), pGetCard()]; pHolds = [false,false,false,false,false]; pDrawn = false;
+    pHand = []; pHolds = [false,false,false,false,false]; pDrawn = false;
     pRender();
     document.getElementById('p-bet-ui').classList.add('hidden');
     document.getElementById('p-action-ui').classList.remove('hidden');
-    setMsg('Hold cards, then draw', true);
+    
+    // Deal one by one
+    for(let i=0; i<5; i++) {
+        setTimeout(() => {
+            pHand.push(pGetCard());
+            pRender();
+            playSound('card');
+        }, 100 + i * 150);
+    }
+    setTimeout(() => setMsg('Hold cards, then draw', true), 900);
 }
 function pDraw(btn) {
     for(let i=0; i<5; i++) if(!pHolds[i]) pHand[i] = pGetCard();
@@ -1602,7 +1612,6 @@ function crashStart(btn) {
     if (!validateBet(bet)) { setMsg("Invalid bet", false); playSound('lose'); return; }
     deductBet(bet);
     
-    // Slower, more rewarding curve (pow 1.5 instead of 2.0, min 1.20x)
     let r = Math.pow(Math.random(), 1.5); 
     let point = Math.max(1.20, (0.95 / (1 - r))); 
     
@@ -1619,7 +1628,7 @@ function crashStart(btn) {
     setMsg('Cash out before it crashes!', true); playSound('tick');
     
     crashState.interval = setInterval(() => {
-        crashState.mult += 0.015; // Slower growth
+        crashState.mult += 0.015; 
         if(el) el.innerText = crashState.mult.toFixed(2) + 'x';
         
         let x = Math.min(100, (crashState.mult - 1) * 25);
@@ -1640,7 +1649,7 @@ function crashStart(btn) {
             document.getElementById('crash-bet-ui').classList.remove('hidden');
             document.getElementById('crash-action-ui').classList.add('hidden');
         }
-    }, 150); // Slower tick rate
+    }, 150); 
 }
 function crashCashout() {
     if(!crashState.active || crashState.cashed) return;
@@ -1692,11 +1701,10 @@ function doublePlay(choice) {
             let isRed = Math.random() < 0.5;
             let win = 0;
             
-            // Animate flip
             if(isRed) {
-                coin.style.transform = 'rotateY(900deg)'; // Lands on back (Red)
+                coin.style.transform = 'rotateY(900deg)'; 
             } else {
-                coin.style.transform = 'rotateY(720deg)'; // Lands on front (Blue)
+                coin.style.transform = 'rotateY(720deg)'; 
             }
             
             setTimeout(() => {
