@@ -76,6 +76,7 @@
 
         main {
             padding: 48px 32px;
+            position: relative;
         }
         
         @media (max-width: 600px) {
@@ -166,7 +167,7 @@
         .timer-warning { color: var(--danger); }
         .game-subtitle { font-size: 14px; color: var(--text-dim); margin-top: 12px; font-weight: 500; }
 
-        .vote-grid { display: grid; grid-template-columns: 1fr; gap: 12px; max-width: 400px; }
+        .vote-grid { display: grid; grid-template-columns: 1fr; gap: 12px; max-width: 400px; margin: 0 auto; }
         .vote-btn { padding: 20px; text-align: left; font-weight: 600; font-size: 16px; background: var(--surface); border: 1px solid var(--border); color: var(--text); transition: all 0.2s; }
         .vote-btn:hover { background: var(--surface-2); border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
 
@@ -178,8 +179,15 @@
 
         #game-area { display: flex; flex-direction: column; align-items: flex-start; }
         .flash-success { box-shadow: inset 0 0 0 2px var(--accent); }
-        .shake { animation: shake 0.3s; }
-        @keyframes shake { 0% { transform: translateX(-4px); } 100% { transform: translateX(4px); } }
+        .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            20% { transform: translate(-10px, 5px) rotate(-1deg); }
+            40% { transform: translate(10px, -5px) rotate(1deg); }
+            60% { transform: translate(-8px, 4px) rotate(0deg); }
+            80% { transform: translate(8px, -4px) rotate(0deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
 
         .balance-display { font-size: 13px; color: var(--text-dim); margin-bottom: 32px; font-variant-numeric: tabular-nums; display: flex; align-items: baseline; gap: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
         .balance-display .val { font-family: 'Space Grotesk', sans-serif; color: var(--accent); font-size: 36px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; }
@@ -192,44 +200,50 @@
         .action-btn { padding: 12px 24px; flex: 1; }
         
         .cooldown { opacity: 0.3; pointer-events: none; }
-        .action-msg { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; min-height: 30px; margin-top: 24px; color: var(--text); letter-spacing: -0.01em; }
+        .action-msg { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; min-height: 30px; margin-top: 24px; color: var(--text); letter-spacing: -0.01em; width: 100%; text-align: left; }
         .win-msg { color: #4ADE80; }
         .loss-msg { color: var(--danger); }
 
         /* Slots */
-        .slot-machine { display: flex; gap: 16px; font-size: 48px; margin-bottom: 32px; background: var(--surface); padding: 24px; border: 1px solid var(--border); border-radius: 4px; }
+        .slot-machine { display: flex; justify-content: center; gap: 16px; font-size: 48px; margin: 0 auto 32px auto; background: var(--surface); padding: 24px; border: 1px solid var(--border); border-radius: 4px; max-width: 440px; }
         .slot-reel { width: 70px; height: 60px; display: flex; align-items: center; justify-content: center; transition: transform 0.3s; }
         .slot-reel.win { transform: scale(1.1); }
         .spinning { opacity: 0.5; animation: spin 0.1s linear infinite; }
         @keyframes spin { 0% { transform: translateY(-8px); } 50% { transform: translateY(8px); } 100% { transform: translateY(-8px); } }
 
         /* Cards */
-        .card-container { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+        .card-container { display: flex; justify-content: center; gap: 12px; margin: 0 auto 32px auto; flex-wrap: wrap; max-width: 440px; }
         .card { width: 60px; height: 84px; background: #fff; color: #000; border-radius: 4px; display: flex; justify-content: center; align-items: center; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.1s; }
         .card:hover { transform: translateY(-2px); }
         .card.red { color: var(--danger); }
         .card.hold { box-shadow: 0 0 0 2px var(--accent), 0 4px 12px rgba(0,0,0,0.3); transform: translateY(-2px); }
         
-        /* Grids */
-        .grid-tower { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 240px; margin-bottom: 32px; }
-        .grid-keno { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; width: 100%; max-width: 600px; margin-bottom: 32px; }
-        .grid-mines { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; max-width: 280px; margin: 0 0 32px 0; }
+        /* Grids - Centered */
+        .grid-tower { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 240px; margin: 0 auto 32px auto; }
+        .grid-keno { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; width: 100%; max-width: 600px; margin: 0 auto 32px auto; }
+        .grid-mines { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; max-width: 280px; margin: 0 auto 32px auto; }
         .tile { background: var(--surface); border: 1px solid var(--border); padding: 16px 0; text-align: center; cursor: pointer; font-weight: 600; font-size: 14px; color: var(--text-dim); transition: all 0.2s; border-radius: 4px; }
         .tile:hover { background: var(--surface-2); color: var(--text); }
         .tile.safe { background: #4ADE80; color: #000; border-color: #4ADE80; }
         .tile.bomb { background: var(--danger); color: #fff; border-color: var(--danger); }
+        .tile.explosion { animation: explode 0.5s ease-out; background: var(--danger) !important; color: #fff !important; border-color: var(--danger) !important; }
+        @keyframes explode {
+            0% { transform: scale(1); opacity: 1; box-shadow: 0 0 0px var(--danger); }
+            30% { transform: scale(1.4); opacity: 1; box-shadow: 0 0 30px var(--danger); }
+            100% { transform: scale(1); opacity: 1; box-shadow: 0 0 10px var(--danger); }
+        }
         .tile.selected { background: var(--accent); color: #000; border-color: var(--accent); }
         .tile.hit { background: #4ADE80; color: #000; border-color: #4ADE80; }
         .tile.disabled { pointer-events: none; opacity: 0.2; }
         .mine-tile { height: 50px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
 
         /* Plinko */
-        .plinko-board { display: flex; gap: 8px; margin-bottom: 32px; width: 100%; max-width: 440px; }
+        .plinko-board { display: flex; gap: 8px; margin: 0 auto 32px auto; width: 100%; max-width: 440px; }
         .plinko-mult { flex: 1; padding: 16px 0; background: var(--surface); border: 1px solid var(--border); font-weight: 700; font-size: 16px; text-align: center; color: var(--text); transition: all 0.1s; border-radius: 4px; font-family: 'Space Grotesk', sans-serif; }
         .plinko-mult.active { background: var(--accent); color: #000; border-color: var(--accent); transform: scale(1.1); }
         
         /* Roulette */
-        .roulette-board { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 32px; max-width: 440px; }
+        .roulette-board { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 0 auto 32px auto; max-width: 440px; }
         .roulette-tile { width: 36px; height: 36px; display: flex; justify-content: center; align-items: center; border: 1px solid var(--border); cursor: pointer; font-weight: 700; font-size: 12px; color: var(--text); transition: all 0.1s; background: var(--surface); border-radius: 4px; }
         .roulette-tile:hover { background: var(--surface-2); }
         .roul-red { border-color: var(--danger); color: var(--danger); }
@@ -239,21 +253,22 @@
         .roulette-tile.spinning { background: var(--accent); color: #000; border-color: var(--accent); }
 
         /* Crash */
-        .crash-display { font-family: 'Space Grotesk', sans-serif; font-size: 56px; font-weight: 700; margin-bottom: 16px; color: var(--text); font-variant-numeric: tabular-nums; letter-spacing: -0.03em; }
+        .crash-display { font-family: 'Space Grotesk', sans-serif; font-size: 56px; font-weight: 700; margin-bottom: 16px; color: var(--text); font-variant-numeric: tabular-nums; letter-spacing: -0.03em; text-align: center; width: 100%; max-width: 440px; }
         .crash-display.crashed { color: var(--danger); }
-        .crash-chart { width: 100%; max-width: 440px; height: 150px; background: var(--surface); margin-bottom: 24px; position: relative; overflow: hidden; border: 1px solid var(--border); border-radius: 4px; }
+        .crash-chart { width: 100%; max-width: 440px; height: 150px; background: var(--surface); margin: 0 auto 24px auto; position: relative; overflow: hidden; border: 1px solid var(--border); border-radius: 4px; }
         .crash-svg { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
 
         /* Double */
-        .double-display { font-family: 'Space Grotesk', sans-serif; font-size: 96px; margin-bottom: 32px; color: var(--text); }
+        .double-display { font-family: 'Space Grotesk', sans-serif; font-size: 96px; margin: 0 auto 32px auto; color: var(--text); text-align: center; max-width: 440px; }
         .double-display.spinning { animation: flipCoin 1s steps(8, end); }
         @keyframes flipCoin { 0% { transform: rotateY(0); } 100% { transform: rotateY(720deg); } }
 
         #bailout-ui { background: var(--surface); border: 1px solid var(--danger); padding: 24px; margin-top: 24px; border-radius: 4px; }
         .next-timer { font-size: 13px; color: var(--text-dim); margin-top: 32px; font-weight: 500; }
 
-        #skip-round-btn { position: absolute; top: 24px; right: 32px; width: auto; padding: 8px 16px; font-size: 12px; font-weight: 600; background: var(--surface); border: 1px solid var(--border); color: var(--text-dim); transition: all 0.2s; z-index: 10; }
+        #skip-round-btn { position: absolute; top: 24px; right: 32px; width: auto; padding: 10px 20px; font-size: 14px; font-weight: 600; background: var(--surface); border: 1px solid var(--border); color: var(--text-dim); transition: all 0.2s; z-index: 10; }
         #skip-round-btn:hover { border-color: var(--danger); color: var(--danger); }
+        @media (max-width: 600px) { #skip-round-btn { top: 16px; right: 16px; padding: 8px 12px; font-size: 12px; } }
 
         /* Info Modal */
         #info-overlay {
@@ -309,7 +324,7 @@
     </nav>
 
     <div id="app-wrapper">
-        <main id="main-content" style="position: relative;">
+        <main id="main-content">
             <button id="skip-round-btn" class="hidden" onclick="skipRound()">Skip Round</button>
             
             <div id="menu-screen">
@@ -419,7 +434,7 @@ let maxPlayers = 4;
 const ALL_GAMES = ['Slots', 'Blackjack', 'Plinko', 'Tower', 'Roulette', 'Balatro', 'Keno', 'Mines', 'Crash', 'Double'];
 let currentRound = 1;
 const roundTimers = [0, 120, 90, 60]; 
-let gameInterval = null, breakInterval = null, voteInterval = null, syncInterval = null;
+let gameInterval = null, breakInterval = null, voteInterval = null;
 let myGameChoice = null;
 let skipVotes = 0;
 
@@ -447,7 +462,7 @@ function playSound(type) {
     else if (type === 'lose') { playTone(200, 0.3, 'sawtooth', 0.08); playTone(100, 0.4, 'sawtooth', 0.08, 0.1); }
     else if (type === 'card') playTone(800, 0.05, 'sine', 0.06);
     else if (type === 'reelStop') playTone(400, 0.1, 'square', 0.05);
-    else if (type === 'bomb') { playTone(100, 0.5, 'sawtooth', 0.15); playTone(50, 0.6, 'sawtooth', 0.15, 0.1); }
+    else if (type === 'bomb') { playTone(100, 0.5, 'sawtooth', 0.2); playTone(50, 0.6, 'sawtooth', 0.2, 0.1); }
     else if (type === 'coinFlip') { playTone(1200, 0.05, 'triangle', 0.08); playTone(900, 0.05, 'triangle', 0.08, 0.1); }
 }
 
@@ -463,7 +478,7 @@ function shakeScreen() {
     const area = document.getElementById('game-area');
     if(area) {
         area.classList.add('shake');
-        setTimeout(()=>area.classList.remove('shake'), 300);
+        setTimeout(()=>area.classList.remove('shake'), 500);
     }
 }
 
@@ -580,7 +595,7 @@ function handleData(data, senderId) {
             checkVotes(data.games);
         } else if (data.type === 'bet_update') {
             if(players[senderId]) players[senderId].cash = data.cash;
-            broadcast({ type: 'state_sync', players: players });
+            broadcast({ type: 'state_sync', players: players }); // Instant Real-time sync
         } else if (data.type === 'skip_vote') {
             if(players[senderId] && !players[senderId].votedSkip) {
                 players[senderId].votedSkip = true;
@@ -695,11 +710,6 @@ function startRound(round, games) {
                 if (skipBtn) { skipBtn.classList.remove('hidden'); skipBtn.disabled = false; skipBtn.innerText = 'Skip Round'; }
                 document.getElementById('current-game-title').innerText = `Playing: ${game}`;
                 loadMiniGame(game);
-                
-                if (isHost) {
-                    if (syncInterval) clearInterval(syncInterval);
-                    syncInterval = setInterval(() => { broadcast({ type: 'state_sync', players: players }); }, 1000);
-                }
             };
             voteContainer.appendChild(btn);
         });
@@ -777,11 +787,6 @@ function startRound3Game(game) {
         if (timeLeft <= 10) { playSound('tick'); document.getElementById('game-timer').classList.add('timer-warning'); }
         if (timeLeft <= 0) { clearInterval(gameInterval); endRound(); }
     }, 1000);
-    
-    if (isHost) {
-        if (syncInterval) clearInterval(syncInterval);
-        syncInterval = setInterval(() => { broadcast({ type: 'state_sync', players: players }); }, 1000);
-    }
 }
 
 function endRound() {
@@ -789,8 +794,6 @@ function endRound() {
     document.getElementById('voting-screen').classList.add('hidden');
     let btn = document.getElementById('skip-round-btn');
     if(btn) { btn.classList.add('hidden'); btn.disabled = false; }
-    
-    if (syncInterval) { clearInterval(syncInterval); syncInterval = null; }
     
     if (isHost) {
         Object.values(players).forEach(p => { p.winBoost = 0; p.winPenalty = false; p.votedSkip = false; });
@@ -881,7 +884,14 @@ function updateGameBalance(isWin, isLoss) {
     updateLeaderboard();
 }
 function validateBet(amount) { let bet = parseInt(amount); if (isNaN(bet) || bet <= 0 || bet > players[myId].cash) return false; return true; }
-function deductBet(bet) { players[myId].cash -= bet; updateGameBalance(); broadcast({ type: 'bet_update', cash: players[myId].cash }); playSound('bet'); }
+function deductBet(bet) { 
+    players[myId].cash -= bet; 
+    updateGameBalance(); 
+    // Real-time sync: Host broadcasts state, client sends update to host
+    if (isHost) broadcast({ type: 'state_sync', players: players });
+    else broadcast({ type: 'bet_update', cash: players[myId].cash });
+    playSound('bet'); 
+}
 function addWinnings(amount, isJackpot=false) {
     let boost = players[myId].winBoost || 0;
     let hasPenalty = players[myId].winPenalty || false;
@@ -890,7 +900,8 @@ function addWinnings(amount, isJackpot=false) {
     let finalAmount = amount + bonus - deduction;
     players[myId].cash += finalAmount;
     updateGameBalance(true);
-    broadcast({ type: 'bet_update', cash: players[myId].cash });
+    if (isHost) broadcast({ type: 'state_sync', players: players });
+    else broadcast({ type: 'bet_update', cash: players[myId].cash });
     if(isJackpot) { playSound('jackpot'); flashSuccess(); } else playSound('win');
     return { finalAmount, bonus, deduction };
 }
@@ -929,7 +940,7 @@ function loadSlots(area) {
     area.innerHTML += `
         ${getBalanceHTML()}
         <div class="slot-machine"><div id="s1" class="slot-reel">💰</div><div id="s2" class="slot-reel">💰</div><div id="s3" class="slot-reel">💰</div></div>
-        <div class="bet-controls">
+        <div class="bet-controls" style="margin: 0 auto;">
             <input type="number" id="slots-bet" class="bet-input" value="10" min="1">
             <button class="btn-primary action-btn" onclick="playSlots(this)">SPIN</button>
             <button class="btn-danger action-btn" onclick="document.getElementById('slots-bet').value=players[myId].cash; playSlots(this)">ALL IN</button>
@@ -976,16 +987,16 @@ let bjDeck = [], bjPlayer = [], bjDealer = [], bjBet = 0, bjState = 'betting';
 function loadBlackjack(area) {
     area.innerHTML += `
         ${getBalanceHTML()}
-        <h3 style="margin-bottom: 12px; color: var(--text-dim);">Dealer: <span id="bj-dealer-val">0</span></h3>
+        <h3 style="margin-bottom: 12px; color: var(--text-dim); text-align: center;">Dealer: <span id="bj-dealer-val">0</span></h3>
         <div class="card-container" id="bj-dealer-cards"></div>
-        <h3 style="margin-bottom: 12px; color: var(--text-dim);">You: <span id="bj-player-val">0</span></h3>
+        <h3 style="margin-bottom: 12px; color: var(--text-dim); text-align: center;">You: <span id="bj-player-val">0</span></h3>
         <div class="card-container" id="bj-player-cards"></div>
-        <div class="bet-controls" id="bj-betting-ui">
+        <div class="bet-controls" id="bj-betting-ui" style="margin: 0 auto;">
             <input type="number" id="bj-bet" class="bet-input" value="10" min="1">
             <button class="btn-primary action-btn" onclick="bjDeal(this)">DEAL</button>
             <button class="btn-danger action-btn" onclick="document.getElementById('bj-bet').value=players[myId].cash; bjDeal(this)">ALL IN</button>
         </div>
-        <div class="bet-controls hidden" id="bj-action-ui">
+        <div class="bet-controls hidden" id="bj-action-ui" style="margin: 0 auto;">
             <button class="btn-ghost action-btn" onclick="bjHit()">HIT</button>
             <button class="btn-ghost action-btn" onclick="bjStand()">STAND</button>
             <button class="btn-primary action-btn" onclick="bjDouble()">DOUBLE</button>
@@ -1037,7 +1048,7 @@ function loadPlinko(area) {
             <div class="plinko-mult">0.2x</div>
             <div class="plinko-mult">1.1x</div><div class="plinko-mult">1.5x</div><div class="plinko-mult">5x</div>
         </div>
-        <div class="bet-controls">
+        <div class="bet-controls" style="margin: 0 auto;">
             <input type="number" id="plinko-bet" class="bet-input" value="10" min="1">
             <button class="btn-primary action-btn" onclick="playPlinko(this)">DROP</button>
             <button class="btn-danger action-btn" onclick="document.getElementById('plinko-bet').value=players[myId].cash; playPlinko(this)">ALL IN</button>
@@ -1079,12 +1090,12 @@ function loadTower(area) {
     area.innerHTML += `
         ${getBalanceHTML()}
         <div id="tower-grid" class="grid-tower"></div>
-        <div class="bet-controls" id="tower-bet-ui">
+        <div class="bet-controls" id="tower-bet-ui" style="margin: 0 auto;">
             <input type="number" id="tower-bet" class="bet-input" value="10" min="1">
             <button class="btn-primary action-btn" onclick="towerStart(this)">START</button>
             <button class="btn-danger action-btn" onclick="document.getElementById('tower-bet').value=players[myId].cash; towerStart(this)">ALL IN</button>
         </div>
-        <div class="bet-controls hidden" id="tower-action-ui">
+        <div class="bet-controls hidden" id="tower-action-ui" style="margin: 0 auto;">
             <button id="tower-cashout-btn" class="btn-gold action-btn" onclick="towerCashout()">CASH OUT €<span id="tower-pot">0</span></button>
         </div>
     `;
@@ -1119,10 +1130,12 @@ function towerPick(col, el) {
     playSound('click');
     if (col === bomb) {
         towerActive = false; setMsg(`Bomb. Lost €${towerBet}`, false); playSound('bomb'); shakeScreen();
-        document.getElementById('tower-bet-ui').classList.remove('hidden');
-        document.getElementById('tower-action-ui').classList.add('hidden');
-        el.className = 'tile bomb'; el.innerText = '✕';
-        renderTower(); 
+        el.classList.add('explosion'); el.innerText = '💥';
+        setTimeout(() => {
+            document.getElementById('tower-bet-ui').classList.remove('hidden');
+            document.getElementById('tower-action-ui').classList.add('hidden');
+            renderTower();
+        }, 600);
     } else {
         el.className = 'tile safe'; el.innerText = '✓'; playSound('win');
         setTimeout(() => {
@@ -1151,7 +1164,7 @@ function loadRoulette(area) {
     area.innerHTML += `
         ${getBalanceHTML()}
         <div class="roulette-board" id="roul-board"></div>
-        <div class="bet-controls">
+        <div class="bet-controls" style="margin: 0 auto;">
             <input type="number" id="roul-bet" class="bet-input" value="10" min="1">
             <button class="btn-primary action-btn" onclick="playRoulette(this)">SPIN</button>
             <button class="btn-danger action-btn" onclick="document.getElementById('roul-bet').value=players[myId].cash; playRoulette(this)">ALL IN</button>
@@ -1209,12 +1222,12 @@ function loadBalatro(area) {
     area.innerHTML += `
         ${getBalanceHTML()}
         <div class="card-container" id="p-hand"></div>
-        <div class="bet-controls" id="p-bet-ui">
+        <div class="bet-controls" id="p-bet-ui" style="margin: 0 auto;">
             <input type="number" id="p-bet" class="bet-input" value="10" min="1">
             <button class="btn-primary action-btn" onclick="pDeal(this)">DEAL</button>
             <button class="btn-danger action-btn" onclick="document.getElementById('p-bet').value=players[myId].cash; pDeal(this)">ALL IN</button>
         </div>
-        <div class="bet-controls hidden" id="p-action-ui">
+        <div class="bet-controls hidden" id="p-action-ui" style="margin: 0 auto;">
             <button class="btn-primary action-btn" onclick="pDraw(this)">DRAW</button>
         </div>
     `;
@@ -1274,9 +1287,9 @@ let kenoDrawing = false;
 function loadKeno(area) {
     area.innerHTML += `
         ${getBalanceHTML()}
-        <h3 style="margin-bottom: 16px; color: var(--text-dim);">Select up to 10 numbers</h3>
+        <h3 style="margin-bottom: 16px; color: var(--text-dim); text-align: center;">Select up to 10 numbers</h3>
         <div class="grid-keno" id="keno-grid"></div>
-        <div class="bet-controls" id="keno-bet-ui" style="max-width: 600px;">
+        <div class="bet-controls" id="keno-bet-ui" style="margin: 0 auto;">
             <input type="number" id="keno-bet" class="bet-input" value="10" min="1" style="flex: 0 0 100px;">
             <button id="keno-draw-btn" class="btn-primary action-btn">DRAW</button>
             <button class="btn-danger action-btn">ALL IN</button>
@@ -1338,7 +1351,7 @@ function loadMines(area) {
     area.innerHTML += `
         ${getBalanceHTML()}
         <div id="mines-grid" class="grid-mines"></div>
-        <div class="bet-controls" id="mines-bet-ui" style="flex-wrap: wrap; max-width: 320px;">
+        <div class="bet-controls" id="mines-bet-ui" style="margin: 0 auto; flex-wrap: wrap; max-width: 320px;">
             <input type="number" id="mines-bet" class="bet-input" value="10" min="1">
             <select id="mines-count" class="bet-input" style="width: 100px; margin:0;">
                 <option value="1">1 Mine</option>
@@ -1350,7 +1363,7 @@ function loadMines(area) {
             <button class="btn-primary action-btn" onclick="minesStart(this)">START</button>
             <button class="btn-danger action-btn" onclick="document.getElementById('mines-bet').value=players[myId].cash; minesStart(this)">ALL IN</button>
         </div>
-        <div class="bet-controls hidden" id="mines-action-ui">
+        <div class="bet-controls hidden" id="mines-action-ui" style="margin: 0 auto;">
             <button id="mines-cashout-btn" class="btn-gold action-btn" onclick="minesCashout()">CASH OUT €<span id="mines-pot">0</span></button>
         </div>
     `;
@@ -1368,7 +1381,7 @@ function renderMinesGrid() {
         else if (minesState.grid[i] === 'bomb') { t.classList.add('bomb'); t.innerText = '💥'; }
         else { 
             t.innerText = minesState.active ? '?' : ''; 
-            if (minesState.active) t.onclick = () => minesPick(i);
+            if (minesState.active) t.onclick = () => minesPick(i, t);
             else t.classList.add('disabled');
         }
         grid.appendChild(t);
@@ -1387,26 +1400,40 @@ function minesStart(btn) {
     setMsg('Find the gems!', true);
     renderMinesGrid();
 }
-function minesPick(idx) {
+function minesPick(idx, el) {
     if (!minesState.active || minesState.grid[idx]) return;
     let isBomb = Math.random() < (minesState.bombs / (25 - minesState.gems));
     playSound('click');
     if (isBomb) {
-        minesState.active = false; minesState.grid[idx] = 'bomb';
-        setMsg(`Boom! Lost €${minesState.origBet}`, false); playSound('bomb'); shakeScreen();
-        document.getElementById('mines-bet-ui').classList.remove('hidden');
-        document.getElementById('mines-action-ui').classList.add('hidden');
-        renderMinesGrid();
+        minesState.active = false; 
+        minesState.grid[idx] = 'bomb';
+        setMsg(`Boom! Lost €${minesState.origBet}`, false); 
+        playSound('bomb'); 
+        shakeScreen();
+        el.classList.add('explosion'); 
+        el.innerText = '💥';
+        setTimeout(() => {
+            document.getElementById('mines-bet-ui').classList.remove('hidden');
+            document.getElementById('mines-action-ui').classList.add('hidden');
+            renderMinesGrid();
+        }, 600);
     } else {
-        minesState.grid[idx] = 'gem'; minesState.gems++;
-        let totalTiles = 25; let safeTiles = totalTiles - minesState.bombs;
+        minesState.grid[idx] = 'gem'; 
+        minesState.gems++;
+        let totalTiles = 25; 
+        let safeTiles = totalTiles - minesState.bombs;
         let currentMult = 1;
-        for (let i = 0; i < minesState.gems; i++) { currentMult *= (totalTiles - i) / (safeTiles - i); }
+        for (let i = 0; i < minesState.gems; i++) { 
+            currentMult *= (totalTiles - i) / (safeTiles - i); 
+        }
+        currentMult *= 0.90; // 10% Nerf
         minesState.bet = Math.floor(minesState.origBet * currentMult);
         document.getElementById('mines-pot').innerText = minesState.bet;
         document.getElementById('mines-cashout-btn').disabled = false;
-        setMsg(`Safe! Multiplier: ${currentMult.toFixed(2)}x`, true); playSound('win');
-        renderMinesGrid();
+        el.classList.add('safe'); 
+        el.innerText = '💎';
+        setMsg(`Safe! Multiplier: ${currentMult.toFixed(2)}x`, true); 
+        playSound('win');
     }
 }
 function minesCashout() {
@@ -1431,12 +1458,12 @@ function loadCrash(area) {
             </svg>
         </div>
         <div class="crash-display" id="crash-mult">1.00x</div>
-        <div class="bet-controls" id="crash-bet-ui">
+        <div class="bet-controls" id="crash-bet-ui" style="margin: 0 auto;">
             <input type="number" id="crash-bet" class="bet-input" value="10" min="1">
             <button class="btn-primary action-btn" onclick="crashStart(this)">BET</button>
             <button class="btn-danger action-btn" onclick="document.getElementById('crash-bet').value=players[myId].cash; crashStart(this)">ALL IN</button>
         </div>
-        <div class="bet-controls hidden" id="crash-action-ui">
+        <div class="bet-controls hidden" id="crash-action-ui" style="margin: 0 auto;">
             <button id="crash-cashout-btn" class="btn-gold action-btn" onclick="crashCashout()">CASH OUT</button>
         </div>
     `;
@@ -1476,10 +1503,15 @@ function crashStart(btn) {
         if(line) line.setAttribute('points', crashState.points);
         
         if (crashState.mult >= crashState.point) {
-            clearInterval(crashState.interval); crashState.active = false; 
+            clearInterval(crashState.interval); 
+            crashState.active = false; 
             if(el) el.classList.add('crashed');
             if(line) line.style.stroke = 'var(--danger)';
-            if (!crashState.cashed) { setMsg(`Crashed at ${crashState.point.toFixed(2)}x. Lost €${crashState.bet}`, false); playSound('bomb'); shakeScreen(); }
+            if (!crashState.cashed) { 
+                setMsg(`Crashed at ${crashState.point.toFixed(2)}x. Lost €${crashState.bet}`, false); 
+                playSound('bomb'); 
+                shakeScreen(); 
+            }
             document.getElementById('crash-bet-ui').classList.remove('hidden');
             document.getElementById('crash-action-ui').classList.add('hidden');
         }
@@ -1487,7 +1519,8 @@ function crashStart(btn) {
 }
 function crashCashout() {
     if(!crashState.active || crashState.cashed) return;
-    crashState.cashed = true; let win = Math.floor(crashState.bet * crashState.mult);
+    crashState.cashed = true; 
+    let win = Math.floor(crashState.bet * crashState.mult);
     let btn = document.getElementById('crash-cashout-btn');
     if(btn) btn.disabled = true;
     setMsg(getWinMsg(`Cashed at ${crashState.mult.toFixed(2)}x`, addWinnings(win, true)), true);
@@ -1499,7 +1532,7 @@ function loadDouble(area) {
     area.innerHTML += `
         ${getBalanceHTML()}
         <div class="double-display" id="double-coin">🪙</div>
-        <div class="bet-controls" id="double-bet-ui">
+        <div class="bet-controls" id="double-bet-ui" style="margin: 0 auto;">
             <input type="number" id="double-bet" class="bet-input" value="10" min="1">
             <button class="action-btn" style="flex:1; background: transparent; border-color: var(--danger); color: var(--danger);" onclick="doublePlay('red')">RED (2x)</button>
             <button class="action-btn" style="flex:1; background: transparent; border-color: var(--accent); color: var(--accent);" onclick="doublePlay('blue')">BLUE (2x)</button>
