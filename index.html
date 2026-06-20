@@ -9,90 +9,93 @@
     <style>
         :root,
         body[data-theme="emerald"] {
-            --bg: #08090b;
-            --surface: #101419;
-            --surface-2: #171d24;
-            --surface-3: #202833;
-            --glass: rgba(16,20,25,0.56);
-            --glass-strong: rgba(16,20,25,0.74);
-            --glass-soft: rgba(255,255,255,0.06);
-            --border: rgba(255,255,255,0.10);
-            --border-light: rgba(255,255,255,0.18);
-            --text: #f4f1e8;
-            --text-dim: #a6adba;
-            --text-faint: #697180;
+            --bg: #060709;
+            --surface: #0f1319;
+            --surface-2: #161c25;
+            --surface-3: #1d2532;
+            --glass: rgba(15, 19, 25, 0.65);
+            --glass-strong: rgba(15, 19, 25, 0.85);
+            --glass-soft: rgba(255, 255, 255, 0.04);
+            --border: rgba(76, 201, 166, 0.15);
+            --border-light: rgba(76, 201, 166, 0.28);
+            --text: #f4f7f6;
+            --text-dim: #9aa8a6;
+            --text-faint: #566865;
             --accent: #f0c75e;
             --accent-2: #4cc9a6;
-            --danger: #e14f55;
-            --felt: #0d4b3e;
-            --felt-dark: #092c29;
-            --black: #12151b;
-            --shadow: 0 24px 80px rgba(0,0,0,0.38);
+            --danger: #ff5c62;
+            --felt: #0c3c32;
+            --felt-dark: #06221c;
+            --black: #0a0d12;
+            --shadow: 0 20px 50px rgba(0,0,0,0.6);
+            --glow: 0 0 15px rgba(76, 201, 166, 0.35);
             --body-bg:
-                radial-gradient(circle at 18% 0%, rgba(76, 201, 166, 0.16), transparent 30%),
-                radial-gradient(circle at 82% 8%, rgba(240, 199, 94, 0.12), transparent 28%),
-                linear-gradient(145deg, #07080a 0%, #0c1115 44%, #090b0e 100%);
+                radial-gradient(circle at 15% 0%, rgba(76, 201, 166, 0.14), transparent 35%),
+                radial-gradient(circle at 85% 10%, rgba(240, 199, 94, 0.1), transparent 35%),
+                linear-gradient(150deg, #05070a 0%, #0d1117 50%, #07090d 100%);
             --board-bg:
-                radial-gradient(circle at 50% 16%, rgba(255,255,255,0.10), transparent 24%),
-                linear-gradient(180deg, #15372f 0%, #0b211f 58%, #091615 100%);
+                radial-gradient(circle at 50% 15%, rgba(76, 201, 166, 0.15), transparent 30%),
+                linear-gradient(180deg, #0e2b24 0%, #061715 60%, #030a09 100%);
         }
 
         body[data-theme="sapphire"] {
-            --bg: #070a12;
-            --surface: #0d1424;
-            --surface-2: #142139;
-            --surface-3: #1c2d49;
-            --glass: rgba(17, 29, 50, 0.52);
-            --glass-strong: rgba(13, 20, 36, 0.78);
-            --glass-soft: rgba(156, 202, 255, 0.08);
-            --border: rgba(185,215,255,0.15);
-            --border-light: rgba(207,226,255,0.25);
-            --text: #f0f7ff;
-            --text-dim: #a9bbd3;
-            --text-faint: #667891;
+            --bg: #05070c;
+            --surface: #0b111e;
+            --surface-2: #111a2f;
+            --surface-3: #182542;
+            --glass: rgba(11, 17, 30, 0.65);
+            --glass-strong: rgba(11, 17, 30, 0.85);
+            --glass-soft: rgba(255, 255, 255, 0.04);
+            --border: rgba(116, 215, 255, 0.15);
+            --border-light: rgba(116, 215, 255, 0.28);
+            --text: #f0f5ff;
+            --text-dim: #9cb1cc;
+            --text-faint: #566d8a;
             --accent: #74d7ff;
             --accent-2: #8a7cff;
             --danger: #ff5c7a;
-            --felt: #153d70;
-            --felt-dark: #0b1d38;
-            --black: #101624;
-            --shadow: 0 24px 90px rgba(0, 10, 28, 0.52);
+            --felt: #11305c;
+            --felt-dark: #081a34;
+            --black: #070b14;
+            --shadow: 0 20px 50px rgba(0,0,0,0.6);
+            --glow: 0 0 15px rgba(116, 215, 255, 0.35);
             --body-bg:
-                radial-gradient(circle at 20% 0%, rgba(116, 215, 255, 0.17), transparent 30%),
-                radial-gradient(circle at 80% 10%, rgba(138, 124, 255, 0.16), transparent 32%),
-                linear-gradient(145deg, #060912 0%, #0b1323 52%, #070a12 100%);
+                radial-gradient(circle at 15% 0%, rgba(116, 215, 255, 0.14), transparent 35%),
+                radial-gradient(circle at 85% 10%, rgba(138, 124, 255, 0.12), transparent 35%),
+                linear-gradient(150deg, #040509 0%, #0a101c 50%, #04060b 100%);
             --board-bg:
-                radial-gradient(circle at 50% 14%, rgba(116, 215, 255, 0.13), transparent 25%),
-                linear-gradient(180deg, #153452 0%, #0d2035 58%, #07101e 100%);
+                radial-gradient(circle at 50% 15%, rgba(116, 215, 255, 0.15), transparent 30%),
+                linear-gradient(180deg, #0e233d 0%, #061121 60%, #030811 100%);
         }
 
         body[data-theme="ruby"] {
-            --bg: #100708;
-            --surface: #1c1012;
-            --surface-2: #281619;
-            --surface-3: #372025;
-            --glass: rgba(34, 15, 18, 0.54);
-            --glass-strong: rgba(28, 16, 18, 0.78);
-            --glass-soft: rgba(255, 196, 135, 0.08);
-            --border: rgba(255,220,190,0.14);
-            --border-light: rgba(255,220,190,0.26);
-            --text: #fff4eb;
-            --text-dim: #d2b5a9;
-            --text-faint: #8e6d67;
+            --bg: #0a0506;
+            --surface: #170d0e;
+            --surface-2: #241417;
+            --surface-3: #321d20;
+            --glass: rgba(23, 13, 14, 0.65);
+            --glass-strong: rgba(23, 13, 14, 0.85);
+            --glass-soft: rgba(255, 255, 255, 0.04);
+            --border: rgba(255, 95, 125, 0.15);
+            --border-light: rgba(255, 95, 125, 0.28);
+            --text: #fff4f5;
+            --text-dim: #cca9ad;
+            --text-faint: #8a5c62;
             --accent: #ffb45c;
             --accent-2: #ff5f7d;
             --danger: #ff4c5c;
-            --felt: #5d1c27;
-            --felt-dark: #331017;
-            --black: #181012;
-            --shadow: 0 24px 90px rgba(24, 4, 5, 0.58);
+            --felt: #4a151e;
+            --felt-dark: #2a0b10;
+            --black: #100708;
+            --shadow: 0 20px 50px rgba(0,0,0,0.6);
+            --glow: 0 0 15px rgba(255, 95, 125, 0.35);
             --body-bg:
-                radial-gradient(circle at 15% 0%, rgba(255, 95, 125, 0.16), transparent 30%),
-                radial-gradient(circle at 82% 8%, rgba(255, 180, 92, 0.16), transparent 30%),
-                linear-gradient(145deg, #100607 0%, #1a0d10 50%, #0e0608 100%);
+                radial-gradient(circle at 15% 0%, rgba(255, 95, 125, 0.14), transparent 35%),
+                radial-gradient(circle at 85% 10%, rgba(255, 180, 92, 0.12), transparent 35%),
+                linear-gradient(150deg, #080405 0%, #160c0e 50%, #090405 100%);
             --board-bg:
-                radial-gradient(circle at 50% 16%, rgba(255,255,255,0.10), transparent 24%),
-                linear-gradient(180deg, #49202a 0%, #271119 58%, #16090e 100%);
+                radial-gradient(circle at 50% 15%, rgba(255, 95, 125, 0.15), transparent 30%),
+                linear-gradient(180deg, #370f17 0%, #1e080d 60%, #0f0406 100%);
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -636,10 +639,12 @@
         <main id="main-content">
             <button id="skip-round-btn" class="hidden" onclick="skipRound()">Skip Round</button>
             
-            <div id="menu-screen">
-                <h1>Gamble Against Friends</h1>
-                <p>No house edge. Real-time multiplayer. Pure adrenaline.</p>
-                <div style="max-width: 400px;">
+            <div id="menu-screen" class="menu-container">
+                <div class="hero-section">
+                    <h1>Gamble Against Friends</h1>
+                    <p>No house edge. Real-time multiplayer. Pure adrenaline.</p>
+                </div>
+                <div class="login-card">
                     <input type="text" id="name-input" placeholder="Enter username" maxlength="12">
                     <div class="form-row">
                         <label>Max Players</label>
@@ -736,6 +741,16 @@
 
 <script>
 // --- STATE ---
+function shuffle(array) {
+    let m = array.length, t, i;
+    while (m) {
+        i = Math.floor(Math.random() * m--);
+        t = array[m];
+        array[m] = array[i];
+        array[i] = t;
+    }
+    return array;
+}
 let peer = null, connections = {}, myConnection = null, isHost = false;
 let myName = "", roomId = "", myId = "";
 let players = {}; 
@@ -772,9 +787,50 @@ setInterval(() => {
     if (isHost) broadcast({ type: 'state_sync', players: players });
 }, 500);
 
-// --- AUDIO ENGINE (Clicky Keyboard Sounds) ---
+// --- AUDIO ENGINE (High-Fidelity Cyber Synth Engine) ---
 let audioCtx = null;
-function initAudio() { if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+let noiseBuffer = null;
+
+function initAudio() { 
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); 
+}
+
+function getNoiseBuffer() {
+    if (noiseBuffer) return noiseBuffer;
+    if (!audioCtx) return null;
+    const bufferSize = audioCtx.sampleRate * 2;
+    noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+    }
+    return noiseBuffer;
+}
+
+function playNoise(duration, vol = 0.1, cutoffFreq = 1000, isLowpass = true, delay = 0) {
+    if (!audioCtx) return;
+    const buffer = getNoiseBuffer();
+    if (!buffer) return;
+    const source = audioCtx.createBufferSource();
+    source.buffer = buffer;
+    
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = isLowpass ? 'lowpass' : 'bandpass';
+    filter.frequency.setValueAtTime(cutoffFreq, audioCtx.currentTime + delay);
+    filter.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + delay + duration);
+
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(vol, audioCtx.currentTime + delay);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + duration);
+
+    source.connect(filter);
+    filter.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    source.start(audioCtx.currentTime + delay);
+    source.stop(audioCtx.currentTime + delay + duration);
+}
+
 function playTone(freq, duration, type='sine', vol=0.1, delay=0) {
     if(!audioCtx) return;
     let o = audioCtx.createOscillator(); let g = audioCtx.createGain();
@@ -784,37 +840,135 @@ function playTone(freq, duration, type='sine', vol=0.1, delay=0) {
     g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + duration);
     o.start(audioCtx.currentTime + delay); o.stop(audioCtx.currentTime + delay + duration);
 }
+
 function playSound(type) {
     initAudio();
-    if (type === 'click') { playTone(1200, 0.02, 'square', 0.04); playTone(800, 0.02, 'square', 0.03, 0.02); }
-    else if (type === 'hover') { playTone(1600, 0.01, 'sine', 0.02); }
-    else if (type === 'spin') { playTone(400, 0.1, 'sawtooth', 0.03); playTone(200, 0.1, 'sawtooth', 0.02, 0.05); }
-    else if (type === 'tick') { playTone(1000, 0.02, 'square', 0.02); }
-    else if (type === 'bet') { playTone(900, 0.03, 'triangle', 0.06); playTone(450, 0.05, 'triangle', 0.05, 0.03); }
-    else if (type === 'win') { [523, 659, 784].forEach((f,i)=>playTone(f, 0.15, 'sine', 0.1, i*0.08)); }
-    else if (type === 'jackpot') { 
-        [523, 659, 784, 1046, 1318].forEach((f,i)=>playTone(f, 0.3, 'sawtooth', 0.15, i*0.1)); 
-        [659, 784, 988, 1318].forEach((f,i)=>playTone(f, 0.3, 'square', 0.1, i*0.15 + 0.2)); 
+    if (type === 'click') { 
+        playTone(1800, 0.01, 'sine', 0.05); 
+        playTone(1200, 0.015, 'sine', 0.04, 0.005); 
     }
-    else if (type === 'lose') { playTone(200, 0.3, 'sawtooth', 0.08); playTone(100, 0.4, 'sawtooth', 0.08, 0.1); }
-    else if (type === 'card') { playTone(600, 0.04, 'sawtooth', 0.03); playTone(300, 0.06, 'sawtooth', 0.02, 0.04); }
-    else if (type === 'reelStop') { playTone(800, 0.05, 'square', 0.06); }
-    else if (type === 'bomb') { playTone(100, 0.5, 'sawtooth', 0.2); playTone(50, 0.6, 'sawtooth', 0.2, 0.1); }
-    else if (type === 'coinFlip') { playTone(1200, 0.05, 'triangle', 0.08); playTone(900, 0.05, 'triangle', 0.08, 0.1); }
-    else if (type === 'slotsSpin') { [180, 260, 340].forEach((f,i)=>playTone(f, 0.12, 'sawtooth', 0.035, i*0.04)); }
-    else if (type === 'slotsStop') { playTone(960, 0.05, 'square', 0.06); playTone(1440, 0.035, 'square', 0.035, 0.035); }
-    else if (type === 'blackjackDeal') { playTone(360, 0.035, 'triangle', 0.035); playTone(620, 0.045, 'triangle', 0.025, 0.025); }
-    else if (type === 'plinkoDrop') { playTone(1320, 0.04, 'sine', 0.05); playTone(760, 0.05, 'triangle', 0.035, 0.04); }
-    else if (type === 'plinkoPeg') { playTone(1120 + Math.random()*260, 0.018, 'triangle', 0.025); }
-    else if (type === 'towerPick') { playTone(520, 0.035, 'square', 0.04); playTone(780, 0.04, 'square', 0.03, 0.04); }
-    else if (type === 'rouletteSpin') { [220, 330, 440, 550].forEach((f,i)=>playTone(f, 0.16, 'sawtooth', 0.035, i*0.045)); }
-    else if (type === 'rouletteTick') { playTone(720, 0.018, 'square', 0.028); playTone(980, 0.012, 'square', 0.018, 0.012); }
-    else if (type === 'balatroCard') { playTone(420, 0.035, 'triangle', 0.035); playTone(260, 0.035, 'sine', 0.018, 0.025); }
-    else if (type === 'kenoPing') { playTone(880, 0.04, 'sine', 0.04); playTone(1320, 0.03, 'sine', 0.03, 0.035); }
-    else if (type === 'minesDig') { playTone(300, 0.035, 'square', 0.035); playTone(180, 0.04, 'triangle', 0.025, 0.035); }
-    else if (type === 'crashRise') { playTone(520, 0.08, 'sawtooth', 0.025); playTone(780, 0.08, 'sawtooth', 0.018, 0.05); }
-    else if (type === 'doubleFlip') { [760, 980, 1220, 980].forEach((f,i)=>playTone(f, 0.045, 'triangle', 0.055, i*0.055)); }
-    else if (type === 'softWin') { [494, 659, 880].forEach((f,i)=>playTone(f, 0.12, 'sine', 0.075, i*0.07)); }
+    else if (type === 'hover') { 
+        playTone(1600, 0.008, 'sine', 0.015); 
+    }
+    else if (type === 'spin') { 
+        [0, 0.15, 0.3, 0.45].forEach(d => {
+            playTone(180, 0.12, 'triangle', 0.04, d);
+            playTone(240, 0.08, 'sine', 0.03, d + 0.04);
+        });
+    }
+    else if (type === 'tick') { 
+        playTone(900, 0.015, 'sine', 0.03); 
+    }
+    else if (type === 'bet') { 
+        [0, 0.04, 0.08].forEach((d, i) => {
+            playTone(2200 - i * 300, 0.02, 'sine', 0.04, d);
+            playTone(1400 - i * 200, 0.015, 'triangle', 0.02, d + 0.005);
+        });
+    }
+    else if (type === 'win') { 
+        const notes = [523.25, 659.25, 783.99, 1046.50];
+        notes.forEach((f, i) => {
+            playTone(f, 0.25, 'triangle', 0.04, i * 0.06);
+            playTone(f * 2.01, 0.2, 'sine', 0.02, i * 0.06);
+        });
+    }
+    else if (type === 'jackpot') { 
+        const scale = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98, 2093.00];
+        scale.forEach((f, i) => {
+            playTone(f, 0.35, 'triangle', 0.05, i * 0.06);
+            playTone(f * 1.005, 0.35, 'sawtooth', 0.02, i * 0.06);
+        });
+        scale.reverse().forEach((f, i) => {
+            playTone(f, 0.35, 'triangle', 0.03, 0.42 + i * 0.06);
+        });
+    }
+    else if (type === 'lose') { 
+        playTone(320, 0.35, 'sawtooth', 0.05);
+        playTone(210, 0.45, 'sawtooth', 0.05, 0.1);
+        playNoise(0.4, 0.03, 200, true, 0.05);
+    }
+    else if (type === 'card' || type === 'blackjackDeal' || type === 'balatroCard') { 
+        playNoise(0.12, 0.06, 800, true);
+        playTone(350, 0.08, 'triangle', 0.02);
+    }
+    else if (type === 'reelStop' || type === 'slotsStop') { 
+        playTone(220, 0.04, 'triangle', 0.08); 
+        playNoise(0.04, 0.03, 1000, true);
+    }
+    else if (type === 'bomb') { 
+        playNoise(0.8, 0.25, 400, true);
+        playTone(90, 0.6, 'sawtooth', 0.15);
+        playTone(55, 0.8, 'sine', 0.2);
+    }
+    else if (type === 'coinFlip' || type === 'doubleFlip') { 
+        for (let i = 0; i < 8; i++) {
+            playTone(1800 + i * 80, 0.03, 'sine', 0.035, i * 0.05);
+        }
+    }
+    else if (type === 'slotsSpin') { 
+        [0, 0.15, 0.3, 0.45].forEach(d => {
+            playTone(180, 0.12, 'triangle', 0.04, d);
+            playTone(240, 0.08, 'sine', 0.03, d + 0.04);
+        });
+    }
+    else if (type === 'plinkoDrop') { 
+        playTone(440, 0.12, 'sine', 0.05); 
+        playNoise(0.08, 0.03, 600, true);
+    }
+    else if (type === 'plinkoPeg') { 
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        o.type = 'triangle';
+        const startFreq = 1200 + Math.random() * 400;
+        o.frequency.setValueAtTime(startFreq, audioCtx.currentTime);
+        o.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.03);
+        g.gain.setValueAtTime(0.06, audioCtx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
+        o.connect(g);
+        g.connect(audioCtx.destination);
+        o.start();
+        o.stop(audioCtx.currentTime + 0.03);
+    }
+    else if (type === 'towerPick') { 
+        playTone(587.33, 0.05, 'triangle', 0.04); 
+        playTone(880, 0.08, 'triangle', 0.03, 0.04); 
+    }
+    else if (type === 'rouletteSpin') { 
+        for (let i = 0; i < 15; i++) {
+            playNoise(0.18, 0.015, 600 + Math.sin(i) * 200, true, i * 0.12);
+            if (i % 2 === 0) playTone(1200 - i * 30, 0.01, 'sine', 0.008, i * 0.12);
+        }
+    }
+    else if (type === 'rouletteTick') { 
+        playTone(1600, 0.008, 'sine', 0.02); 
+        playTone(900, 0.01, 'triangle', 0.015, 0.002);
+    }
+    else if (type === 'kenoPing') { 
+        playTone(880, 0.08, 'sine', 0.04); 
+        playTone(1320, 0.12, 'sine', 0.03, 0.04); 
+    }
+    else if (type === 'minesDig') { 
+        playTone(293.66, 0.05, 'sine', 0.04); 
+        playTone(440, 0.08, 'triangle', 0.03, 0.03); 
+    }
+    else if (type === 'crashRise') { 
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        o.type = 'sawtooth';
+        const currentMult = (typeof crashState !== 'undefined') ? crashState.mult : 1.0;
+        o.frequency.setValueAtTime(80 + currentMult * 25, audioCtx.currentTime);
+        o.frequency.exponentialRampToValueAtTime(80 + (currentMult + 0.1) * 25, audioCtx.currentTime + 0.15);
+        g.gain.setValueAtTime(0.015, audioCtx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+        o.connect(g);
+        g.connect(audioCtx.destination);
+        o.start();
+        o.stop(audioCtx.currentTime + 0.15);
+    }
+    else if (type === 'softWin') { 
+        const notes = [494, 659, 880];
+        notes.forEach((f,i)=>playTone(f, 0.12, 'sine', 0.075, i*0.07)); 
+    }
 }
 
 function playGameSound(event) {
@@ -1044,7 +1198,7 @@ function startMatch() {
     playSound('click');
     if(Object.values(players).filter(p=>p.connected).length < 1) return alert("Need at least 1 player!");
     currentRound = 1;
-    let gameChoices = [...ALL_GAMES].sort(() => 0.5 - Math.random()).slice(0, 3);
+    let gameChoices = shuffle([...ALL_GAMES]).slice(0, 3);
     broadcast({ type: 'start_match', players: players, round: currentRound, games: gameChoices });
     startRound(currentRound, gameChoices);
 }
@@ -1279,7 +1433,7 @@ function showBreak(results, boostedPlayerId, nextRound) {
             }
             currentRound = nextRound;
             let gameChoices = currentRound === 3 ? 2 : 3;
-            let choices = [...ALL_GAMES].sort(() => 0.5 - Math.random()).slice(0, gameChoices);
+            let choices = shuffle([...ALL_GAMES]).slice(0, gameChoices);
             if(isHost) { broadcast({ type: 'start_match', players: players, round: currentRound, games: choices }); startRound(currentRound, choices); }
         }
     }, 1000);
@@ -2029,7 +2183,14 @@ function loadCrash(area) {
         ${getBalanceHTML()}
         <div class="crash-chart">
             <svg class="crash-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <polyline id="crash-line" points="0,100" fill="none" stroke="#D4AF37" stroke-width="2" vector-effect="non-scaling-stroke" />
+                <defs>
+                    <linearGradient id="crash-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.3"/>
+                        <stop offset="100%" stop-color="var(--accent)" stop-opacity="0.0"/>
+                    </linearGradient>
+                </defs>
+                <path id="crash-area" fill="url(#crash-grad)" d="" />
+                <polyline id="crash-line" points="0,100" fill="none" stroke="var(--accent)" stroke-width="3" vector-effect="non-scaling-stroke" style="filter: drop-shadow(0 0 5px var(--accent));" />
             </svg>
         </div>
         <div class="crash-display" id="crash-mult">1.00x</div>
@@ -2045,8 +2206,10 @@ function loadCrash(area) {
     crashState = { active: false, bet: 0, mult: 1.00, interval: null, cashed: false, point: 0, points: "0,100" };
     let el = document.getElementById('crash-mult');
     let line = document.getElementById('crash-line');
+    let areaPath = document.getElementById('crash-area');
     if(el) { el.innerText = '1.00x'; el.style.color = 'var(--text)'; el.classList.remove('crashed'); }
-    if(line) { line.setAttribute('points', '0,100'); line.style.stroke = '#D4AF37'; }
+    if(line) { line.setAttribute('points', '0,100'); line.style.stroke = 'var(--accent)'; }
+    if(areaPath) { areaPath.setAttribute('d', 'M 0 100 L 0 100 Z'); }
 }
 function crashStart(btn) {
     let bet = parseInt(document.getElementById('crash-bet').value);
@@ -2063,19 +2226,33 @@ function crashStart(btn) {
     
     let el = document.getElementById('crash-mult');
     let line = document.getElementById('crash-line');
+    let areaPath = document.getElementById('crash-area');
     if(el) { el.style.color = 'var(--text)'; el.classList.remove('crashed'); }
-    if(line) { line.setAttribute('points', '0,100'); line.style.stroke = '#D4AF37'; }
+    if(line) { line.setAttribute('points', '0,100'); line.style.stroke = 'var(--accent)'; }
+    if(areaPath) { areaPath.setAttribute('d', 'M 0 100 L 0 100 Z'); }
     
     setMsg('Cash out before it crashes!', true); playGameSound('action');
     
     crashState.interval = setInterval(() => {
         crashState.mult += 0.015; 
         if(el) el.innerText = crashState.mult.toFixed(2) + 'x';
+        playGameSound('tick');
         
         let x = Math.min(100, (crashState.mult - 1) * 25);
-        let y = 100 - Math.min(100, (crashState.mult - 1) * 25);
+        let y = 100 - Math.min(95, (crashState.mult - 1) * 25);
         crashState.points += ` ${x},${y}`;
         if(line) line.setAttribute('points', crashState.points);
+        
+        const pts = crashState.points.split(' ');
+        let d = 'M 0 100';
+        for (const p of pts) {
+            if (p) {
+                const xy = p.split(',');
+                d += " L " + xy[0] + " " + xy[1];
+            }
+        }
+        d += " L " + x + " 100 Z";
+        if(areaPath) areaPath.setAttribute('d', d);
         
         if (crashState.mult >= crashState.point) {
             clearInterval(crashState.interval); 
