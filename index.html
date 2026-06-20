@@ -1725,13 +1725,17 @@ function playPlinko(btn) {
     const multEls = document.querySelectorAll('.plinko-mult');
     const ball = document.getElementById('plinko-ball');
     const points = getPlinkoPath(pos);
-    multEls.forEach(el => el.classList.remove('active'));
-    ball.classList.add('dropping');
-    ball.animate(points.map(point => ({ transform: `translate(${point.x - 11}px, ${point.y - 11}px)` })), {
-        duration: 1850,
-        easing: 'cubic-bezier(.18,.7,.28,1)',
-        fill: 'forwards'
-    });
+        // Reset ball state to ensure it appears on rapid clicks
+        ball.classList.remove('dropping');
+        ball.style.transform = '';
+        multEls.forEach(el => el.classList.remove('active'));
+        ball.classList.add('dropping');
+        // Start animation of the ball falling through the pegs
+        ball.animate(points.map(point => ({ transform: `translate(${point.x - 11}px, ${point.y - 11}px)` })), {
+            duration: 1850,
+            easing: 'cubic-bezier(.18,.7,.28,1)',
+            fill: 'forwards'
+        });
     let tick = 0;
     const tickInt = setInterval(() => { playGameSound('tick'); tick++; if(tick > 8) clearInterval(tickInt); }, 170);
     setTimeout(() => {
@@ -1901,11 +1905,12 @@ function playRoulette(btn) {
     const index = ROULETTE_ORDER.indexOf(res);
     const landingAngle = index * slice + slice / 2;
     
+    // Calculate wheel rotation to land on result
     let M = Math.ceil((rouletteWheelRotation + 1440 + landingAngle) / 360);
     rouletteWheelRotation = M * 360 - landingAngle;
-    
-    let N = Math.floor((rouletteBallRotation - 1800) / 360);
-    rouletteBallRotation = N * 360;
+
+    // Synchronize ball rotation with wheel for correct landing alignment
+    rouletteBallRotation = rouletteWheelRotation;
     
     resultEl.innerText = '...';
     document.querySelectorAll('.roulette-tile').forEach(t => t.classList.remove('hit'));
