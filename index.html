@@ -163,9 +163,9 @@
         .list-item:last-child { border-bottom: none; }
 
         .game-header { margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
-        .timer-val { font-family: 'Space Grotesk', sans-serif; font-size: 64px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; line-height: 1; letter-spacing: -0.03em; }
+        .timer-val { font-family: 'Space Grotesk', sans-serif; font-size: 64px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; line-height: 1; letter-spacing: -0.03em; text-align: center; }
         .timer-warning { color: var(--danger); }
-        .game-subtitle { font-size: 14px; color: var(--text-dim); margin-top: 12px; font-weight: 500; }
+        .game-subtitle { font-size: 14px; color: var(--text-dim); margin-top: 12px; font-weight: 500; text-align: center; }
 
         .vote-grid { display: grid; grid-template-columns: 1fr; gap: 12px; max-width: 400px; margin: 0 auto; }
         .vote-btn { padding: 20px; text-align: left; font-weight: 600; font-size: 16px; background: var(--surface); border: 1px solid var(--border); color: var(--text); transition: all 0.2s; }
@@ -177,7 +177,7 @@
         .stat-cash.flash-up { color: #4ADE80; }
         .stat-cash.flash-down { color: var(--danger); }
 
-        #game-area { display: flex; flex-direction: column; align-items: flex-start; }
+        #game-area { display: flex; flex-direction: column; align-items: center; }
         .flash-success { box-shadow: inset 0 0 0 2px var(--accent); }
         .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
         @keyframes shake {
@@ -200,16 +200,18 @@
         .action-btn { padding: 12px 24px; flex: 1; }
         
         .cooldown { opacity: 0.3; pointer-events: none; }
-        .action-msg { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; min-height: 30px; margin-top: 24px; color: var(--text); letter-spacing: -0.01em; width: 100%; text-align: left; }
+        .action-msg { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; min-height: 30px; margin-top: 24px; color: var(--text); letter-spacing: -0.01em; width: 100%; text-align: center; }
         .win-msg { color: #4ADE80; }
         .loss-msg { color: var(--danger); }
 
         /* Slots */
-        .slot-machine { display: flex; justify-content: center; gap: 16px; font-size: 48px; margin: 0 auto 32px auto; background: var(--surface); padding: 24px; border: 1px solid var(--border); border-radius: 4px; max-width: 440px; }
-        .slot-reel { width: 70px; height: 60px; display: flex; align-items: center; justify-content: center; transition: transform 0.3s; }
-        .slot-reel.win { transform: scale(1.1); }
+        .slot-machine { display: flex; justify-content: center; gap: 16px; font-size: 48px; margin: 0 auto 32px auto; background: var(--surface); padding: 24px; border: 1px solid var(--border); border-radius: 4px; max-width: 440px; overflow: hidden; }
+        .slot-reel { width: 80px; height: 60px; display: flex; align-items: center; justify-content: center; transition: transform 0.3s; }
+        .slot-reel.win { transform: scale(1.2); }
         .spinning { opacity: 0.5; animation: spin 0.1s linear infinite; }
-        @keyframes spin { 0% { transform: translateY(-8px); } 50% { transform: translateY(8px); } 100% { transform: translateY(-8px); } }
+        @keyframes spin { 0% { transform: translateY(-15px); } 50% { transform: translateY(15px); } 100% { transform: translateY(-15px); } }
+        .slot-slide-in { animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { 0% { transform: translateX(-100px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
 
         /* Cards */
         .card-container { display: flex; justify-content: center; gap: 12px; margin: 0 auto 32px auto; flex-wrap: wrap; max-width: 440px; }
@@ -258,13 +260,15 @@
         .crash-chart { width: 100%; max-width: 440px; height: 150px; background: var(--surface); margin: 0 auto 24px auto; position: relative; overflow: hidden; border: 1px solid var(--border); border-radius: 4px; }
         .crash-svg { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
 
-        /* Double */
-        .double-display { font-family: 'Space Grotesk', sans-serif; font-size: 96px; margin: 0 auto 32px auto; color: var(--text); text-align: center; max-width: 440px; }
-        .double-display.spinning { animation: flipCoin 1s steps(8, end); }
-        @keyframes flipCoin { 0% { transform: rotateY(0); } 100% { transform: rotateY(720deg); } }
+        /* Double Custom Coin */
+        .coin-container { width: 100px; height: 100px; perspective: 1000px; margin: 0 auto 32px auto; }
+        .coin-inner { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0s; }
+        .coin-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: 'Space Grotesk', sans-serif; font-size: 24px; border: 4px solid var(--bg); box-shadow: 0 0 15px rgba(0,0,0,0.5); }
+        .coin-face.front { background: var(--accent); color: #000; }
+        .coin-face.back { background: var(--danger); color: #fff; transform: rotateY(180deg); }
 
         #bailout-ui { background: var(--surface); border: 1px solid var(--danger); padding: 24px; margin-top: 24px; border-radius: 4px; }
-        .next-timer { font-size: 13px; color: var(--text-dim); margin-top: 32px; font-weight: 500; }
+        .next-timer { font-size: 13px; color: var(--text-dim); margin-top: 32px; font-weight: 500; text-align: center; }
 
         #skip-round-btn { position: absolute; top: 24px; right: 32px; width: auto; padding: 10px 20px; font-size: 14px; font-weight: 600; background: var(--surface); border: 1px solid var(--border); color: var(--text-dim); transition: all 0.2s; z-index: 10; }
         #skip-round-btn:hover { border-color: var(--danger); color: var(--danger); }
@@ -309,6 +313,10 @@
         .info-list { list-style: none; padding: 0; margin: 0 0 24px 0; }
         .info-list li { background: var(--surface); margin-bottom: 8px; padding: 16px; border: 1px solid var(--border); border-radius: 4px; color: var(--text-dim); font-size: 13px; }
         .info-list li strong { color: var(--text); margin-right: 8px; font-family: 'Space Grotesk', sans-serif; }
+
+        /* Confetti */
+        .confetti { position: fixed; top: -10px; width: 10px; height: 10px; z-index: 1000; pointer-events: none; animation: fall 2s linear forwards; border-radius: 2px; }
+        @keyframes fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
     </style>
 </head>
 <body>
@@ -363,10 +371,10 @@
 
             <div id="voting-screen" class="hidden">
                 <div class="game-header">
-                    <div id="voting-timer" class="timer-val">120</div>
-                    <div class="game-subtitle" id="round-title">Round 1</div>
+                    <div id="voting-timer" class="timer-val">15</div>
+                    <div class="game-subtitle" id="round-title">Round 1 Selection</div>
                 </div>
-                <p id="vote-instructions" style="margin-bottom: 24px;">Select a game to start playing.</p>
+                <p id="vote-instructions" style="margin-bottom: 24px; text-align: center;">Select a game to start playing.</p>
                 <div id="vote-options" class="vote-grid"></div>
             </div>
 
@@ -458,10 +466,14 @@ function playSound(type) {
     else if (type === 'tick') playTone(1000, 0.03, 'square', 0.02);
     else if (type === 'bet') { playTone(300, 0.05, 'triangle', 0.08); playTone(150, 0.1, 'triangle', 0.08, 0.05); }
     else if (type === 'win') { [523, 659, 784].forEach((f,i)=>playTone(f, 0.15, 'sine', 0.1, i*0.08)); }
-    else if (type === 'jackpot') { [523, 659, 784, 1046, 1318].forEach((f,i)=>playTone(f, 0.2, 'sawtooth', 0.12, i*0.1)); }
+    else if (type === 'jackpot') { 
+        // Massive Jackpot Sound
+        [523, 659, 784, 1046, 1318].forEach((f,i)=>playTone(f, 0.3, 'sawtooth', 0.15, i*0.1)); 
+        [659, 784, 988, 1318].forEach((f,i)=>playTone(f, 0.3, 'square', 0.1, i*0.15 + 0.2)); 
+    }
     else if (type === 'lose') { playTone(200, 0.3, 'sawtooth', 0.08); playTone(100, 0.4, 'sawtooth', 0.08, 0.1); }
     else if (type === 'card') playTone(800, 0.05, 'sine', 0.06);
-    else if (type === 'reelStop') playTone(400, 0.1, 'square', 0.05);
+    else if (type === 'reelStop') playTone(400, 0.1, 'square', 0.08);
     else if (type === 'bomb') { playTone(100, 0.5, 'sawtooth', 0.2); playTone(50, 0.6, 'sawtooth', 0.2, 0.1); }
     else if (type === 'coinFlip') { playTone(1200, 0.05, 'triangle', 0.08); playTone(900, 0.05, 'triangle', 0.08, 0.1); }
 }
@@ -479,6 +491,17 @@ function shakeScreen() {
     if(area) {
         area.classList.add('shake');
         setTimeout(()=>area.classList.remove('shake'), 500);
+    }
+}
+function spawnConfetti(amount=50) {
+    for(let i=0; i<amount; i++) {
+        let c = document.createElement('div');
+        c.className = 'confetti';
+        c.style.left = Math.random() * 100 + 'vw';
+        c.style.background = ['#D4AF37', '#4ADE80', '#EAEAEA', '#E5484D'][Math.floor(Math.random()*4)];
+        c.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 3000);
     }
 }
 
@@ -590,12 +613,15 @@ function handleData(data, senderId) {
             players[senderId] = { name: data.name, cash: 100, connected: true };
             updateLobbyUI();
             broadcast({ type: 'lobby_update', players: players, maxPlayers: maxPlayers });
+        } else if (data.type === 'pick_vote') {
+            if(players[senderId]) players[senderId].pickedGame = data.game;
+            checkPicks();
         } else if (data.type === 'vote') {
             if(players[senderId]) players[senderId].voted = data.game;
             checkVotes(data.games);
         } else if (data.type === 'bet_update') {
             if(players[senderId]) players[senderId].cash = data.cash;
-            broadcast({ type: 'state_sync', players: players }); // Instant Real-time sync
+            broadcast({ type: 'state_sync', players: players });
         } else if (data.type === 'skip_vote') {
             if(players[senderId] && !players[senderId].votedSkip) {
                 players[senderId].votedSkip = true;
@@ -613,6 +639,7 @@ function handleData(data, senderId) {
         if (data.type === 'lobby_full') { alert("Lobby is full."); location.reload(); }
         else if (data.type === 'lobby_update') { players = data.players; maxPlayers = data.maxPlayers; updateLobbyUI(); }
         else if (data.type === 'start_match') { players = data.players; startRound(data.round, data.games); }
+        else if (data.type === 'start_play_phase') { startPlayPhase(data.round, data.games, data.myGame); }
         else if (data.type === 'state_sync') { 
             for(let id in data.players) {
                 if (id !== myId) {
@@ -621,6 +648,7 @@ function handleData(data, senderId) {
                     players[id].votedSkip = data.players[id].votedSkip;
                     players[id].winBoost = data.players[id].winBoost;
                     players[id].winPenalty = data.players[id].winPenalty;
+                    players[id].pickedGame = data.players[id].pickedGame;
                 }
             }
             updateLeaderboard(); 
@@ -668,52 +696,90 @@ function startRound(round, games) {
     document.getElementById('lobby-screen').classList.add('hidden');
     document.getElementById('break-screen').classList.add('hidden');
     document.getElementById('voting-screen').classList.remove('hidden');
-    document.getElementById('round-title').innerText = `Round ${round}`;
-    updateLeaderboard();
+    document.getElementById('round-title').innerText = `Round ${round} Selection`;
+    document.getElementById('voting-timer').innerText = "15";
+    document.getElementById('voting-timer').classList.remove('timer-warning');
+    document.getElementById('vote-instructions').innerText = "Select a game to start playing.";
     myGameChoice = null;
-    skipVotes = 0;
-    if(players[myId]) players[myId].votedSkip = false; 
+    
+    if(players[myId]) players[myId].pickedGame = null;
+
+    let voteContainer = document.getElementById('vote-options');
+    voteContainer.innerHTML = '';
+    
+    let timeLeft = 15;
+    if (voteInterval) clearInterval(voteInterval);
+    voteInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('voting-timer').innerText = timeLeft;
+        if (timeLeft <= 5) { playSound('tick'); document.getElementById('voting-timer').classList.add('timer-warning'); }
+        if (timeLeft <= 0) { 
+            clearInterval(voteInterval); 
+            if(isHost) {
+                // Auto-assign random game if not picked
+                Object.values(players).forEach(p => {
+                    if(p.connected && !p.pickedGame) p.pickedGame = games[Math.floor(Math.random() * games.length)];
+                });
+                checkPicks(true);
+            }
+        }
+    }, 1000);
+
+    games.forEach(game => {
+        let btn = document.createElement('button');
+        btn.innerText = game; btn.className = 'vote-btn';
+        btn.onclick = () => {
+            playSound('click');
+            if(myGameChoice) return;
+            myGameChoice = game;
+            document.getElementById('vote-instructions').innerText = `Locked in ${game}. Waiting for other players...`;
+            broadcast({ type: 'pick_vote', game: game });
+            if(isHost) {
+                if(players[myId]) players[myId].pickedGame = game;
+                checkPicks();
+            }
+        };
+        voteContainer.appendChild(btn);
+    });
+}
+
+function checkPicks(forceStart=false) {
+    let activePlayers = Object.values(players).filter(p=>p.connected);
+    if (activePlayers.every(p => p.pickedGame)) {
+        clearInterval(voteInterval);
+        let picks = {};
+        activePlayers.forEach(p => picks[p.id] = p.pickedGame);
+        broadcast({ type: 'start_play_phase', round: currentRound, games: picks });
+        startPlayPhase(currentRound, picks, picks[myId]);
+    } else if (forceStart) {
+        let picks = {};
+        activePlayers.forEach(p => picks[p.id] = p.pickedGame || ALL_GAMES[0]);
+        broadcast({ type: 'start_play_phase', round: currentRound, games: picks });
+        startPlayPhase(currentRound, picks, picks[myId]);
+    }
+}
+
+function startPlayPhase(round, games, myGame) {
+    document.getElementById('voting-screen').classList.add('hidden');
+    document.getElementById('game-screen').classList.remove('hidden');
+    document.getElementById('current-game-title').innerText = `Playing: ${myGame}`;
     
     const skipBtn = document.getElementById('skip-round-btn');
-    if (skipBtn) { skipBtn.disabled = false; skipBtn.innerText = 'Skip Round'; }
-    if (skipBtn) skipBtn.classList.add('hidden');
-
-    if (round < 3) {
-        document.getElementById('vote-instructions').innerText = "Select a game to start playing.";
-        let voteContainer = document.getElementById('vote-options');
-        voteContainer.innerHTML = '';
-        
-        let timeLeft = roundTimers[round];
-        document.getElementById('voting-timer').innerText = timeLeft;
-        document.getElementById('game-timer').innerText = timeLeft; 
-        document.getElementById('voting-timer').classList.remove('timer-warning');
-        document.getElementById('game-timer').classList.remove('timer-warning');
-        
-        if (gameInterval) clearInterval(gameInterval);
-        gameInterval = setInterval(() => {
-            timeLeft--;
-            document.getElementById('voting-timer').innerText = timeLeft;
-            document.getElementById('game-timer').innerText = timeLeft;
-            if (timeLeft <= 10) { playSound('tick'); document.getElementById('voting-timer').classList.add('timer-warning'); document.getElementById('game-timer').classList.add('timer-warning'); }
-            if (timeLeft <= 0) { clearInterval(gameInterval); endRound(); }
-        }, 1000);
-
-        games.forEach(game => {
-            let btn = document.createElement('button');
-            btn.innerText = game; btn.className = 'vote-btn';
-            btn.onclick = () => {
-                playSound('click');
-                if(myGameChoice) return;
-                myGameChoice = game;
-                document.getElementById('voting-screen').classList.add('hidden');
-                document.getElementById('game-screen').classList.remove('hidden');
-                if (skipBtn) { skipBtn.classList.remove('hidden'); skipBtn.disabled = false; skipBtn.innerText = 'Skip Round'; }
-                document.getElementById('current-game-title').innerText = `Playing: ${game}`;
-                loadMiniGame(game);
-            };
-            voteContainer.appendChild(btn);
-        });
-    } else { startRound3Vote(games); }
+    if (skipBtn) { skipBtn.classList.remove('hidden'); skipBtn.disabled = false; skipBtn.innerText = 'Skip Round'; }
+    
+    let timeLeft = roundTimers[round];
+    document.getElementById('game-timer').innerText = timeLeft;
+    document.getElementById('game-timer').classList.remove('timer-warning');
+    
+    loadMiniGame(myGame);
+    
+    if (gameInterval) clearInterval(gameInterval);
+    gameInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('game-timer').innerText = timeLeft;
+        if (timeLeft <= 10) { playSound('tick'); document.getElementById('game-timer').classList.add('timer-warning'); }
+        if (timeLeft <= 0) { clearInterval(gameInterval); endRound(); }
+    }, 1000);
 }
 
 function skipRound() {
@@ -731,7 +797,8 @@ function checkSkip() {
 }
 
 function startRound3Vote(games) {
-    document.getElementById('vote-instructions').innerText = "Final Round: Vote for the game.";
+    document.getElementById('round-title').innerText = "Final Round Vote";
+    document.getElementById('vote-instructions').innerText = "Vote for the final game.";
     let voteContainer = document.getElementById('vote-options');
     voteContainer.innerHTML = '';
     let timeLeft = 15;
@@ -741,7 +808,7 @@ function startRound3Vote(games) {
     voteInterval = setInterval(() => {
         timeLeft--;
         document.getElementById('voting-timer').innerText = timeLeft;
-        if (timeLeft <= 10) { playSound('tick'); document.getElementById('voting-timer').classList.add('timer-warning'); }
+        if (timeLeft <= 5) { playSound('tick'); document.getElementById('voting-timer').classList.add('timer-warning'); }
         if (timeLeft <= 0) { clearInterval(voteInterval); if(isHost) tallyVotes(games); }
     }, 1000);
     games.forEach(game => {
@@ -751,14 +818,20 @@ function startRound3Vote(games) {
             playSound('click');
             myGameChoice = game;
             broadcast({ type: 'vote', game: game, games: games });
-            voteContainer.innerHTML = `<p style="color: var(--text-dim);">Voted for ${game}. Waiting for nodes...</p>`;
+            voteContainer.innerHTML = `<p style="color: var(--text-dim); text-align: center;">Voted for ${game}. Waiting for nodes...</p>`;
             if(isHost) checkVotes(games);
         };
         voteContainer.appendChild(btn);
     });
 }
 
-function checkVotes(games) { let activePlayers = Object.values(players).filter(p=>p.connected); if (activePlayers.every(p => p.voted)) { clearInterval(voteInterval); if(isHost) tallyVotes(games); } }
+function checkVotes(games) { 
+    let activePlayers = Object.values(players).filter(p=>p.connected); 
+    if (activePlayers.every(p => p.voted)) { 
+        clearInterval(voteInterval); 
+        if(isHost) tallyVotes(games); 
+    } 
+}
 function tallyVotes(games) {
     let activePlayers = Object.values(players).filter(p=>p.connected);
     let tally = {};
@@ -796,7 +869,7 @@ function endRound() {
     if(btn) { btn.classList.add('hidden'); btn.disabled = false; }
     
     if (isHost) {
-        Object.values(players).forEach(p => { p.winBoost = 0; p.winPenalty = false; p.votedSkip = false; });
+        Object.values(players).forEach(p => { p.winBoost = 0; p.winPenalty = false; p.votedSkip = false; p.pickedGame = null; p.voted = null; });
         let sortedPlayers = Object.entries(players).filter(p=>p[1].connected).sort((a, b) => b[1].cash - a[1].cash);
         let winnerId = sortedPlayers[0][0];
         if (currentRound === 1) players[winnerId].winBoost = 0.10;
@@ -822,6 +895,10 @@ function showBreak(results, boostedPlayerId, nextRound) {
         document.getElementById('next-round-timer').innerText = `Next cycle in ${timeLeft}s`;
         if (timeLeft <= 0) {
             clearInterval(breakInterval);
+            // Auto bailout if 0 cash
+            if (players[myId] && players[myId].cash <= 0) {
+                chooseBailout(50, false);
+            }
             currentRound = nextRound;
             let gameChoices = currentRound === 3 ? 2 : 3;
             let choices = [...ALL_GAMES].sort(() => 0.5 - Math.random()).slice(0, gameChoices);
@@ -844,7 +921,7 @@ function showGameOver(finalPlayers) {
     let sorted = Object.values(players).filter(p=>p.connected).sort((a, b) => b.cash - a.cash);
     document.getElementById('winner-name').innerText = sorted[0].name;
     document.getElementById('final-leaderboard').innerHTML = sorted.map((p, i) => `<div class="list-item"><span><span class="stat-rank">${i+1}</span>${p.name}</span> <span class="tabular" style="color: var(--accent); font-weight: 700;">€${p.cash}</span></div>`).join('');
-    playSound('jackpot'); flashSuccess();
+    playSound('jackpot'); flashSuccess(); spawnConfetti(150);
 }
 
 function updateLeaderboard() {
@@ -887,7 +964,6 @@ function validateBet(amount) { let bet = parseInt(amount); if (isNaN(bet) || bet
 function deductBet(bet) { 
     players[myId].cash -= bet; 
     updateGameBalance(); 
-    // Real-time sync: Host broadcasts state, client sends update to host
     if (isHost) broadcast({ type: 'state_sync', players: players });
     else broadcast({ type: 'bet_update', cash: players[myId].cash });
     playSound('bet'); 
@@ -902,7 +978,7 @@ function addWinnings(amount, isJackpot=false) {
     updateGameBalance(true);
     if (isHost) broadcast({ type: 'state_sync', players: players });
     else broadcast({ type: 'bet_update', cash: players[myId].cash });
-    if(isJackpot) { playSound('jackpot'); flashSuccess(); } else playSound('win');
+    if(isJackpot) { playSound('jackpot'); flashSuccess(); spawnConfetti(80); } else playSound('win');
     return { finalAmount, bonus, deduction };
 }
 function getWinMsg(prefix, res) {
@@ -950,36 +1026,50 @@ function loadSlots(area) {
 function playSlots(btn) {
     let bet = parseInt(document.getElementById('slots-bet').value);
     if (!validateBet(bet)) { setMsg("Invalid bet", false); playSound('lose'); return; }
-    deductBet(bet); triggerCooldown(btn, 1200); playSound('spin');
+    deductBet(bet); triggerCooldown(btn, 3500); playSound('spin');
     const sym = ['💰', '💎', '🍒', '7️⃣', '💩'];
     let s1 = document.getElementById('s1'), s2 = document.getElementById('s2'), s3 = document.getElementById('s3');
+    
+    // Final Results predetermined
+    let r1 = sym[Math.floor(Math.random()*5)], r2 = sym[Math.floor(Math.random()*5)], r3 = sym[Math.floor(Math.random()*5)];
+    
+    // Start spinning all
     s1.className = s2.className = s3.className = "slot-reel spinning";
-    let spins = 0;
-    let spinInt = setInterval(() => {
-        s1.innerText = sym[Math.floor(Math.random()*5)];
-        s2.innerText = sym[Math.floor(Math.random()*5)];
-        s3.innerText = sym[Math.floor(Math.random()*5)];
-        spins++;
-        if (spins > 18) { 
-            clearInterval(spinInt);
-            s1.className = s2.className = s3.className = "slot-reel";
-            playSound('reelStop');
-            let r1 = sym[Math.floor(Math.random()*5)], r2 = sym[Math.floor(Math.random()*5)], r3 = sym[Math.floor(Math.random()*5)];
-            s1.innerText = r1; s2.innerText = r2; s3.innerText = r3;
-            let win = 0;
-            if (r1===r2 && r2===r3) {
-                if (r1==='7️⃣') win = bet*50; else if (r1==='💎') win = bet*20; else win = bet*10;
-                s1.classList.add('win'); s2.classList.add('win'); s3.classList.add('win');
-                setMsg(getWinMsg("Jackpot", addWinnings(win, true)), true);
-            } else if (r1===r2 || r2===r3 || r1===r3) {
-                win = Math.floor(bet*1.5); 
-                if(r1===r2) s1.classList.add('win'), s2.classList.add('win');
-                else if(r2===r3) s2.classList.add('win'), s3.classList.add('win');
-                else s1.classList.add('win'), s3.classList.add('win');
-                setMsg(getWinMsg("Win", addWinnings(win)), true);
-            } else { setMsg(`Lost €${bet}`, false); playSound('lose'); }
-        }
-    }, 60);
+    
+    // Reel 1 stops at 1s
+    setTimeout(() => {
+        s1.className = "slot-reel slot-slide-in";
+        s1.innerText = r1;
+        playSound('reelStop');
+    }, 1000);
+
+    // Reel 2 stops at 2s
+    setTimeout(() => {
+        s2.className = "slot-reel slot-slide-in";
+        s2.innerText = r2;
+        playSound('reelStop');
+    }, 2000);
+
+    // Reel 3 stops at 3s
+    setTimeout(() => {
+        s3.className = "slot-reel slot-slide-in";
+        s3.innerText = r3;
+        playSound('reelStop');
+        
+        // Evaluate Win
+        let win = 0;
+        if (r1===r2 && r2===r3) {
+            if (r1==='7️⃣') win = bet*50; else if (r1==='💎') win = bet*20; else win = bet*10;
+            s1.classList.add('win'); s2.classList.add('win'); s3.classList.add('win');
+            setMsg(getWinMsg("JACKPOT!", addWinnings(win, true)), true);
+        } else if (r1===r2 || r2===r3 || r1===r3) {
+            win = Math.floor(bet*1.5); 
+            if(r1===r2) s1.classList.add('win'), s2.classList.add('win');
+            else if(r2===r3) s2.classList.add('win'), s3.classList.add('win');
+            else s1.classList.add('win'), s3.classList.add('win');
+            setMsg(getWinMsg("Win", addWinnings(win)), true);
+        } else { setMsg(`Lost €${bet}`, false); playSound('lose'); }
+    }, 3000);
 }
 
 // 2. BLACKJACK
@@ -1478,8 +1568,9 @@ function crashStart(btn) {
     if (!validateBet(bet)) { setMsg("Invalid bet", false); playSound('lose'); return; }
     deductBet(bet);
     
-    let r = Math.pow(Math.random(), 2.0); 
-    let point = Math.max(1.00, (0.95 / (1 - r))); 
+    // Slower, more rewarding curve (pow 1.5 instead of 2.0, min 1.20x)
+    let r = Math.pow(Math.random(), 1.5); 
+    let point = Math.max(1.20, (0.95 / (1 - r))); 
     
     crashState = { active: true, bet: bet, mult: 1.00, interval: null, cashed: false, point: point, points: "0,100" };
     document.getElementById('crash-bet-ui').classList.add('hidden');
@@ -1494,7 +1585,7 @@ function crashStart(btn) {
     setMsg('Cash out before it crashes!', true); playSound('tick');
     
     crashState.interval = setInterval(() => {
-        crashState.mult += 0.02 + Math.random() * 0.03; 
+        crashState.mult += 0.015; // Slower growth
         if(el) el.innerText = crashState.mult.toFixed(2) + 'x';
         
         let x = Math.min(100, (crashState.mult - 1) * 25);
@@ -1515,7 +1606,7 @@ function crashStart(btn) {
             document.getElementById('crash-bet-ui').classList.remove('hidden');
             document.getElementById('crash-action-ui').classList.add('hidden');
         }
-    }, 100);
+    }, 150); // Slower tick rate
 }
 function crashCashout() {
     if(!crashState.active || crashState.cashed) return;
@@ -1531,7 +1622,12 @@ let doubleActive = false, doubleBet = 0;
 function loadDouble(area) {
     area.innerHTML += `
         ${getBalanceHTML()}
-        <div class="double-display" id="double-coin">🪙</div>
+        <div class="coin-container">
+            <div class="coin-inner" id="double-coin">
+                <div class="coin-face front">BLUE</div>
+                <div class="coin-face back">RED</div>
+            </div>
+        </div>
         <div class="bet-controls" id="double-bet-ui" style="margin: 0 auto;">
             <input type="number" id="double-bet" class="bet-input" value="10" min="1">
             <button class="action-btn" style="flex:1; background: transparent; border-color: var(--danger); color: var(--danger);" onclick="doublePlay('red')">RED (2x)</button>
@@ -1540,30 +1636,46 @@ function loadDouble(area) {
     `;
     doubleActive = false; doubleBet = 0;
     let coin = document.getElementById('double-coin');
-    if(coin) coin.style.animation = 'none';
+    if(coin) coin.style.transition = 'none';
 }
 function doublePlay(choice) {
     if (doubleActive) return;
     let bet = parseInt(document.getElementById('double-bet').value);
     if (!validateBet(bet)) { setMsg("Invalid bet", false); playSound('lose'); return; }
     deductBet(bet); doubleActive = true; doubleBet = bet; playSound('coinFlip');
+    
     let coin = document.getElementById('double-coin');
-    if(coin) { coin.style.animation = 'none'; coin.offsetHeight; coin.style.animation = 'flipCoin 1s steps(8, end)'; }
+    if(coin) {
+        coin.style.transition = 'none';
+        coin.style.transform = 'rotateY(0deg)';
+    }
+    
     setMsg('Flipping...', true);
+    
     setTimeout(() => {
-        if(coin) coin.style.animation = 'none';
-        let isRed = Math.random() < 0.5;
-        let win = 0;
-        if ((choice === 'red' && isRed) || (choice === 'blue' && !isRed)) {
-            win = doubleBet * 2;
-            if(coin) { coin.innerText = isRed ? '🔴' : '🔵'; coin.style.color = isRed ? 'var(--danger)' : 'var(--accent)'; }
-            setMsg(getWinMsg("Win!", addWinnings(win, true)), true);
-        } else {
-            if(coin) { coin.innerText = isRed ? '🔴' : '🔵'; coin.style.color = isRed ? 'var(--danger)' : 'var(--accent)'; }
-            setMsg(`Lost €${doubleBet}`, false); playSound('lose'); shakeScreen();
+        if(coin) {
+            coin.style.transition = 'transform 1s ease-out';
+            let isRed = Math.random() < 0.5;
+            let win = 0;
+            
+            // Animate flip
+            if(isRed) {
+                coin.style.transform = 'rotateY(900deg)'; // Lands on back (Red)
+            } else {
+                coin.style.transform = 'rotateY(720deg)'; // Lands on front (Blue)
+            }
+            
+            setTimeout(() => {
+                if ((choice === 'red' && isRed) || (choice === 'blue' && !isRed)) {
+                    win = doubleBet * 2;
+                    setMsg(getWinMsg("Win!", addWinnings(win, true)), true);
+                } else {
+                    setMsg(`Lost €${doubleBet}`, false); playSound('lose'); shakeScreen();
+                }
+                doubleActive = false;
+            }, 1000);
         }
-        doubleActive = false;
-    }, 1000);
+    }, 100);
 }
 
 // Hover sound effect for buttons
