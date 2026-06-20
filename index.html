@@ -3,363 +3,303 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gamble Against Friends</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>GAMBLE.SYS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
         :root {
-            --bg-base: #0a0800;
-            --bg-glass-panel: rgba(255, 248, 231, 0.08);
-            --bg-glass-elevated: rgba(255, 248, 231, 0.12);
-            --bg-glass-input: rgba(255, 248, 231, 0.08);
-            --text-primary: #FFF8E7;
-            --text-secondary: rgba(255, 248, 231, 0.7);
-            --text-tertiary: rgba(255, 248, 231, 0.5);
-            --accent-gold: #FFD60A;
-            --accent-amber: #FF9F0A;
-            --accent-blue: #0A84FF; 
-            --success: #30D158;
-            --danger: #FF453A;
-            --border-light: rgba(255, 214, 10, 0.2);
-            --border-highlight: inset 0 1px 1px rgba(255, 248, 231, 0.2);
+            --bg: #0D0D0D;
+            --surface: #161616;
+            --surface-2: #1C1C1C;
+            --border: #262626;
+            --border-light: #303030;
+            --text: #EAEAEA;
+            --text-dim: #888888;
+            --text-faint: #555555;
+            --accent: #D4AF37; /* Deep Gold */
+            --danger: #E5484D;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: var(--bg-base);
-            color: var(--text-primary);
+            font-family: 'Manrope', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            padding: 40px 24px;
-            font-size: 16px;
+            padding: 0;
+            font-size: 15px;
             line-height: 1.5;
             overflow-x: hidden;
-            position: relative;
-        }
-
-        /* Dynamic Animated Gold Background */
-        .bg-blob {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(120px);
-            z-index: -1;
-            opacity: 0.3;
-            animation: moveBlob 20s infinite alternate ease-in-out;
-        }
-        .blob-1 { width: 600px; height: 600px; background: var(--accent-gold); top: -10%; left: -10%; animation-duration: 25s; }
-        .blob-2 { width: 500px; height: 500px; background: var(--accent-amber); bottom: -10%; right: -10%; animation-duration: 30s; animation-delay: -5s; }
-        .blob-3 { width: 400px; height: 400px; background: #8A6D00; top: 40%; left: 40%; animation-duration: 22s; animation-delay: -10s; }
-        
-        @keyframes moveBlob {
-            0% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(100px, 50px) scale(1.1); }
-            66% { transform: translate(-50px, 100px) scale(0.9); }
-            100% { transform: translate(80px, -80px) scale(1.05); }
         }
 
         .hidden { display: none !important; }
 
         /* Navbar */
         .navbar {
-            max-width: 1000px;
-            margin: 0 auto 40px auto;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 24px;
-            background: var(--bg-glass-panel);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid var(--border-light);
-            border-radius: 100px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            border-bottom: 1px solid var(--border);
         }
-        .nav-logo { font-size: 20px; font-weight: 800; color: var(--accent-gold); letter-spacing: -0.02em; cursor: pointer; text-shadow: 0 0 10px rgba(255, 214, 10, 0.3); transition: transform 0.2s; }
-        .nav-logo:hover { transform: scale(1.05); }
-        .nav-logo span { color: var(--text-primary); }
-        .nav-links { display: flex; gap: 16px; }
-        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 13px; font-weight: 600; transition: all 0.2s; cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em; padding: 8px 14px; border-radius: 20px; }
-        .nav-links a:hover { color: var(--accent-gold); background: rgba(255, 214, 10, 0.1); }
-        @media (max-width: 600px) { .nav-links { gap: 4px; } .nav-links a { font-size: 11px; padding: 4px 8px; } }
+        .nav-logo { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: var(--text); cursor: pointer; letter-spacing: -0.02em; }
+        .nav-logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 32px; }
+        .nav-links a { color: var(--text-dim); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; cursor: pointer; }
+        .nav-links a:hover { color: var(--text); }
+        @media (max-width: 600px) { .nav-links { gap: 16px; } .nav-links a { font-size: 12px; } }
 
         #app-wrapper {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 24px;
-            align-items: start;
-        }
-
-        @media (max-width: 820px) {
-            #app-wrapper { grid-template-columns: 1fr; }
-            body { padding: 20px 16px; }
-        }
-
-        .panel {
-            background-color: var(--bg-glass-panel);
-            backdrop-filter: blur(24px) saturate(150%);
-            -webkit-backdrop-filter: blur(24px) saturate(150%);
-            border: 1px solid var(--border-light);
-            border-radius: 24px;
-            padding: 40px;
+            grid-template-columns: 1fr 320px;
+            gap: 0;
             position: relative;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-            overflow: hidden; 
-            min-width: 0; 
         }
 
-        @media (max-width: 820px) {
-            .panel { padding: 32px 24px; border-radius: 20px; }
+        #sidebar {
+            padding: 48px 32px;
+            border-left: 1px solid var(--border);
+            align-self: stretch;
         }
 
-        h1 { font-size: 48px; font-weight: 800; letter-spacing: -0.03em; text-align: center; margin-bottom: 12px; color: var(--text-primary); line-height: 1.1; text-shadow: 0 2px 10px rgba(0,0,0,0.4); }
-        h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 16px; text-shadow: 0 1px 2px rgba(0,0,0,0.1); color: var(--accent-gold); }
-        h3 { font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
-        p { font-size: 16px; color: var(--text-secondary); line-height: 1.5; text-align: center; margin-bottom: 32px; text-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        @media (max-width: 900px) {
+            #app-wrapper { grid-template-columns: 1fr; }
+            #sidebar { border-left: none; border-top: 1px solid var(--border); padding: 32px; }
+        }
 
-        .tabular { font-variant-numeric: tabular-nums; }
+        main {
+            padding: 48px 32px;
+        }
+        
+        @media (max-width: 600px) {
+            main, .navbar { padding-left: 20px; padding-right: 20px; }
+        }
+
+        h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; text-align: left; line-height: 1.1; margin-bottom: 16px; color: var(--text); letter-spacing: -0.03em; }
+        h2 { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 600; color: var(--text); margin-bottom: 24px; letter-spacing: -0.02em; }
+        h3 { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
+        p { font-size: 16px; color: var(--text-dim); text-align: left; margin-bottom: 32px; line-height: 1.6; max-width: 90%; }
 
         input[type="text"], input[type="number"], select {
             width: 100%;
-            background-color: var(--bg-glass-input);
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
             padding: 14px 16px;
-            color: var(--text-primary);
-            font-family: inherit;
-            font-size: 16px;
+            color: var(--text);
+            font-family: 'Manrope', sans-serif;
+            font-size: 15px;
             font-weight: 500;
             margin-bottom: 16px;
-            transition: all 0.2s;
+            transition: border-color 0.2s;
             -webkit-appearance: none;
             appearance: none;
-            backdrop-filter: blur(5px);
         }
 
         input:focus, select:focus {
             outline: none;
-            background-color: rgba(255, 248, 231, 0.15);
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 0 4px rgba(255, 214, 10, 0.1);
+            border-color: var(--accent);
         }
-        input::placeholder { color: var(--text-tertiary); }
+        input::placeholder { color: var(--text-faint); }
 
         select {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path fill="%23FFD60A" d="M6 9L1 4h10z"/></svg>');
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path fill="%23888888" d="M6 9L1 4h10z"/></svg>');
             background-repeat: no-repeat;
             background-position: right 16px center;
             cursor: pointer;
         }
-        select option { background-color: #1c1c1e; color: var(--accent-gold); }
+        select option { background-color: var(--surface); color: var(--text); }
 
         button {
             width: 100%;
             padding: 14px 24px;
-            border: none;
-            border-radius: 14px;
-            font-family: inherit;
-            font-size: 15px;
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background-color: var(--bg-glass-elevated);
-            color: var(--text-primary);
-            border: 1px solid var(--border-light);
+            transition: all 0.2s;
+            background: var(--surface);
+            color: var(--text);
             line-height: 1.2;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
-        button:hover { background-color: rgba(255, 248, 231, 0.2); border-color: var(--accent-gold); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 214, 10, 0.15); }
-        button:active { transform: translateY(0) scale(0.98); }
-        button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+        button:hover { background: var(--surface-2); border-color: var(--text-faint); }
+        button:active { transform: scale(0.98); }
+        button:disabled { opacity: 0.3; cursor: not-allowed; }
 
-        .btn-primary { background-color: var(--accent-gold); border: none; color: #000; box-shadow: 0 4px 15px rgba(255, 214, 10, 0.3); }
-        .btn-primary:hover { background-color: #ffe438; box-shadow: 0 8px 25px rgba(255, 214, 10, 0.4); }
-        .btn-danger { background-color: var(--danger); border: none; color: #fff; box-shadow: 0 4px 15px rgba(255, 69, 58, 0.3); }
-        .btn-danger:hover { background-color: #e0342a; box-shadow: 0 8px 25px rgba(255, 69, 58, 0.4); }
-        .btn-gold { background: linear-gradient(135deg, var(--accent-gold), var(--accent-amber)); border: none; color: #000; box-shadow: 0 4px 15px rgba(255, 159, 10, 0.3); }
-        .btn-gold:hover { box-shadow: 0 8px 25px rgba(255, 159, 10, 0.4); }
-        .btn-ghost { background: transparent; border: 1px solid var(--border-light); color: var(--text-secondary); box-shadow: none; }
-        .btn-ghost:hover { background: rgba(255, 214, 10, 0.1); color: var(--accent-gold); border-color: var(--accent-gold); }
+        .btn-primary { background: var(--accent); border-color: var(--accent); color: #000; }
+        .btn-primary:hover { background: #E5C158; border-color: #E5C158; }
+        .btn-danger { background: var(--danger); border-color: var(--danger); color: #fff; }
+        .btn-danger:hover { background: #F15A5F; border-color: #F15A5F; }
+        .btn-gold { background: transparent; border-color: var(--accent); color: var(--accent); }
+        .btn-gold:hover { background: var(--accent); color: #000; }
+        .btn-ghost { background: transparent; border-color: var(--border-light); color: var(--text); }
+        .btn-ghost:hover { border-color: var(--text); }
 
-        .menu-cta { display: flex; gap: 12px; justify-content: center; margin-top: 8px; }
-        .menu-cta button { width: auto; padding-left: 32px; padding-right: 32px; }
-        .form-row { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; background: var(--bg-glass-input); border: 1px solid var(--border-light); border-radius: 12px; padding: 4px 16px; transition: all 0.2s; }
-        .form-row:hover, .form-row:focus-within { border-color: var(--accent-gold); box-shadow: 0 0 0 4px rgba(255, 214, 10, 0.1); }
-        .form-row label { font-size: 13px; color: var(--text-secondary); width: 100px; font-weight: 500; }
-        .form-row select { border: none; background: transparent; margin: 0; padding: 10px 0; flex: 1; background-position: right 0 center; color: var(--accent-gold); font-weight: 700; }
-        .form-row select:focus { box-shadow: none; background-color: transparent; }
+        .menu-cta { display: flex; gap: 12px; margin-top: 16px; }
+        .menu-cta button { flex: 1; }
+        .form-row { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 4px 16px; transition: border-color 0.2s; }
+        .form-row:focus-within { border-color: var(--accent); }
+        .form-row label { font-size: 13px; color: var(--text-dim); width: 100px; font-weight: 500; }
+        .form-row select { border: none; margin: 0; padding: 12px 0; flex: 1; background-position: right 0 center; color: var(--text); font-weight: 600; background-color: transparent; }
+        .form-row select:focus { box-shadow: none; }
         
-        .lobby-info { text-align: center; margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--border-light); }
-        .room-code { font-size: 48px; font-weight: 800; color: var(--accent-gold); letter-spacing: 0.05em; font-variant-numeric: tabular-nums; display: block; margin-top: 4px; text-shadow: 0 0 20px rgba(255, 214, 10, 0.4); }
+        .lobby-info { margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+        .room-code { font-family: 'Space Grotesk', sans-serif; font-size: 48px; font-weight: 700; color: var(--accent); letter-spacing: 0.02em; display: block; margin-top: 8px; line-height: 1; }
         
-        .list-container { background-color: var(--bg-glass-input); border: 1px solid var(--border-light); border-radius: 16px; overflow: hidden; }
-        .list-item { padding: 16px 20px; font-size: 16px; color: var(--text-primary); border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; transition: background-color 0.2s; }
-        .list-item:hover { background-color: rgba(255, 214, 10, 0.05); }
+        .list-container { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; background: var(--surface); }
+        .list-item { padding: 16px; font-size: 14px; color: var(--text); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; }
+        .list-item:hover { background: var(--surface-2); }
         .list-item:last-child { border-bottom: none; }
 
-        .game-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--border-light); }
-        .timer-val { font-size: 64px; font-weight: 800; color: var(--text-primary); font-variant-numeric: tabular-nums; line-height: 1; letter-spacing: -0.04em; text-shadow: 0 0 15px rgba(255, 214, 10, 0.2); transition: color 0.3s; }
-        .timer-warning { color: var(--danger); animation: pulse 1s infinite; text-shadow: 0 0 15px rgba(255, 69, 58, 0.4); }
-        @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.05); } 100% { opacity: 1; transform: scale(1); } }
-        .game-subtitle { font-size: 14px; color: var(--text-secondary); margin-top: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        .game-header { margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+        .timer-val { font-family: 'Space Grotesk', sans-serif; font-size: 64px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; line-height: 1; letter-spacing: -0.03em; }
+        .timer-warning { color: var(--danger); }
+        .game-subtitle { font-size: 14px; color: var(--text-dim); margin-top: 12px; font-weight: 500; }
 
-        .vote-grid { display: grid; grid-template-columns: 1fr; gap: 12px; max-width: 400px; margin: 0 auto; }
-        .vote-btn { padding: 18px; text-align: center; font-weight: 600; font-size: 17px; background-color: var(--bg-glass-elevated); border: 1px solid var(--border-light); border-radius: 14px; color: var(--text-primary); transition: all 0.2s; }
-        .vote-btn:hover { background-color: rgba(255, 214, 10, 0.15); border-color: var(--accent-gold); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 214, 10, 0.15); color: var(--accent-gold); }
+        .vote-grid { display: grid; grid-template-columns: 1fr; gap: 12px; max-width: 400px; }
+        .vote-btn { padding: 20px; text-align: left; font-weight: 600; font-size: 16px; background: var(--surface); border: 1px solid var(--border); color: var(--text); transition: all 0.2s; }
+        .vote-btn:hover { background: var(--surface-2); border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
 
-        .stat-rank { font-size: 14px; color: var(--text-secondary); width: 24px; }
-        .stat-name { color: var(--text-primary); font-size: 16px; font-weight: 600; flex: 1; padding-left: 12px; }
-        .stat-cash { color: var(--accent-gold); font-weight: 700; font-size: 16px; font-variant-numeric: tabular-nums; transition: color 0.3s; }
-        .stat-cash.flash-up { color: var(--success); text-shadow: 0 0 10px var(--success); }
+        .stat-rank { font-size: 13px; color: var(--text-faint); width: 24px; font-weight: 600; }
+        .stat-name { color: var(--text); font-size: 14px; font-weight: 500; flex: 1; padding-left: 12px; }
+        .stat-cash { color: var(--accent); font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums; transition: color 0.3s; }
+        .stat-cash.flash-up { color: #4ADE80; }
         .stat-cash.flash-down { color: var(--danger); }
 
-        #game-area { display: flex; flex-direction: column; align-items: center; position: relative; transition: box-shadow 0.3s; border-radius: 20px; padding: 10px; overflow: visible; }
-        .flash-success { box-shadow: inset 0 0 0 1000px rgba(48, 209, 88, 0.15); }
-        .shake { animation: shake 0.5s; }
-        @keyframes shake { 0% { transform: translateX(0); } 20% { transform: translateX(-12px); } 40% { transform: translateX(12px); } 60% { transform: translateX(-8px); } 80% { transform: translateX(8px); } 100% { transform: translateX(0); } }
+        #game-area { display: flex; flex-direction: column; align-items: flex-start; }
+        .flash-success { box-shadow: inset 0 0 0 2px var(--accent); }
+        .shake { animation: shake 0.3s; }
+        @keyframes shake { 0% { transform: translateX(-4px); } 100% { transform: translateX(4px); } }
 
-        .balance-display { font-size: 14px; font-weight: 600; color: var(--text-secondary); margin-bottom: 32px; font-variant-numeric: tabular-nums; transition: color 0.2s; display: flex; align-items: baseline; gap: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
-        .balance-display .val { color: var(--accent-gold); font-size: 36px; font-weight: 800; letter-spacing: -0.02em; text-shadow: 0 0 15px rgba(255, 214, 10, 0.3); transition: transform 0.3s; }
-        .balance-display.win .val { color: var(--success); text-shadow: 0 0 20px rgba(48, 209, 88, 0.6); transform: scale(1.1); }
-        .balance-display.loss .val { color: var(--danger); transform: scale(0.95); }
+        .balance-display { font-size: 13px; color: var(--text-dim); margin-bottom: 32px; font-variant-numeric: tabular-nums; display: flex; align-items: baseline; gap: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
+        .balance-display .val { font-family: 'Space Grotesk', sans-serif; color: var(--accent); font-size: 36px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; }
+        .balance-display.win .val { color: #4ADE80; }
+        .balance-display.loss .val { color: var(--danger); }
 
-        .bet-controls { display: flex; justify-content: center; align-items: stretch; gap: 12px; margin-top: 32px; width: 100%; max-width: 600px; }
-        .bet-input { width: 120px; margin: 0; text-align: center; font-size: 18px; font-weight: 700; background-color: var(--bg-glass-input); border: 1px solid var(--border-light); color: var(--accent-gold); border-radius: 12px; transition: all 0.2s; }
-        .bet-input:focus { border-color: var(--accent-gold); box-shadow: 0 0 0 4px rgba(255, 214, 10, 0.1); }
-        .action-btn { width: auto; padding: 14px 24px; margin: 0; border-radius: 12px; flex: 1; }
+        .bet-controls { display: flex; gap: 12px; margin-top: 24px; width: 100%; max-width: 600px; align-items: stretch; }
+        .bet-input { width: 120px; margin: 0; text-align: center; font-size: 16px; font-weight: 700; background: var(--bg); border: 1px solid var(--border-light); color: var(--accent); padding: 12px 16px; font-family: 'Space Grotesk', sans-serif; }
+        .bet-input:focus { border-color: var(--accent); }
+        .action-btn { padding: 12px 24px; flex: 1; }
         
-        .cooldown { opacity: 0.5; pointer-events: none; }
-        .action-msg { font-size: 24px; font-weight: 800; min-height: 30px; margin-top: 24px; font-variant-numeric: tabular-nums; color: var(--text-primary); letter-spacing: -0.02em; text-shadow: 0 1px 2px rgba(0,0,0,0.1); transition: opacity 0.3s; }
-        .win-msg { color: var(--success); text-shadow: 0 0 15px rgba(48, 209, 88, 0.5); animation: winPulse 0.5s; }
-        .loss-msg { color: var(--danger); text-shadow: 0 0 15px rgba(255, 69, 58, 0.5); }
-        @keyframes winPulse { 0% { transform: scale(0.8); opacity: 0; } 50% { transform: scale(1.2); } 100% { transform: scale(1); opacity: 1; } }
+        .cooldown { opacity: 0.3; pointer-events: none; }
+        .action-msg { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; min-height: 30px; margin-top: 24px; color: var(--text); letter-spacing: -0.01em; }
+        .win-msg { color: #4ADE80; }
+        .loss-msg { color: var(--danger); }
 
         /* Slots */
-        .slot-machine { display: flex; justify-content: center; gap: 16px; font-size: 48px; margin-bottom: 32px; background-color: rgba(0, 0, 0, 0.4); padding: 32px; border-radius: 20px; border: 1px solid var(--border-light); box-shadow: inset 0 0 30px rgba(0,0,0,0.3); backdrop-filter: blur(10px); }
-        .slot-reel { width: 70px; height: 60px; display: flex; align-items: center; justify-content: center; transition: transform 0.3s, text-shadow 0.3s; }
-        .slot-reel.win { text-shadow: 0 0 20px var(--accent-gold); transform: scale(1.2); }
-        .spinning { opacity: 0.7; animation: spin 0.1s linear infinite; filter: blur(1px); }
-        @keyframes spin { 0% { transform: translateY(-15px); } 50% { transform: translateY(15px); } 100% { transform: translateY(-15px); } }
+        .slot-machine { display: flex; gap: 16px; font-size: 48px; margin-bottom: 32px; background: var(--surface); padding: 24px; border: 1px solid var(--border); border-radius: 4px; }
+        .slot-reel { width: 70px; height: 60px; display: flex; align-items: center; justify-content: center; transition: transform 0.3s; }
+        .slot-reel.win { transform: scale(1.1); }
+        .spinning { opacity: 0.5; animation: spin 0.1s linear infinite; }
+        @keyframes spin { 0% { transform: translateY(-8px); } 50% { transform: translateY(8px); } 100% { transform: translateY(-8px); } }
 
         /* Cards */
-        .card-container { display: flex; justify-content: center; gap: 12px; margin-bottom: 32px; min-height: 100px; flex-wrap: wrap; perspective: 1000px; }
-        .card { width: 64px; height: 90px; background: linear-gradient(145deg, #ffffff, #e6e6e6); color: #000; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 24px; font-weight: 700; box-shadow: 0 6px 15px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.5); animation: dealCard 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; transition: transform 0.2s; }
-        .card:hover { transform: translateY(-5px); }
+        .card-container { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+        .card { width: 60px; height: 84px; background: #fff; color: #000; border-radius: 4px; display: flex; justify-content: center; align-items: center; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.1s; }
+        .card:hover { transform: translateY(-2px); }
         .card.red { color: var(--danger); }
-        .card.hold { box-shadow: 0 0 0 3px var(--accent-gold), 0 6px 15px rgba(0,0,0,0.4); transform: translateY(-5px); }
-        @keyframes dealCard { 0% { transform: scale(0.5) translateY(20px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
+        .card.hold { box-shadow: 0 0 0 2px var(--accent), 0 4px 12px rgba(0,0,0,0.3); transform: translateY(-2px); }
         
         /* Grids */
-        .grid-tower { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 280px; margin-bottom: 32px; }
-        .grid-keno { display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px; width: 100%; max-width: 600px; margin-bottom: 32px; }
-        .grid-mines { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 300px; margin: 0 auto 32px auto; }
-        .tile { background-color: var(--bg-glass-elevated); border: 1px solid var(--border-light); padding: 14px 0; text-align: center; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 16px; color: var(--text-primary); transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.2); transform-style: preserve-3d; }
-        .tile:hover { background-color: rgba(255, 214, 10, 0.15); border-color: var(--accent-gold); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(255, 214, 10, 0.15); }
-        .tile.safe { background-color: var(--success); color: #000; border-color: transparent; box-shadow: 0 0 20px rgba(48, 209, 88, 0.4); animation: flipIn 0.4s; }
-        .tile.bomb { background-color: var(--danger); color: #fff; border-color: transparent; box-shadow: 0 0 20px rgba(255, 69, 58, 0.4); animation: flipIn 0.4s; }
-        .tile.selected { background-color: var(--accent-gold); color: #000; border-color: transparent; box-shadow: 0 0 20px rgba(255, 214, 10, 0.4); transform: scale(1.05); }
-        .tile.hit { background-color: var(--success); color: #000; border-color: transparent; box-shadow: 0 0 20px rgba(48, 209, 88, 0.4); animation: popHit 0.3s; }
-        .tile.disabled { pointer-events: none; opacity: 0.3; background: transparent; border-color: rgba(255,255,255,0.1); box-shadow: none; }
+        .grid-tower { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 240px; margin-bottom: 32px; }
+        .grid-keno { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; width: 100%; max-width: 600px; margin-bottom: 32px; }
+        .grid-mines { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; max-width: 280px; margin: 0 0 32px 0; }
+        .tile { background: var(--surface); border: 1px solid var(--border); padding: 16px 0; text-align: center; cursor: pointer; font-weight: 600; font-size: 14px; color: var(--text-dim); transition: all 0.2s; border-radius: 4px; }
+        .tile:hover { background: var(--surface-2); color: var(--text); }
+        .tile.safe { background: #4ADE80; color: #000; border-color: #4ADE80; }
+        .tile.bomb { background: var(--danger); color: #fff; border-color: var(--danger); }
+        .tile.selected { background: var(--accent); color: #000; border-color: var(--accent); }
+        .tile.hit { background: #4ADE80; color: #000; border-color: #4ADE80; }
+        .tile.disabled { pointer-events: none; opacity: 0.2; }
         .mine-tile { height: 50px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
-        @keyframes flipIn { 0% { transform: rotateY(0); } 50% { transform: rotateY(90deg); } 100% { transform: rotateY(0); } }
-        @keyframes popHit { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1.05); } }
 
         /* Plinko */
         .plinko-board { display: flex; gap: 8px; margin-bottom: 32px; width: 100%; max-width: 440px; }
-        .plinko-mult { flex: 1; padding: 16px 0; background-color: var(--bg-glass-elevated); border: 1px solid var(--border-light); border-radius: 12px; font-weight: 700; font-size: 16px; text-align: center; color: var(--text-primary); transition: all 0.15s; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .plinko-mult.active { background-color: var(--accent-gold); color: #000; border-color: transparent; transform: scale(1.2) translateY(-10px); box-shadow: 0 10px 25px rgba(255, 214, 10, 0.4); }
+        .plinko-mult { flex: 1; padding: 16px 0; background: var(--surface); border: 1px solid var(--border); font-weight: 700; font-size: 16px; text-align: center; color: var(--text); transition: all 0.1s; border-radius: 4px; font-family: 'Space Grotesk', sans-serif; }
+        .plinko-mult.active { background: var(--accent); color: #000; border-color: var(--accent); transform: scale(1.1); }
         
         /* Roulette */
-        .roulette-board { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 32px; max-width: 440px; }
-        .roulette-tile { width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; border-radius: 50%; cursor: pointer; font-weight: 700; font-size: 14px; color: #fff; border: 1px solid var(--border-light); transition: all 0.1s; backdrop-filter: blur(5px); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .roulette-tile:hover { transform: scale(1.1); }
-        .roul-red { background-color: rgba(255, 69, 58, 0.8); }
-        .roul-black { background-color: rgba(0, 0, 0, 0.4); }
-        .roul-green { background-color: rgba(48, 209, 88, 0.8); }
-        .roulette-tile.selected { box-shadow: 0 0 0 3px var(--accent-gold); transform: scale(1.15); }
-        .roulette-tile.spinning { box-shadow: 0 0 0 3px #fff; transform: scale(1.15); }
+        .roulette-board { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 32px; max-width: 440px; }
+        .roulette-tile { width: 36px; height: 36px; display: flex; justify-content: center; align-items: center; border: 1px solid var(--border); cursor: pointer; font-weight: 700; font-size: 12px; color: var(--text); transition: all 0.1s; background: var(--surface); border-radius: 4px; }
+        .roulette-tile:hover { background: var(--surface-2); }
+        .roul-red { border-color: var(--danger); color: var(--danger); }
+        .roul-black { border-color: var(--text-dim); color: var(--text); }
+        .roul-green { background: #4ADE80; color: #000; border-color: #4ADE80; }
+        .roulette-tile.selected { border-width: 2px; transform: scale(1.1); }
+        .roulette-tile.spinning { background: var(--accent); color: #000; border-color: var(--accent); }
 
         /* Crash */
-        .crash-display { font-size: 64px; font-weight: 800; margin-bottom: 16px; text-align: center; transition: color 0.2s; font-variant-numeric: tabular-nums; letter-spacing: -0.03em; text-shadow: 0 0 15px rgba(255, 214, 10, 0.2); }
-        .crash-display.crashed { color: var(--danger); animation: shake 0.5s; }
-        .crash-chart { width: 100%; max-width: 440px; height: 150px; background: rgba(0,0,0,0.2); border-radius: 16px; margin-bottom: 24px; position: relative; overflow: hidden; border: 1px solid var(--border-light); display: flex; align-items: flex-end; }
+        .crash-display { font-family: 'Space Grotesk', sans-serif; font-size: 56px; font-weight: 700; margin-bottom: 16px; color: var(--text); font-variant-numeric: tabular-nums; letter-spacing: -0.03em; }
+        .crash-display.crashed { color: var(--danger); }
+        .crash-chart { width: 100%; max-width: 440px; height: 150px; background: var(--surface); margin-bottom: 24px; position: relative; overflow: hidden; border: 1px solid var(--border); border-radius: 4px; }
         .crash-svg { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
 
         /* Double */
-        .double-display { font-size: 100px; margin-bottom: 32px; text-align: center; transition: transform 0.1s; }
-        .double-display.spinning { animation: flipCoin 1.5s ease-in-out; }
-        @keyframes flipCoin { 0% { transform: rotateY(0); } 100% { transform: rotateY(1800deg); } }
+        .double-display { font-family: 'Space Grotesk', sans-serif; font-size: 96px; margin-bottom: 32px; color: var(--text); }
+        .double-display.spinning { animation: flipCoin 1s steps(8, end); }
+        @keyframes flipCoin { 0% { transform: rotateY(0); } 100% { transform: rotateY(720deg); } }
 
-        #bailout-ui { background-color: rgba(0, 0, 0, 0.2); border: 1px solid var(--danger); padding: 24px; border-radius: 16px; margin-top: 24px; text-align: center; backdrop-filter: blur(10px); }
-        .next-timer { font-size: 14px; color: var(--text-secondary); text-align: center; font-weight: 500; margin-top: 32px; }
+        #bailout-ui { background: var(--surface); border: 1px solid var(--danger); padding: 24px; margin-top: 24px; border-radius: 4px; }
+        .next-timer { font-size: 13px; color: var(--text-dim); margin-top: 32px; font-weight: 500; }
 
-        #skip-round-btn { position: absolute; top: 24px; right: 24px; width: auto; padding: 8px 16px; font-size: 14px; font-weight: 600; background-color: var(--bg-glass-elevated); border: 1px solid var(--border-light); color: var(--text-secondary); border-radius: 980px; backdrop-filter: blur(10px); transition: all 0.2s; z-index: 10; }
-        #skip-round-btn:hover { background-color: rgba(255, 214, 10, 0.15); color: var(--danger); border-color: var(--danger); transform: translateY(-2px); }
+        #skip-round-btn { position: absolute; top: 24px; right: 32px; width: auto; padding: 8px 16px; font-size: 12px; font-weight: 600; background: var(--surface); border: 1px solid var(--border); color: var(--text-dim); transition: all 0.2s; z-index: 10; }
+        #skip-round-btn:hover { border-color: var(--danger); color: var(--danger); }
 
         /* Info Modal */
         #info-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(15px) saturate(150%);
-            -webkit-backdrop-filter: blur(15px) saturate(150%);
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
             z-index: 1000; display: flex; justify-content: center; align-items: center;
-            padding: 20px; opacity: 0; pointer-events: none;
+            padding: 24px; opacity: 0; pointer-events: none;
             transition: opacity 0.2s;
         }
         #info-overlay.active { opacity: 1; pointer-events: auto; }
         .info-modal-container {
-            background: var(--bg-glass-panel);
-            backdrop-filter: blur(30px) saturate(150%);
-            -webkit-backdrop-filter: blur(30px) saturate(150%);
+            background: var(--bg);
             border: 1px solid var(--border-light);
-            border-radius: 24px;
             max-width: 600px;
             width: 100%;
             max-height: 80vh;
             overflow-y: auto;
-            padding: 40px;
+            padding: 32px;
             position: relative;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-            transform: scale(0.95);
-            transition: transform 0.2s;
+            border-radius: 8px;
         }
-        #info-overlay.active .info-modal-container { transform: scale(1); }
         .close-modal-btn {
-            position: absolute; top: 20px; right: 20px;
+            position: absolute; top: 16px; right: 16px;
             width: auto; padding: 8px 16px;
-            background: var(--bg-glass-elevated); border: 1px solid var(--border-light);
-            color: var(--text-primary); border-radius: 980px;
-            font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em;
-            transition: all 0.2s;
+            background: var(--surface); border: 1px solid var(--border);
+            color: var(--text-dim);
+            font-size: 13px; font-weight: 600;
+            transition: all 0.2s; border-radius: 4px;
         }
-        .close-modal-btn:hover { background: var(--danger); color: #fff; border-color: var(--danger); transform: translateY(-2px); }
+        .close-modal-btn:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
         .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
         @media (max-width: 600px) { .info-grid { grid-template-columns: 1fr; } }
-        .info-item { background: var(--bg-glass-input); padding: 16px; border-radius: 12px; border: 1px solid var(--border-light); display: flex; flex-direction: column; gap: 4px; transition: transform 0.2s; }
-        .info-item:hover { transform: translateY(-2px); background: rgba(255, 214, 10, 0.1); border-color: var(--accent-gold); }
-        .info-item strong { color: var(--accent-gold); font-size: 16px; }
-        .info-item span { color: var(--text-secondary); font-size: 14px; }
+        .info-item { background: var(--surface); padding: 20px; border: 1px solid var(--border); border-radius: 4px; display: flex; flex-direction: column; gap: 8px; transition: border-color 0.2s; }
+        .info-item:hover { border-color: var(--accent); }
+        .info-item strong { color: var(--accent); font-size: 16px; font-family: 'Space Grotesk', sans-serif; }
+        .info-item span { color: var(--text-dim); font-size: 13px; }
         .info-list { list-style: none; padding: 0; margin: 0 0 24px 0; }
-        .info-list li { background: var(--bg-glass-input); margin-bottom: 8px; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-light); color: var(--text-secondary); font-size: 14px; }
-        .info-list li strong { color: var(--accent-gold); margin-right: 8px; }
+        .info-list li { background: var(--surface); margin-bottom: 8px; padding: 16px; border: 1px solid var(--border); border-radius: 4px; color: var(--text-dim); font-size: 13px; }
+        .info-list li strong { color: var(--text); margin-right: 8px; font-family: 'Space Grotesk', sans-serif; }
     </style>
 </head>
 <body>
 
-    <div class="bg-blob blob-1"></div>
-    <div class="bg-blob blob-2"></div>
-    <div class="bg-blob blob-3"></div>
-
     <nav class="navbar">
-        <div class="nav-logo" onclick="navClick('Lobby')">Gamble<span>.</span></div>
+        <div class="nav-logo" onclick="navClick('Lobby')">GAMBLE<span>.</span>SYS</div>
         <div class="nav-links">
             <a onclick="navClick('Lobby')">Lobby</a>
             <a onclick="navClick('Games')">Games</a>
@@ -369,28 +309,28 @@
     </nav>
 
     <div id="app-wrapper">
-        <main class="panel" id="main-content">
+        <main id="main-content" style="position: relative;">
             <button id="skip-round-btn" class="hidden" onclick="skipRound()">Skip Round</button>
             
             <div id="menu-screen">
-                <h1>Gamble Against Friends.</h1>
+                <h1>Gamble Against Friends</h1>
                 <p>No house edge. Real-time multiplayer. Pure adrenaline.</p>
-                <div style="max-width: 360px; margin: 0 auto;">
-                    <input type="text" id="name-input" placeholder="Enter your username" maxlength="12">
+                <div style="max-width: 400px;">
+                    <input type="text" id="name-input" placeholder="Enter username" maxlength="12">
                     <div class="form-row">
                         <label>Max Players</label>
                         <select id="max-players-select">
-                            <option value="2">2 Players</option>
-                            <option value="3">3 Players</option>
-                            <option value="4" selected>4 Players</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4" selected>4</option>
                         </select>
                     </div>
                     <div class="menu-cta">
                         <button class="btn-primary" onclick="hostGame()">Host Game</button>
-                        <button onclick="document.getElementById('join-section').classList.toggle('hidden')">Join</button>
+                        <button class="btn-ghost" onclick="document.getElementById('join-section').classList.toggle('hidden')">Join</button>
                     </div>
                     <div id="join-section" class="hidden" style="margin-top: 16px;">
-                        <input type="text" id="room-code-input" placeholder="Enter Room Code" maxlength="6">
+                        <input type="text" id="room-code-input" placeholder="Enter room code" maxlength="6">
                         <button class="btn-gold" onclick="joinGame()" style="width: 100%;">Connect</button>
                     </div>
                 </div>
@@ -403,40 +343,40 @@
                 </div>
                 <h3>Players (<span id="player-count">1</span>/<span id="max-players-display">4</span>)</h3>
                 <div id="lobby-players" class="list-container"></div>
-                <button id="start-btn" onclick="startMatch()" class="hidden btn-primary" style="margin-top: 32px;">Start Match</button>
+                <button id="start-btn" onclick="startMatch()" class="hidden btn-primary" style="margin-top: 24px;">Initialize Match</button>
             </div>
 
             <div id="voting-screen" class="hidden">
                 <div class="game-header">
-                    <div id="voting-timer" class="timer-val tabular">120</div>
-                    <span class="game-subtitle" id="round-title">Round 1</span>
+                    <div id="voting-timer" class="timer-val">120</div>
+                    <div class="game-subtitle" id="round-title">Round 1</div>
                 </div>
-                <p id="vote-instructions" style="margin-bottom: 32px;">Select a game to start playing.</p>
+                <p id="vote-instructions" style="margin-bottom: 24px;">Select a game to start playing.</p>
                 <div id="vote-options" class="vote-grid"></div>
             </div>
 
             <div id="game-screen" class="hidden">
                 <div class="game-header">
-                    <div id="game-timer" class="timer-val tabular">120</div>
-                    <span class="game-subtitle" id="current-game-title">Playing: Slots</span>
+                    <div id="game-timer" class="timer-val">120</div>
+                    <div class="game-subtitle" id="current-game-title">Playing: Slots</div>
                 </div>
                 <div id="game-area"></div>
             </div>
 
             <div id="break-screen" class="hidden">
-                <div class="game-header" style="border-bottom: none; padding-bottom: 0; margin-bottom: 32px;">
-                    <div class="game-subtitle" style="font-size: 24px; color: var(--text-primary); font-weight: 700;">Round Complete</div>
+                <div class="game-header" style="border-bottom: none; padding-bottom: 0; margin-bottom: 24px;">
+                    <div class="game-subtitle" style="font-size: 24px; color: var(--text); font-weight: 600;">Round Complete</div>
                 </div>
                 <h3>Standings</h3>
                 <div id="break-results" class="list-container"></div>
-                <p id="boost-text" style="color: var(--success); font-size: 14px; font-weight: 600; text-align: center; margin-top: 24px; margin-bottom: 0;"></p>
+                <p id="boost-text" style="color: #4ADE80; font-size: 14px; font-weight: 600; margin-top: 16px; margin-bottom: 0;"></p>
                 
                 <div id="bailout-ui" class="hidden">
-                    <h3 style="color: var(--danger);">Bailout Required</h3>
-                    <p style="font-size: 14px; margin-bottom: 24px;">Select your bailout package for the next round.</p>
+                    <h3 style="color: var(--danger);">System Failure</h3>
+                    <p style="font-size: 14px; margin-bottom: 16px;">Select bailout package.</p>
                     <div style="display: flex; gap: 12px;">
-                        <button class="btn-primary" style="font-size: 14px;" onclick="chooseBailout(50, false)">€50 (Safe)</button>
-                        <button class="btn-danger" style="font-size: 14px;" onclick="chooseBailout(80, true)">€80 (-10% Wins)</button>
+                        <button class="btn-primary" style="font-size: 13px;" onclick="chooseBailout(50, false)">€50 (Safe)</button>
+                        <button class="btn-danger" style="font-size: 13px;" onclick="chooseBailout(80, true)">€80 (-10% Wins)</button>
                     </div>
                 </div>
 
@@ -444,29 +384,28 @@
             </div>
 
             <div id="gameover-screen" class="hidden">
-                <h1>Match Over.</h1>
-                <div style="text-align: center; margin-bottom: 40px;">
-                    <h3 style="margin-bottom: 4px;">Winner</h3>
-                    <h2 id="winner-name" style="font-size: 32px; color: var(--accent-gold); font-weight: 800; margin-bottom: 0;">...</h2>
+                <h1>Match Terminated</h1>
+                <div style="margin-bottom: 32px;">
+                    <h3 style="margin-bottom: 4px;">Victor</h3>
+                    <div id="winner-name" style="font-family: 'Space Grotesk', sans-serif; font-size: 32px; color: var(--accent); font-weight: 700;">...</div>
                 </div>
                 <h3>Final Standings</h3>
                 <div id="final-leaderboard" class="list-container"></div>
-                <button onclick="location.reload()" class="btn-gold" style="margin-top: 32px;">New Match</button>
+                <button onclick="location.reload()" class="btn-gold" style="margin-top: 24px;">New Match</button>
             </div>
         </main>
 
-        <aside id="sidebar" class="panel">
+        <aside id="sidebar">
             <h3>Leaderboard</h3>
-            <div id="leaderboard-list" class="list-container" style="border: none; padding: 0; background: transparent;">
-                <p style="font-size: 14px; color: var(--text-secondary); text-align: left;">Waiting for match to start...</p>
+            <div id="leaderboard-list" class="list-container" style="border: none; background: transparent;">
+                <p style="color: var(--text-faint); font-size: 13px;">Waiting for connection...</p>
             </div>
         </aside>
     </div>
 
-    <!-- Info Modal -->
     <div id="info-overlay" onclick="if(event.target === this) closeModal()">
         <div class="info-modal-container">
-            <button class="close-modal-btn" onclick="closeModal()">✕ Close</button>
+            <button class="close-modal-btn" onclick="closeModal()">Close</button>
             <div id="info-modal-content"></div>
         </div>
     </div>
@@ -521,7 +460,7 @@ function flashSuccess() {
 function shakeScreen() {
     const area = document.getElementById('game-area');
     area.classList.add('shake');
-    setTimeout(()=>area.classList.remove('shake'), 500);
+    setTimeout(()=>area.classList.remove('shake'), 300);
 }
 
 // --- NAV & MODAL ---
@@ -534,7 +473,7 @@ function navClick(page) {
         let content = '';
         if (page === 'Games') {
             content = `
-                <h2 style="text-align: center; margin-bottom: 24px;">Game Library</h2>
+                <h2>Games</h2>
                 <div class="info-grid">
                    <div class="info-item"><strong>Slots</strong><span>Match 3 symbols. 7️⃣ pays 50x.</span></div>
                    <div class="info-item"><strong>Blackjack</strong><span>Classic 21. Beat the dealer. Pays 2x.</span></div>
@@ -550,7 +489,7 @@ function navClick(page) {
             `;
         } else if (page === 'Rules') {
             content = `
-                <h2 style="text-align: center; margin-bottom: 24px;">Match Rules</h2>
+                <h2>Rules</h2>
                 <ul class="info-list">
                     <li><strong>The Goal:</strong> Have the most money at the end of Round 3.</li>
                     <li><strong>Starting Cash:</strong> Everyone starts with €100.</li>
@@ -563,10 +502,10 @@ function navClick(page) {
             `;
         } else if (page === 'About') {
             content = `
-                <h2 style="text-align: center; margin-bottom: 24px;">About</h2>
-                <p style="text-align: left; margin-bottom: 16px;">Gamble Against Friends is a peer-to-peer (P2P) multiplayer betting game built with WebRTC. There is no server, no house edge, and no middleman.</p>
-                <p style="text-align: left; margin-bottom: 16px;">One player hosts the game, and others join via a 4-digit room code. All game state is synchronized directly between players in real-time.</p>
-                <p style="text-align: left; margin-bottom: 16px;">With 10 unique mini-games, dynamic round timers, and boost mechanics, it's designed to be the ultimate fast-paced casino party game for you and your friends.</p>
+                <h2>About</h2>
+                <p>Gamble Against Friends is a peer-to-peer (P2P) multiplayer betting game built with WebRTC. There is no server, no house edge, and no middleman.</p>
+                <p>One player hosts the game, and others join via a 4-digit room code. All game state is synchronized directly between players in real-time.</p>
+                <p>With 10 unique mini-games, dynamic round timers, and boost mechanics, it's designed to be the ultimate fast-paced casino party game for you and your friends.</p>
             `;
         }
         document.getElementById('info-modal-content').innerHTML = content;
@@ -687,7 +626,7 @@ function showLobby() {
 function updateLobbyUI() {
     document.getElementById('player-count').innerText = Object.values(players).filter(p=>p.connected).length;
     document.getElementById('max-players-display').innerText = maxPlayers;
-    document.getElementById('lobby-players').innerHTML = Object.values(players).map(p => `<div class="list-item">${p.name} ${p.connected ? '' : '(Disconnected)'}</div>`).join('');
+    document.getElementById('lobby-players').innerHTML = Object.values(players).map(p => `<div class="list-item">${p.name} ${p.connected ? '' : '(DC)'}</div>`).join('');
 }
 
 function startMatch() {
@@ -793,7 +732,7 @@ function startRound3Vote(games) {
             playSound('click');
             myGameChoice = game;
             broadcast({ type: 'vote', game: game, games: games });
-            voteContainer.innerHTML = `<p style="color: var(--text-secondary);">Voted for ${game}. Waiting for others...</p>`;
+            voteContainer.innerHTML = `<p style="color: var(--text-dim);">Voted for ${game}. Waiting for nodes...</p>`;
             if(isHost) checkVotes(games);
         };
         voteContainer.appendChild(btn);
@@ -859,17 +798,17 @@ function endRound() {
 function showBreak(results, boostedPlayerId, nextRound) {
     document.getElementById('break-screen').classList.remove('hidden');
     let boostPct = nextRound === 2 ? "10%" : "15%";
-    document.getElementById('break-results').innerHTML = results.map((p, i) => `<div class="list-item"><span><span class="stat-rank">${i+1}</span>${p[1].name}</span> <span class="tabular" style="color: var(--accent-gold); font-weight: 700;">€${p[1].cash}</span></div>`).join('');
+    document.getElementById('break-results').innerHTML = results.map((p, i) => `<div class="list-item"><span><span class="stat-rank">${i+1}</span>${p[1].name}</span> <span class="tabular" style="color: var(--accent); font-weight: 700;">€${p[1].cash}</span></div>`).join('');
     if(players[boostedPlayerId]) document.getElementById('boost-text').innerText = `${players[boostedPlayerId].name} receives a ${boostPct} win boost next round.`;
     if (nextRound === 2) playSound('win'); else playSound('jackpot');
     if (players[myId].cash <= 0 && nextRound <= 3) document.getElementById('bailout-ui').classList.remove('hidden');
     else document.getElementById('bailout-ui').classList.add('hidden');
     let timeLeft = 15;
-    document.getElementById('next-round-timer').innerText = `Next round in ${timeLeft}s`;
+    document.getElementById('next-round-timer').innerText = `Next cycle in ${timeLeft}s`;
     if (breakInterval) clearInterval(breakInterval);
     breakInterval = setInterval(() => {
         timeLeft--;
-        document.getElementById('next-round-timer').innerText = `Next round in ${timeLeft}s`;
+        document.getElementById('next-round-timer').innerText = `Next cycle in ${timeLeft}s`;
         if (timeLeft <= 0) {
             clearInterval(breakInterval);
             currentRound = nextRound;
@@ -893,7 +832,7 @@ function showGameOver(finalPlayers) {
     document.getElementById('gameover-screen').classList.remove('hidden');
     let sorted = Object.values(players).filter(p=>p.connected).sort((a, b) => b.cash - a.cash);
     document.getElementById('winner-name').innerText = sorted[0].name;
-    document.getElementById('final-leaderboard').innerHTML = sorted.map((p, i) => `<div class="list-item"><span><span class="stat-rank">${i+1}</span>${p.name}</span> <span class="tabular" style="color: var(--accent-gold); font-weight: 700;">€${p.cash}</span></div>`).join('');
+    document.getElementById('final-leaderboard').innerHTML = sorted.map((p, i) => `<div class="list-item"><span><span class="stat-rank">${i+1}</span>${p.name}</span> <span class="tabular" style="color: var(--accent); font-weight: 700;">€${p.cash}</span></div>`).join('');
     playSound('jackpot'); flashSuccess();
 }
 
@@ -922,10 +861,10 @@ function updateLeaderboard() {
 }
 
 // --- GAMES ---
-function getBalanceHTML() { return `<div class="balance-display tabular" id="balance-display">Balance<span class="val">€${players[myId].cash}</span></div>`; }
+function getBalanceHTML() { return `<div class="balance-display">Balance <span class="val">€${players[myId].cash}</span></div>`; }
 function updateGameBalance(isWin, isLoss) {
     const disp = document.getElementById('balance-display');
-    if(disp) disp.innerHTML = `Balance<span class="val">€${players[myId].cash}</span>`;
+    if(disp) disp.innerHTML = `Balance <span class="val">€${players[myId].cash}</span>`;
     updateLeaderboard();
     if (isWin) { disp.classList.add('win'); disp.classList.remove('loss'); setTimeout(()=>disp.classList.remove('win'), 500); }
     if (isLoss) { disp.classList.add('loss'); disp.classList.remove('win'); setTimeout(()=>disp.classList.remove('loss'), 500); }
@@ -951,7 +890,7 @@ function getWinMsg(prefix, res) {
     return msg;
 }
 function triggerCooldown(btn, ms) { btn.disabled = true; btn.classList.add('cooldown'); setTimeout(() => { btn.disabled = false; btn.classList.remove('cooldown'); }, ms); }
-function setMsg(msg, isWin) { let el = document.getElementById('action-msg'); el.className = isWin ? 'action-msg win-msg' : 'action-msg loss-msg'; el.style.opacity = 0; el.innerText = msg; setTimeout(() => { el.style.opacity = 1; }, 10); }
+function setMsg(msg, isWin) { let el = document.getElementById('action-msg'); el.className = isWin ? 'action-msg win-msg' : 'action-msg loss-msg'; el.innerText = msg; }
 
 function loadMiniGame(game) {
     let area = document.getElementById('game-area');
@@ -1021,9 +960,9 @@ let bjDeck = [], bjPlayer = [], bjDealer = [], bjBet = 0, bjState = 'betting';
 function loadBlackjack(area) {
     area.innerHTML += `
         ${getBalanceHTML()}
-        <h3 style="margin-bottom: 12px; text-align: left; color: var(--text-primary);">Dealer: <span id="bj-dealer-val" class="tabular">0</span></h3>
+        <h3 style="margin-bottom: 12px; color: var(--text-dim);">Dealer: <span id="bj-dealer-val">0</span></h3>
         <div class="card-container" id="bj-dealer-cards"></div>
-        <h3 style="margin-bottom: 12px; text-align: left; color: var(--text-primary);">You: <span id="bj-player-val" class="tabular">0</span></h3>
+        <h3 style="margin-bottom: 12px; color: var(--text-dim);">You: <span id="bj-player-val">0</span></h3>
         <div class="card-container" id="bj-player-cards"></div>
         <div class="bet-controls" id="bj-betting-ui">
             <input type="number" id="bj-bet" class="bet-input" value="10" min="1">
@@ -1130,7 +1069,7 @@ function loadTower(area) {
             <button class="btn-danger action-btn" onclick="document.getElementById('tower-bet').value=players[myId].cash; towerStart(this)">ALL IN</button>
         </div>
         <div class="bet-controls hidden" id="tower-action-ui">
-            <button id="tower-cashout-btn" class="btn-gold action-btn" onclick="towerCashout()">CASH OUT €<span id="tower-pot" class="tabular">0</span></button>
+            <button id="tower-cashout-btn" class="btn-gold action-btn" onclick="towerCashout()">CASH OUT €<span id="tower-pot">0</span></button>
         </div>
     `;
     towerLevel = 0; towerBet = 0; towerActive = false;
@@ -1211,7 +1150,7 @@ function loadRoulette(area) {
         t.onclick=()=>roulSelect(t, i); board.appendChild(t);
     }
     let btns = ['Red', 'Black', 'Even', 'Odd'];
-    btns.forEach(b => { let t = document.createElement('div'); t.className='roulette-tile roul-green'; t.innerText=b; t.style.width='64px'; t.style.borderRadius='12px'; t.onclick=()=>roulSelect(t, b); board.appendChild(t); });
+    btns.forEach(b => { let t = document.createElement('div'); t.className='roulette-tile roul-green'; t.innerText=b; t.style.width='64px'; t.onclick=()=>roulSelect(t, b); board.appendChild(t); });
 }
 function roulSelect(el, val) { playSound('click'); document.querySelectorAll('.roulette-tile').forEach(t=>t.classList.remove('selected')); el.classList.add('selected'); roulSelection = val; }
 function playRoulette(btn) {
@@ -1319,7 +1258,7 @@ let kenoDrawing = false;
 function loadKeno(area) {
     area.innerHTML += `
         ${getBalanceHTML()}
-        <h3 style="margin-bottom: 16px; text-align: left; color: var(--text-primary);">Select up to 10 numbers</h3>
+        <h3 style="margin-bottom: 16px; color: var(--text-dim);">Select up to 10 numbers</h3>
         <div class="grid-keno" id="keno-grid"></div>
         <div class="bet-controls" id="keno-bet-ui" style="max-width: 600px;">
             <input type="number" id="keno-bet" class="bet-input" value="10" min="1" style="flex: 0 0 100px;">
@@ -1396,7 +1335,7 @@ function loadMines(area) {
             <button class="btn-danger action-btn" onclick="document.getElementById('mines-bet').value=players[myId].cash; minesStart(this)">ALL IN</button>
         </div>
         <div class="bet-controls hidden" id="mines-action-ui">
-            <button id="mines-cashout-btn" class="btn-gold action-btn" onclick="minesCashout()">CASH OUT €<span id="mines-pot" class="tabular">0</span></button>
+            <button id="mines-cashout-btn" class="btn-gold action-btn" onclick="minesCashout()">CASH OUT €<span id="mines-pot">0</span></button>
         </div>
     `;
     minesState = { active: false, bet: 0, origBet: 0, bombs: 3, gems: 0, grid: [] };
@@ -1472,10 +1411,10 @@ function loadCrash(area) {
         ${getBalanceHTML()}
         <div class="crash-chart">
             <svg class="crash-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <polyline id="crash-line" points="0,100" fill="none" stroke="var(--accent-gold)" stroke-width="2" vector-effect="non-scaling-stroke" style="filter: drop-shadow(0 0 4px var(--accent-gold));" />
+                <polyline id="crash-line" points="0,100" fill="none" stroke="#D4AF37" stroke-width="2" vector-effect="non-scaling-stroke" />
             </svg>
         </div>
-        <div class="crash-display tabular" id="crash-mult">1.00x</div>
+        <div class="crash-display" id="crash-mult">1.00x</div>
         <div class="bet-controls" id="crash-bet-ui">
             <input type="number" id="crash-bet" class="bet-input" value="10" min="1">
             <button class="btn-primary action-btn" onclick="crashStart(this)">BET</button>
@@ -1488,17 +1427,16 @@ function loadCrash(area) {
     crashState = { active: false, bet: 0, mult: 1.00, interval: null, cashed: false, point: 0, points: "0,100" };
     let el = document.getElementById('crash-mult');
     let line = document.getElementById('crash-line');
-    if(el) { el.innerText = '1.00x'; el.style.color = 'var(--text-primary)'; el.classList.remove('crashed'); }
-    if(line) { line.setAttribute('points', '0,100'); line.style.stroke = 'var(--accent-gold)'; }
+    if(el) { el.innerText = '1.00x'; el.style.color = 'var(--text)'; el.classList.remove('crashed'); }
+    if(line) { line.setAttribute('points', '0,100'); line.style.stroke = '#D4AF37'; }
 }
 function crashStart(btn) {
     let bet = parseInt(document.getElementById('crash-bet').value);
     if (!validateBet(bet)) { setMsg("Invalid bet", false); playSound('lose'); return; }
     deductBet(bet);
     
-    // Provably fair-like math (5% house edge)
-    let r = Math.random();
-    let point = Math.max(1.00, (0.95 / (1 - r))); // Will sometimes crash at 1.00x, average around 2.0x
+    let r = Math.pow(Math.random(), 2.0); 
+    let point = Math.max(1.00, (0.95 / (1 - r))); 
     
     crashState = { active: true, bet: bet, mult: 1.00, interval: null, cashed: false, point: point, points: "0,100" };
     document.getElementById('crash-bet-ui').classList.add('hidden');
@@ -1507,18 +1445,15 @@ function crashStart(btn) {
     
     let el = document.getElementById('crash-mult');
     let line = document.getElementById('crash-line');
-    el.style.color = 'var(--text-primary)'; el.classList.remove('crashed');
-    line.setAttribute('points', '0,100'); line.style.stroke = 'var(--accent-gold)';
+    el.style.color = 'var(--text)'; el.classList.remove('crashed');
+    line.setAttribute('points', '0,100'); line.style.stroke = '#D4AF37';
     
     setMsg('Cash out before it crashes!', true); playSound('tick');
     
     crashState.interval = setInterval(() => {
-        crashState.mult += 0.02 + Math.random() * 0.03; // Slower growth
+        crashState.mult += 0.02 + Math.random() * 0.03; 
         el.innerText = crashState.mult.toFixed(2) + 'x';
         
-        // Map multiplier to chart points
-        // X goes from 0 to 100. Let's say 1x is x=0, 5x is x=100.
-        // Y goes from 100 (bottom) to 0 (top). Let's say 1x is y=100, 5x is y=0.
         let x = Math.min(100, (crashState.mult - 1) * 25);
         let y = 100 - Math.min(100, (crashState.mult - 1) * 25);
         crashState.points += ` ${x},${y}`;
@@ -1548,8 +1483,8 @@ function loadDouble(area) {
         <div class="double-display" id="double-coin">🪙</div>
         <div class="bet-controls" id="double-bet-ui">
             <input type="number" id="double-bet" class="bet-input" value="10" min="1">
-            <button class="action-btn" style="flex:1; background-color: var(--danger); color: #fff;" onclick="doublePlay('red')">RED (2x)</button>
-            <button class="action-btn" style="flex:1; background-color: var(--accent-blue); color: #fff;" onclick="doublePlay('blue')">BLUE (2x)</button>
+            <button class="action-btn" style="flex:1; background: transparent; border-color: var(--danger); color: var(--danger);" onclick="doublePlay('red')">RED (2x)</button>
+            <button class="action-btn" style="flex:1; background: transparent; border-color: var(--accent); color: var(--accent);" onclick="doublePlay('blue')">BLUE (2x)</button>
         </div>
     `;
     doubleActive = false; doubleBet = 0;
@@ -1563,7 +1498,7 @@ function doublePlay(choice) {
     deductBet(bet); doubleActive = true; doubleBet = bet; playSound('coinFlip');
     let coin = document.getElementById('double-coin');
     coin.style.animation = 'none'; coin.offsetHeight; 
-    coin.style.animation = 'flipCoin 1.5s ease-in-out';
+    coin.style.animation = 'flipCoin 1s steps(8, end)';
     setMsg('Flipping...', true);
     setTimeout(() => {
         coin.style.animation = 'none';
@@ -1572,15 +1507,15 @@ function doublePlay(choice) {
         if ((choice === 'red' && isRed) || (choice === 'blue' && !isRed)) {
             win = doubleBet * 2;
             coin.innerText = isRed ? '🔴' : '🔵';
-            coin.style.color = isRed ? 'var(--danger)' : 'var(--accent-blue)';
+            coin.style.color = isRed ? 'var(--danger)' : 'var(--accent)';
             setMsg(getWinMsg("Win!", addWinnings(win, true)), true);
         } else {
             coin.innerText = isRed ? '🔴' : '🔵';
-            coin.style.color = isRed ? 'var(--danger)' : 'var(--accent-blue)';
+            coin.style.color = isRed ? 'var(--danger)' : 'var(--accent)';
             setMsg(`Lost €${doubleBet}`, false); playSound('lose'); shakeScreen();
         }
         doubleActive = false;
-    }, 1500);
+    }, 1000);
 }
 
 // Hover sound effect for buttons
@@ -1589,7 +1524,7 @@ document.addEventListener('mouseover', (e) => {
     if (e.target.tagName === 'BUTTON' && !e.target.disabled) {
         if (!hoverTimeout) {
             playSound('hover');
-            hoverTimeout = setTimeout(() => { hoverTimeout = null; }, 50); // Throttle to prevent stutter
+            hoverTimeout = setTimeout(() => { hoverTimeout = null; }, 50);
         }
     }
 });
