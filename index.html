@@ -8,32 +8,23 @@
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
         :root {
-            --bg: #08090b;
-            --surface: #101419;
-            --surface-2: #171d24;
-            --surface-3: #202833;
-            --border: rgba(255,255,255,0.10);
-            --border-light: rgba(255,255,255,0.18);
-            --text: #f4f1e8;
-            --text-dim: #a6adba;
-            --text-faint: #697180;
-            --accent: #f0c75e;
-            --accent-2: #4cc9a6;
-            --danger: #e14f55;
-            --felt: #0d4b3e;
-            --felt-dark: #092c29;
-            --black: #12151b;
-            --shadow: 0 24px 80px rgba(0,0,0,0.38);
+            --bg: #0D0D0D;
+            --surface: #161616;
+            --surface-2: #1C1C1C;
+            --border: #262626;
+            --border-light: #303030;
+            --text: #EAEAEA;
+            --text-dim: #888888;
+            --text-faint: #555555;
+            --accent: #D4AF37; /* Deep Gold */
+            --danger: #E5484D;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
             font-family: 'Manrope', sans-serif;
-            background:
-                radial-gradient(circle at 18% 0%, rgba(76, 201, 166, 0.16), transparent 30%),
-                radial-gradient(circle at 82% 8%, rgba(240, 199, 94, 0.12), transparent 28%),
-                linear-gradient(145deg, #07080a 0%, #0c1115 44%, #090b0e 100%);
+            background-color: var(--bg);
             color: var(--text);
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
@@ -43,33 +34,20 @@
             line-height: 1.5;
             overflow-x: hidden;
         }
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            opacity: 0.24;
-            background-image:
-                linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
-            background-size: 52px 52px;
-            mask-image: linear-gradient(to bottom, #000, transparent 86%);
-        }
 
         .hidden { display: none !important; }
 
         /* Navbar */
         .navbar {
-            max-width: 1240px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 24px 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid var(--border);
-            backdrop-filter: blur(16px);
         }
-        .nav-logo { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 800; color: var(--text); cursor: pointer; letter-spacing: 0; }
+        .nav-logo { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: var(--text); cursor: pointer; letter-spacing: -0.02em; }
         .nav-logo span { color: var(--accent); }
         .nav-links { display: flex; gap: 32px; }
         .nav-links a { color: var(--text-dim); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; cursor: pointer; }
@@ -77,51 +55,36 @@
         @media (max-width: 600px) { .nav-links { gap: 16px; } .nav-links a { font-size: 12px; } }
 
         #app-wrapper {
-            max-width: 1240px;
+            max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: minmax(0, 1fr) 330px;
-            gap: 24px;
+            grid-template-columns: 1fr 320px;
+            gap: 0;
             position: relative;
-            padding: 24px 32px 48px;
         }
 
         #sidebar {
-            padding: 24px;
-            border: 1px solid var(--border);
+            padding: 48px 32px;
+            border-left: 1px solid var(--border);
             align-self: stretch;
-            background: rgba(16,20,25,0.72);
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(18px);
-            position: sticky;
-            top: 24px;
-            max-height: calc(100vh - 48px);
         }
 
         @media (max-width: 900px) {
-            #app-wrapper { grid-template-columns: 1fr; padding: 18px; }
-            #sidebar { position: static; max-height: none; padding: 20px; }
+            #app-wrapper { grid-template-columns: 1fr; }
+            #sidebar { border-left: none; border-top: 1px solid var(--border); padding: 32px; }
         }
 
         main {
-            padding: 32px;
+            padding: 48px 32px;
             position: relative;
-            min-height: 650px;
-            background: rgba(12,16,20,0.66);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(18px);
         }
         
         @media (max-width: 600px) {
             main, .navbar { padding-left: 20px; padding-right: 20px; }
-            main { padding-top: 28px; }
         }
 
-        h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.25rem, 5vw, 4.4rem); font-weight: 800; text-align: left; line-height: 0.96; margin-bottom: 18px; color: var(--text); letter-spacing: 0; max-width: 760px; }
-        h2 { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 24px; letter-spacing: 0; }
+        h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; text-align: left; line-height: 1.1; margin-bottom: 16px; color: var(--text); letter-spacing: -0.03em; }
+        h2 { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 600; color: var(--text); margin-bottom: 24px; letter-spacing: -0.02em; }
         h3 { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
         p { font-size: 16px; color: var(--text-dim); text-align: left; margin-bottom: 32px; line-height: 1.6; max-width: 90%; }
 
@@ -129,7 +92,7 @@
             width: 100%;
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 4px;
             padding: 14px 16px;
             color: var(--text);
             font-family: 'Manrope', sans-serif;
@@ -159,7 +122,7 @@
             width: 100%;
             padding: 14px 24px;
             border: 1px solid var(--border-light);
-            border-radius: 8px;
+            border-radius: 4px;
             font-family: 'Manrope', sans-serif;
             font-size: 14px;
             font-weight: 600;
@@ -174,12 +137,12 @@
         button:active { transform: scale(0.98); }
         button:disabled { opacity: 0.3; cursor: not-allowed; }
 
-        .btn-primary { background: linear-gradient(180deg, #ffdc82, var(--accent)); border-color: rgba(255,255,255,0.22); color: #17120a; box-shadow: 0 10px 24px rgba(240,199,94,0.18); }
+        .btn-primary { background: var(--accent); border-color: var(--accent); color: #000; }
         .btn-primary:hover { background: #E5C158; border-color: #E5C158; }
         .btn-danger { background: var(--danger); border-color: var(--danger); color: #fff; }
         .btn-danger:hover { background: #F15A5F; border-color: #F15A5F; }
-        .btn-gold { background: rgba(240,199,94,0.10); border-color: rgba(240,199,94,0.55); color: var(--accent); }
-        .btn-gold:hover { background: var(--accent); color: #111; }
+        .btn-gold { background: transparent; border-color: var(--accent); color: var(--accent); }
+        .btn-gold:hover { background: var(--accent); color: #000; }
         .btn-ghost { background: transparent; border-color: var(--border-light); color: var(--text); }
         .btn-ghost:hover { border-color: var(--text); }
 
@@ -194,12 +157,12 @@
         .lobby-info { margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
         .room-code { font-family: 'Space Grotesk', sans-serif; font-size: 48px; font-weight: 700; color: var(--accent); letter-spacing: 0.02em; display: block; margin-top: 8px; line-height: 1; }
         
-        .list-container { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: rgba(255,255,255,0.035); }
-        .list-item { padding: 14px 16px; font-size: 14px; color: var(--text); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; transition: background 0.2s, transform 0.2s; }
+        .list-container { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; background: var(--surface); }
+        .list-item { padding: 16px; font-size: 14px; color: var(--text); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; }
         .list-item:hover { background: var(--surface-2); }
         .list-item:last-child { border-bottom: none; }
 
-        .game-header { margin-bottom: 30px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+        .game-header { margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
         .timer-val { font-family: 'Space Grotesk', sans-serif; font-size: 64px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; line-height: 1; letter-spacing: -0.03em; text-align: center; }
         .timer-warning { color: var(--danger); }
         .game-subtitle { font-size: 14px; color: var(--text-dim); margin-top: 12px; font-weight: 500; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; }
@@ -229,7 +192,7 @@
         }
 
         .balance-display { font-size: 13px; color: var(--text-dim); margin-bottom: 32px; font-variant-numeric: tabular-nums; display: flex; align-items: baseline; gap: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
-        .balance-display .val { font-family: 'Space Grotesk', sans-serif; color: var(--accent); font-size: 36px; font-weight: 800; letter-spacing: 0; line-height: 1; }
+        .balance-display .val { font-family: 'Space Grotesk', sans-serif; color: var(--accent); font-size: 36px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; }
         .balance-display.win .val { color: #4ADE80; }
         .balance-display.loss .val { color: var(--danger); }
 
@@ -244,7 +207,7 @@
         .loss-msg { color: var(--danger); }
 
         /* Slots */
-        .slot-machine { display: flex; justify-content: center; gap: 16px; font-size: 48px; margin: 0 auto 32px auto; background: linear-gradient(180deg, var(--surface-2), var(--surface)); padding: 24px; border: 1px solid var(--border); border-radius: 8px; max-width: 440px; overflow: hidden; box-shadow: var(--shadow); }
+        .slot-machine { display: flex; justify-content: center; gap: 16px; font-size: 48px; margin: 0 auto 32px auto; background: var(--surface); padding: 24px; border: 1px solid var(--border); border-radius: 4px; max-width: 440px; overflow: hidden; }
         .slot-reel { width: 80px; height: 60px; display: flex; align-items: center; justify-content: center; transition: transform 0.3s; }
         .slot-reel.win { transform: scale(1.2); }
         .spinning { opacity: 0.5; animation: spin 0.1s linear infinite; }
@@ -292,189 +255,19 @@
         .mine-tile { font-size: 28px; }
 
         /* Plinko */
-        .plinko-board {
-            position: relative;
-            width: min(100%, 520px);
-            height: 430px;
-            margin: 0 auto 28px auto;
-            border: 1px solid rgba(255,255,255,0.16);
-            border-radius: 8px;
-            overflow: hidden;
-            background:
-                radial-gradient(circle at 50% 16%, rgba(255,255,255,0.10), transparent 24%),
-                linear-gradient(180deg, #15372f 0%, #0b211f 58%, #091615 100%);
-            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04), var(--shadow);
-        }
-        .plinko-rail {
-            position: absolute;
-            inset: 16px 18px 78px;
-            border-left: 2px solid rgba(240,199,94,0.38);
-            border-right: 2px solid rgba(240,199,94,0.38);
-            transform: perspective(700px) rotateX(2deg);
-        }
-        .plinko-peg {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #f7efe0;
-            box-shadow: 0 0 12px rgba(240,199,94,0.34);
-            transform: translate(-50%, -50%);
-        }
-        .plinko-ball {
-            position: absolute;
-            z-index: 3;
-            left: 50%;
-            top: 28px;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            opacity: 0;
-            background: radial-gradient(circle at 32% 28%, #fff7cf, #f0c75e 42%, #9d681b 100%);
-            border: 1px solid rgba(255,255,255,0.48);
-            box-shadow: 0 10px 22px rgba(0,0,0,0.42), 0 0 22px rgba(240,199,94,0.36);
-            transform: translate(-50%, -50%);
-        }
-        .plinko-ball.dropping { opacity: 1; }
-        .plinko-buckets {
-            position: absolute;
-            left: 16px;
-            right: 16px;
-            bottom: 14px;
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 6px;
-        }
-        .plinko-mult {
-            min-height: 54px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255,255,255,0.07);
-            border: 1px solid rgba(255,255,255,0.13);
-            border-bottom: 3px solid rgba(240,199,94,0.45);
-            font-weight: 800;
-            font-size: 15px;
-            text-align: center;
-            color: var(--text);
-            transition: all 0.18s;
-            border-radius: 6px;
-            font-family: 'Space Grotesk', sans-serif;
-        }
-        .plinko-mult.hot { color: #17120a; background: linear-gradient(180deg, #ffdc82, var(--accent)); }
-        .plinko-mult.active { color: #071512; background: linear-gradient(180deg, #82ffd6, var(--accent-2)); border-color: var(--accent-2); transform: translateY(-6px); box-shadow: 0 12px 26px rgba(76,201,166,0.28); }
-
+        .plinko-board { display: flex; gap: 8px; margin: 0 auto 32px auto; width: 100%; max-width: 440px; }
+        .plinko-mult { flex: 1; padding: 16px 0; background: var(--surface); border: 1px solid var(--border); font-weight: 700; font-size: 16px; text-align: center; color: var(--text); transition: all 0.1s; border-radius: 4px; font-family: 'Space Grotesk', sans-serif; }
+        .plinko-mult.active { background: var(--accent); color: #000; border-color: var(--accent); transform: scale(1.1); }
+        
         /* Roulette */
-        .roulette-layout {
-            width: min(100%, 760px);
-            margin: 0 auto 28px;
-            display: grid;
-            grid-template-columns: minmax(260px, 360px) minmax(260px, 1fr);
-            gap: 24px;
-            align-items: center;
-        }
-        .roulette-stage {
-            position: relative;
-            aspect-ratio: 1;
-            width: 100%;
-            max-width: 360px;
-            margin: 0 auto;
-            border-radius: 50%;
-            background: radial-gradient(circle, #1d120d 0 28%, #745328 29% 33%, #24140d 34% 100%);
-            box-shadow: var(--shadow), inset 0 0 0 10px #6c461c, inset 0 0 0 18px rgba(240,199,94,0.5);
-        }
-        .roulette-wheel {
-            position: absolute;
-            inset: 24px;
-            border-radius: 50%;
-            background: var(--wheel-gradient);
-            border: 8px solid #c99535;
-            transition: transform 3.2s cubic-bezier(.12,.72,.14,1);
-            box-shadow: inset 0 0 0 2px rgba(255,255,255,0.18), inset 0 0 34px rgba(0,0,0,0.55);
-        }
-        .roulette-wheel::after {
-            content: "";
-            position: absolute;
-            inset: 31%;
-            border-radius: 50%;
-            background: radial-gradient(circle at 35% 32%, #f7dfa0, #a87525 55%, #4a2a12);
-            border: 5px solid #f0c75e;
-            box-shadow: 0 8px 22px rgba(0,0,0,0.42);
-        }
-        .roulette-pocket {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            width: 28px;
-            height: 50%;
-            margin-left: -14px;
-            transform-origin: 50% 0;
-            display: flex;
-            justify-content: center;
-            pointer-events: none;
-        }
-        .roulette-pocket span {
-            margin-top: 11px;
-            color: #fff;
-            font-size: 10px;
-            font-weight: 800;
-            text-shadow: 0 1px 3px #000;
-        }
-        .roulette-ball {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            z-index: 4;
-            width: 14px;
-            height: 14px;
-            margin: -7px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 34% 30%, #fff, #d8dde5 54%, #808996);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.52);
-            transform: rotate(0deg) translateY(-138px);
-            transition: transform 3.2s cubic-bezier(.12,.72,.14,1);
-        }
-        .roulette-pointer {
-            position: absolute;
-            left: 50%;
-            top: -5px;
-            z-index: 5;
-            width: 0;
-            height: 0;
-            border-left: 14px solid transparent;
-            border-right: 14px solid transparent;
-            border-top: 28px solid var(--accent);
-            transform: translateX(-50%);
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.45));
-        }
-        .roulette-result {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            z-index: 6;
-            transform: translate(-50%, -50%);
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 30px;
-            font-weight: 800;
-            color: #17120a;
-        }
-        .roulette-board {
-            display: grid;
-            grid-template-columns: repeat(6, minmax(34px, 1fr));
-            gap: 7px;
-        }
-        .roulette-tile { min-height: 36px; display: flex; justify-content: center; align-items: center; border: 1px solid var(--border); cursor: pointer; font-weight: 800; font-size: 12px; color: var(--text); transition: all 0.14s; background: rgba(255,255,255,0.06); border-radius: 6px; }
-        .roulette-tile:hover { background: rgba(255,255,255,0.12); transform: translateY(-1px); }
-        .roul-red { background: rgba(225,79,85,0.24); border-color: rgba(225,79,85,0.55); color: #ffd8dc; }
-        .roul-black { background: rgba(18,21,27,0.92); border-color: rgba(255,255,255,0.16); color: #f5f5f5; }
-        .roul-green { background: rgba(76,201,166,0.24); color: #cbfff0; border-color: rgba(76,201,166,0.60); }
-        .roulette-tile.outside { grid-column: span 3; min-height: 42px; }
-        .roulette-tile.selected { border-color: var(--accent); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent), 0 0 18px rgba(240,199,94,0.16); transform: translateY(-2px); }
-        .roulette-tile.hit { background: linear-gradient(180deg, #ffdc82, var(--accent)); color: #17120a; border-color: var(--accent); }
-        @media (max-width: 760px) {
-            .roulette-layout { grid-template-columns: 1fr; }
-            .roulette-stage { max-width: 320px; }
-        }
+        .roulette-board { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 0 auto 32px auto; max-width: 440px; }
+        .roulette-tile { width: 36px; height: 36px; display: flex; justify-content: center; align-items: center; border: 1px solid var(--border); cursor: pointer; font-weight: 700; font-size: 12px; color: var(--text); transition: all 0.1s; background: var(--surface); border-radius: 4px; }
+        .roulette-tile:hover { background: var(--surface-2); }
+        .roul-red { border-color: var(--danger); color: var(--danger); }
+        .roul-black { border-color: var(--text-dim); color: var(--text); }
+        .roul-green { background: #4ADE80; color: #000; border-color: #4ADE80; }
+        .roulette-tile.selected { border-width: 2px; transform: scale(1.1); }
+        .roulette-tile.spinning { background: var(--accent); color: #000; border-color: var(--accent); }
 
         /* Crash */
         .crash-display { font-family: 'Space Grotesk', sans-serif; font-size: 56px; font-weight: 700; margin-bottom: 16px; color: var(--text); font-variant-numeric: tabular-nums; letter-spacing: -0.03em; text-align: center; width: 100%; max-width: 440px; }
@@ -670,14 +463,8 @@ const GAME_ICONS = {
 let currentRound = 1;
 const roundTimers = [0, 120, 90, 60]; 
 let gameInterval = null, breakInterval = null, voteInterval = null, syncInterval = null;
-let leaderboardCache = {};
 let myGameChoice = null;
 let skipVotes = 0;
-setInterval(() => {
-    if (Object.keys(players).length === 0) return;
-    updateLeaderboard();
-    if (isHost) broadcast({ type: 'state_sync', players: players });
-}, 500);
 
 // --- AUDIO ENGINE (Clicky Keyboard Sounds) ---
 let audioCtx = null;
@@ -853,7 +640,6 @@ function handleData(data, senderId) {
             checkVotes(data.games);
         } else if (data.type === 'bet_update') {
             if(players[senderId]) players[senderId].cash = data.cash;
-            updateLeaderboard();
             broadcast({ type: 'state_sync', players: players }); // Instant sync
         } else if (data.type === 'skip_vote') {
             if(players[senderId] && !players[senderId].votedSkip) {
@@ -1019,6 +805,12 @@ function startPlayPhase(round, games, myGame) {
         if (timeLeft <= 10) { playSound('tick'); document.getElementById('game-timer').classList.add('timer-warning'); }
         if (timeLeft <= 0) { clearInterval(gameInterval); endRound(); }
     }, 1000);
+
+    // 0.5s Heartbeat Sync for Host
+    if (isHost) {
+        if (syncInterval) clearInterval(syncInterval);
+        syncInterval = setInterval(() => { broadcast({ type: 'state_sync', players: players }); }, 500);
+    }
 }
 
 function skipRound() {
@@ -1104,6 +896,12 @@ function startRound3Game(game) {
         if (timeLeft <= 10) { playSound('tick'); document.getElementById('game-timer').classList.add('timer-warning'); }
         if (timeLeft <= 0) { clearInterval(gameInterval); endRound(); }
     }, 1000);
+
+    // 0.5s Heartbeat Sync for Host
+    if (isHost) {
+        if (syncInterval) clearInterval(syncInterval);
+        syncInterval = setInterval(() => { broadcast({ type: 'state_sync', players: players }); }, 500);
+    }
 }
 
 function endRound() {
@@ -1177,33 +975,37 @@ function showGameOver(finalPlayers) {
     document.getElementById('break-screen').classList.add('hidden');
     document.getElementById('game-screen').classList.add('hidden');
     document.getElementById('gameover-screen').classList.remove('hidden');
-    let sorted = Object.entries(players).filter(([, p])=>p.connected).sort((a, b) => b[1].cash - a[1].cash);
-    document.getElementById('winner-name').innerText = sorted[0][1].name;
-    document.getElementById('final-leaderboard').innerHTML = sorted.map((p, i) => `<div class="list-item"><span><span class="stat-rank">${i+1}</span>${p[1].name}</span> <span class="tabular" style="color: var(--accent); font-weight: 700;">€${p[1].cash}</span></div>`).join('');
+    let sorted = Object.values(players).filter(p=>p.connected).sort((a, b) => b.cash - a.cash);
+    document.getElementById('winner-name').innerText = sorted[0].name;
+    document.getElementById('final-leaderboard').innerHTML = sorted.map((p, i) => `<div class="list-item"><span><span class="stat-rank">${i+1}</span>${p.name}</span> <span class="tabular" style="color: var(--accent); font-weight: 700;">€${p.cash}</span></div>`).join('');
     playSound('jackpot'); flashSuccess(); spawnConfetti(150);
 }
 
 function updateLeaderboard() {
     let list = document.getElementById('leaderboard-list');
     if(!list) return;
-    let sorted = Object.entries(players).filter(([, p])=>p.connected).sort((a, b) => b[1].cash - a[1].cash);
+    let sorted = Object.values(players).filter(p=>p.connected).sort((a, b) => b.cash - a.cash);
     if(sorted.length === 0) return;
-    list.innerHTML = sorted.map(([id, p], i) => {
-        let oldVal = leaderboardCache[id];
-        let direction = oldVal !== undefined && oldVal !== p.cash ? (p.cash > oldVal ? ' flash-up' : ' flash-down') : '';
-        leaderboardCache[id] = p.cash;
-        return `
+    list.innerHTML = sorted.map((p, i) => `
         <div class="list-item">
-            <span><span class="stat-rank">${i+1}</span><span class="stat-name">${escapeHTML(p.name)}</span></span>
-            <span class="stat-cash${direction}">€${p.cash}</span>
+            <span><span class="stat-rank">${i+1}</span><span class="stat-name">${p.name}</span></span>
+            <span class="stat-cash">€${p.cash}</span>
         </div>
-    `}).join('');
-    setTimeout(() => document.querySelectorAll('.stat-cash').forEach(el => el.classList.remove('flash-up', 'flash-down')), 650);
+    `).join('');
+    
+    let cashEls = document.querySelectorAll('.stat-cash');
+    cashEls.forEach(el => {
+        let oldVal = parseInt(el.dataset.oldval || 0);
+        let newVal = parseInt(el.innerText.replace('€', ''));
+        if (oldVal !== 0 && oldVal !== newVal) {
+            if (newVal > oldVal) el.classList.add('flash-up');
+            else el.classList.add('flash-down');
+            setTimeout(() => { el.classList.remove('flash-up'); el.classList.remove('flash-down'); }, 1000);
+        }
+        el.dataset.oldval = newVal;
+    });
 }
 
-function escapeHTML(value) {
-    return String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
-}
 // --- GAMES ---
 function getBalanceHTML() { return `<div class="balance-display" id="balance-display">Balance <span class="val">€${players[myId].cash}</span></div>`; }
 function updateGameBalance(isWin, isLoss) {
@@ -1386,16 +1188,13 @@ function bjStand() {
 }
 
 // 3. PLINKO
-const PLINKO_MULTS = [5, 1.5, 1.1, 0.2, 1.1, 1.5, 5];
 function loadPlinko(area) {
     area.innerHTML += `
         ${getBalanceHTML()}
-        <div class="plinko-board" id="plinko-board">
-            <div class="plinko-rail" id="plinko-rail"></div>
-            <div class="plinko-ball" id="plinko-ball"></div>
-            <div class="plinko-buckets">
-                ${PLINKO_MULTS.map(mult => `<div class="plinko-mult ${mult >= 3 ? 'hot' : ''}">${mult}x</div>`).join('')}
-            </div>
+        <div class="plinko-board">
+            <div class="plinko-mult">5x</div><div class="plinko-mult">1.5x</div><div class="plinko-mult">1.1x</div>
+            <div class="plinko-mult">0.2x</div>
+            <div class="plinko-mult">1.1x</div><div class="plinko-mult">1.5x</div><div class="plinko-mult">5x</div>
         </div>
         <div class="bet-controls" style="margin: 0 auto;">
             <input type="number" id="plinko-bet" class="bet-input" value="10" min="1">
@@ -1403,68 +1202,36 @@ function loadPlinko(area) {
             <button class="btn-danger action-btn" onclick="document.getElementById('plinko-bet').value=players[myId].cash; playPlinko(this)">ALL IN</button>
         </div>
     `;
-    renderPlinkoPegs();
-}
-function renderPlinkoPegs() {
-    const rail = document.getElementById('plinko-rail');
-    if(!rail) return;
-    rail.innerHTML = '';
-    const rows = 8;
-    for(let r = 0; r < rows; r++) {
-        const count = r + 3;
-        for(let c = 0; c < count; c++) {
-            const peg = document.createElement('span');
-            peg.className = 'plinko-peg';
-            peg.style.left = `${((c + 1) / (count + 1)) * 100}%`;
-            peg.style.top = `${10 + r * 10.6}%`;
-            rail.appendChild(peg);
-        }
-    }
-}
-function getPlinkoPath(targetSlot) {
-    const board = document.getElementById('plinko-board');
-    const rect = board.getBoundingClientRect();
-    const bucketWidth = (rect.width - 32) / PLINKO_MULTS.length;
-    let points = [{ x: rect.width / 2, y: 30 }];
-    for(let r = 0; r < 8; r++) {
-        const progress = (r + 1) / 9;
-        const idealX = 32 + targetSlot * bucketWidth + bucketWidth / 2;
-        const drift = (idealX - rect.width / 2) * progress;
-        const wobble = (Math.random() - 0.5) * (58 - r * 4);
-        points.push({ x: rect.width / 2 + drift + wobble, y: 72 + r * 34 });
-    }
-    points.push({ x: 32 + targetSlot * bucketWidth + bucketWidth / 2, y: rect.height - 56 });
-    return points;
 }
 function playPlinko(btn) {
     let bet = parseInt(document.getElementById('plinko-bet').value);
     if (!validateBet(bet)) { setMsg("Invalid bet", false); playSound('lose'); return; }
-    deductBet(bet); triggerCooldown(btn, 2100); playSound('tick');
+    deductBet(bet); triggerCooldown(btn, 1600); playSound('tick');
     let pos = 3;
-    for(let i=0; i<8; i++) pos += Math.random() > 0.5 ? 0.5 : -0.5;
-    pos = Math.max(0, Math.min(PLINKO_MULTS.length - 1, Math.round(pos)));
-    const multEls = document.querySelectorAll('.plinko-mult');
-    const ball = document.getElementById('plinko-ball');
-    const points = getPlinkoPath(pos);
-    multEls.forEach(el => el.classList.remove('active'));
-    ball.classList.add('dropping');
-    ball.animate(points.map(point => ({ transform: `translate(${point.x - 11}px, ${point.y - 11}px)` })), {
-        duration: 1850,
-        easing: 'cubic-bezier(.18,.7,.28,1)',
-        fill: 'forwards'
-    });
-    let tick = 0;
-    const tickInt = setInterval(() => { playSound('tick'); tick++; if(tick > 8) clearInterval(tickInt); }, 170);
+    for(let i=0; i<6; i++) { pos += Math.random() > 0.5 ? 0.5 : -0.5; }
+    pos = Math.round(pos); 
+    const mults = [5, 1.5, 1.1, 0.2, 1.1, 1.5, 5];
+    let multEls = document.querySelectorAll('.plinko-mult');
+    let curr = 0;
+    let animInt = setInterval(() => {
+        multEls.forEach(el => el.classList.remove('active'));
+        multEls[curr].classList.add('active');
+        playSound('tick');
+        curr++;
+        if(curr >= mults.length) curr = 0;
+    }, 100);
     setTimeout(() => {
+        clearInterval(animInt);
+        multEls.forEach(el => el.classList.remove('active'));
         multEls[pos].classList.add('active');
-        const win = Math.floor(bet * PLINKO_MULTS[pos]);
-        if (win > 0) {
-            if(PLINKO_MULTS[pos] >= 3) setMsg(getWinMsg(`Huge Win ${PLINKO_MULTS[pos]}x`, addWinnings(win, true)), true);
-            else setMsg(getWinMsg(`Landed ${PLINKO_MULTS[pos]}x`, addWinnings(win)), true);
-        } else { setMsg(`Landed ${PLINKO_MULTS[pos]}x. Lost €${bet}`, false); playSound('lose'); }
-        setTimeout(() => ball.classList.remove('dropping'), 700);
-    }, 1900);
+        let win = Math.floor(bet * mults[pos]);
+        if (win > 0) { 
+            if(mults[pos] >= 3) { setMsg(getWinMsg(`Huge Win ${mults[pos]}x`, addWinnings(win, true)), true); }
+            else { setMsg(getWinMsg(`Landed ${mults[pos]}x`, addWinnings(win)), true); }
+        } else { setMsg(`Landed ${mults[pos]}x. Lost €${bet}`, false); playSound('lose'); }
+    }, 1500);
 }
+
 // 4. TOWER
 let towerLevel = 0, towerBet = 0, towerActive = false, towerCols = 3;
 function loadTower(area) {
@@ -1540,21 +1307,11 @@ function towerCashout() {
 }
 
 // 5. ROULETTE
-let roulSelection = null, rouletteWheelRotation = 0, rouletteBallRotation = 0;
-const ROULETTE_ORDER = [0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
-const ROULETTE_REDS = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36];
+let roulSelection = null;
 function loadRoulette(area) {
     area.innerHTML += `
         ${getBalanceHTML()}
-        <div class="roulette-layout">
-            <div class="roulette-stage">
-                <div class="roulette-pointer"></div>
-                <div class="roulette-wheel" id="roulette-wheel"></div>
-                <div class="roulette-ball" id="roulette-ball"></div>
-                <div class="roulette-result" id="roulette-result">--</div>
-            </div>
-            <div class="roulette-board" id="roul-board"></div>
-        </div>
+        <div class="roulette-board" id="roul-board"></div>
         <div class="bet-controls" style="margin: 0 auto;">
             <input type="number" id="roul-bet" class="bet-input" value="10" min="1">
             <button class="btn-primary action-btn" onclick="playRoulette(this)">SPIN</button>
@@ -1562,90 +1319,51 @@ function loadRoulette(area) {
         </div>
     `;
     roulSelection = null;
-    renderRouletteWheel();
-    renderRouletteBets();
-}
-function getRouletteColor(num) {
-    if(num === 0) return 'green';
-    return ROULETTE_REDS.includes(num) ? 'red' : 'black';
-}
-function renderRouletteWheel() {
-    const wheel = document.getElementById('roulette-wheel');
-    if(!wheel) return;
-    const slice = 360 / ROULETTE_ORDER.length;
-    const gradient = ROULETTE_ORDER.map((num, i) => {
-        const color = num === 0 ? '#0f8f68' : (ROULETTE_REDS.includes(num) ? '#b93138' : '#11151c');
-        return `${color} ${i * slice}deg ${(i + 1) * slice}deg`;
-    }).join(', ');
-    wheel.style.setProperty('--wheel-gradient', `conic-gradient(${gradient})`);
-    wheel.innerHTML = ROULETTE_ORDER.map((num, i) => `<div class="roulette-pocket" style="transform: rotate(${i * slice + slice / 2}deg)"><span style="transform: rotate(${90}deg)">${num}</span></div>`).join('');
-}
-function renderRouletteBets() {
-    const board = document.getElementById('roul-board');
-    board.innerHTML = '';
-    const zero = document.createElement('div');
-    zero.className = 'roulette-tile roul-green';
-    zero.innerText = '0';
-    zero.onclick = () => roulSelect(zero, '0');
-    board.appendChild(zero);
+    let board = document.getElementById('roul-board');
+    let reds = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36];
+    let z = document.createElement('div'); z.className='roulette-tile roul-green'; z.innerText='0'; z.onclick=()=>roulSelect(z, '0'); board.appendChild(z);
     for(let i=1; i<=36; i++) {
-        const t = document.createElement('div');
-        t.className = 'roulette-tile ' + (ROULETTE_REDS.includes(i) ? 'roul-red' : 'roul-black');
-        t.innerText = i;
-        t.onclick = () => roulSelect(t, i);
-        board.appendChild(t);
+        let t = document.createElement('div'); t.className = 'roulette-tile ' + (reds.includes(i) ? 'roul-red' : 'roul-black'); t.innerText = i;
+        t.onclick=()=>roulSelect(t, i); board.appendChild(t);
     }
-    ['Red', 'Black', 'Even', 'Odd'].forEach(b => {
-        const t = document.createElement('div');
-        t.className = 'roulette-tile roul-green outside';
-        t.innerText = b;
-        t.onclick = () => roulSelect(t, b);
-        board.appendChild(t);
-    });
+    let btns = ['Red', 'Black', 'Even', 'Odd'];
+    btns.forEach(b => { let t = document.createElement('div'); t.className='roulette-tile roul-green'; t.innerText=b; t.style.width='64px'; t.onclick=()=>roulSelect(t, b); board.appendChild(t); });
 }
-function roulSelect(el, val) {
-    playSound('click');
-    document.querySelectorAll('.roulette-tile').forEach(t=>t.classList.remove('selected'));
-    el.classList.add('selected');
-    roulSelection = val;
-}
+function roulSelect(el, val) { playSound('click'); document.querySelectorAll('.roulette-tile').forEach(t=>t.classList.remove('selected')); el.classList.add('selected'); roulSelection = val; }
 function playRoulette(btn) {
     if(roulSelection === null) { setMsg("Select a bet", false); playSound('lose'); return; }
     let bet = parseInt(document.getElementById('roul-bet').value);
     if (!validateBet(bet)) { setMsg("Invalid bet", false); playSound('lose'); return; }
-    deductBet(bet); triggerCooldown(btn, 3400); playSound('spin');
-    const res = Math.floor(Math.random()*37);
-    const wheel = document.getElementById('roulette-wheel');
-    const ball = document.getElementById('roulette-ball');
-    const resultEl = document.getElementById('roulette-result');
-    const slice = 360 / ROULETTE_ORDER.length;
-    const index = ROULETTE_ORDER.indexOf(res);
-    const landingAngle = index * slice + slice / 2;
-    rouletteWheelRotation += 1440 + (360 - landingAngle);
-    rouletteBallRotation -= 1800 + landingAngle;
-    resultEl.innerText = '...';
-    document.querySelectorAll('.roulette-tile').forEach(t => t.classList.remove('hit'));
-    wheel.style.transform = `rotate(${rouletteWheelRotation}deg)`;
-    ball.style.transform = `rotate(${rouletteBallRotation}deg) translateY(-138px)`;
-    let ticks = 0;
-    const tickInt = setInterval(() => { playSound('tick'); ticks++; if(ticks > 16) clearInterval(tickInt); }, 140);
-    setTimeout(() => {
-        resultEl.innerText = res;
-        const hitTile = [...document.querySelectorAll('.roulette-tile')].find(t => t.innerText == String(res));
-        if(hitTile) hitTile.classList.add('hit');
-        let win = 0;
-        if (roulSelection == '0' && res == 0) win = bet * 36;
-        else if (roulSelection == res) win = bet * 36;
-        else if (roulSelection == 'Red' && ROULETTE_REDS.includes(res)) win = bet * 2;
-        else if (roulSelection == 'Black' && res!=0 && !ROULETTE_REDS.includes(res)) win = bet * 2;
-        else if (roulSelection == 'Even' && res!=0 && res%2==0) win = bet * 2;
-        else if (roulSelection == 'Odd' && res%2==1) win = bet * 2;
-        if (win > 0) {
-            if(win >= bet*10) setMsg(getWinMsg(`Jackpot ${res}`, addWinnings(win, true)), true);
-            else setMsg(getWinMsg(`Landed ${res}`, addWinnings(win)), true);
-        } else { setMsg(`Landed ${res}. Lost €${bet}`, false); playSound('lose'); }
-    }, 3300);
+    deductBet(bet); triggerCooldown(btn, 3000); playSound('spin');
+    let tiles = document.querySelectorAll('.roulette-tile');
+    let spins = 0;
+    let maxSpins = 30;
+    let spinInt = setInterval(() => {
+        tiles.forEach(t => t.classList.remove('spinning'));
+        let r = Math.floor(Math.random() * tiles.length);
+        tiles[r].classList.add('spinning');
+        if(spins % 2 === 0) playSound('tick');
+        spins++;
+        if (spins > maxSpins) { 
+            clearInterval(spinInt);
+            tiles.forEach(t => t.classList.remove('spinning'));
+            let res = Math.floor(Math.random()*37);
+            let reds = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36];
+            let win = 0;
+            if (roulSelection == '0' && res == 0) win = bet * 36;
+            else if (roulSelection == res) win = bet * 36;
+            else if (roulSelection == 'Red' && reds.includes(res)) win = bet * 2;
+            else if (roulSelection == 'Black' && res!=0 && !reds.includes(res)) win = bet * 2;
+            else if (roulSelection == 'Even' && res!=0 && res%2==0) win = bet * 2;
+            else if (roulSelection == 'Odd' && res%2==1) win = bet * 2;
+            if (win > 0) { 
+                if(win >= bet*10) { setMsg(getWinMsg(`Jackpot ${res}`, addWinnings(win, true)), true); }
+                else { setMsg(getWinMsg(`Landed ${res}`, addWinnings(win)), true); }
+            } else { setMsg(`Landed ${res}. Lost €${bet}`, false); playSound('lose'); }
+        }
+    }, 100);
 }
+
 // 6. BALATRO
 let pDeck = [], pHand = [], pHolds = [], pBet = 0, pDrawn = false;
 function loadBalatro(area) {
