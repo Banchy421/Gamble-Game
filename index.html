@@ -724,8 +724,10 @@ function startRound(round, games) {
             clearInterval(voteInterval); 
             if(isHost) {
                 // Auto-assign random game if not picked
-                Object.values(players).forEach(p => {
-                    if(p.connected && !p.pickedGame) p.pickedGame = games[Math.floor(Math.random() * games.length)];
+                Object.keys(players).forEach(id => {
+                    if(players[id].connected && !players[id].pickedGame) {
+                        players[id].pickedGame = games[Math.floor(Math.random() * games.length)];
+                    }
                 });
                 checkPicks(true);
             }
@@ -752,16 +754,20 @@ function startRound(round, games) {
 }
 
 function checkPicks(forceStart=false) {
-    let activePlayers = Object.values(players).filter(p=>p.connected);
-    if (activePlayers.every(p => p.pickedGame)) {
+    let activePlayerIds = Object.keys(players).filter(id => players[id].connected);
+    let allPicked = activePlayerIds.every(id => players[id].pickedGame);
+    
+    if (allPicked || forceStart) {
         clearInterval(voteInterval);
         let picks = {};
-        activePlayers.forEach(p => picks[p.id] = p.pickedGame);
-        broadcast({ type: 'start_play_phase', round: currentRound, games: picks });
-        startPlayPhase(currentRound, picks, picks[myId]);
-    } else if (forceStart) {
-        let picks = {};
-        activePlayers.forEach(p => picks[p.id] = p.pickedGame || ALL_GAMES[0]);
+        activePlayerIds.forEach(id => {
+            // Ensure everyone has a game assigned
+            if(!players[id].pickedGame) {
+                players[id].pickedGame = ALL_GAMES[Math.floor(Math.random() * ALL_GAMES.length)];
+            }
+            picks[id] = players[id].pickedGame;
+        });
+        
         broadcast({ type: 'start_play_phase', round: currentRound, games: picks });
         startPlayPhase(currentRound, picks, picks[myId]);
     }
