@@ -642,7 +642,6 @@ function updateLobbyUI() {
 
 function startMatch() {
     playSound('click');
-    // Changed to < 1 for testing alone
     if(Object.values(players).filter(p=>p.connected).length < 1) return alert("Need at least 1 player!");
     currentRound = 1;
     let gameChoices = [...ALL_GAMES].sort(() => 0.5 - Math.random()).slice(0, 3);
@@ -871,7 +870,7 @@ function updateLeaderboard() {
 }
 
 // --- GAMES ---
-function getBalanceHTML() { return `<div class="balance-display">Balance <span class="val">€${players[myId].cash}</span></div>`; }
+function getBalanceHTML() { return `<div class="balance-display" id="balance-display">Balance <span class="val">€${players[myId].cash}</span></div>`; }
 function updateGameBalance(isWin, isLoss) {
     const disp = document.getElementById('balance-display');
     if(disp) {
