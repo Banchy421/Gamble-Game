@@ -279,6 +279,7 @@
         .vote-btn { padding: 20px; text-align: left; font-weight: 600; font-size: 16px; background: var(--surface-2); border: 1px solid var(--border); color: var(--text); transition: all 0.2s; display: flex; align-items: center; gap: 12px; backdrop-filter: blur(6px); }
         .vote-btn:hover { background: var(--surface-3); border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
         .vote-btn .icon { font-size: 24px; }
+        .vote-btn .vote-count { margin-left: auto; background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px; font-size: 14px; }
 
         .stat-rank { font-size: 13px; color: var(--text-faint); width: 24px; font-weight: 600; }
         .stat-name { color: var(--text); font-size: 14px; font-weight: 500; flex: 1; padding-left: 12px; }
@@ -322,7 +323,7 @@
         .slot-slide-in { animation: slideIn 0.3s ease-out; }
         @keyframes slideIn { 0% { transform: translateX(-100px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
 
-        /* Cards - Smoother Animation */
+        /* Cards */
         .card-container { display: flex; justify-content: center; gap: 12px; margin: 0 auto 32px auto; flex-wrap: wrap; max-width: 440px; min-height: 90px; }
         .card { 
             width: 60px; height: 84px; background: rgba(255,255,255,0.9); color: #000; border-radius: 6px; 
@@ -343,7 +344,7 @@
             100% { transform: translateX(0) translateY(0) rotate(0); opacity: 1; } 
         }
         
-        /* Grids - Glassy Tiles */
+        /* Grids */
         .grid-tower { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 360px; margin: 0 auto 32px auto; }
         .grid-keno { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; width: 100%; max-width: 600px; margin: 0 auto 32px auto; }
         .grid-mines { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 420px; margin: 0 auto 32px auto; }
@@ -391,7 +392,7 @@
         .roulette-wheel { position: absolute; inset: 24px; border-radius: 50%; background: var(--wheel-gradient); border: 8px solid #c99535; transition: transform 3.2s cubic-bezier(.12,.72,.14,1); box-shadow: inset 0 0 0 2px rgba(255,255,255,0.18), inset 0 0 34px rgba(0,0,0,0.55); }
         .roulette-wheel::after { content: ""; position: absolute; inset: 31%; border-radius: 50%; background: radial-gradient(circle at 35% 32%, #f7dfa0, #a87525 55%, #4a2a12); border: 5px solid #f0c75e; box-shadow: 0 8px 22px rgba(0,0,0,0.42); }
         .roulette-pocket { position: absolute; left: 50%; top: 50%; width: 28px; height: 50%; margin-left: -14px; transform-origin: 50% 0; display: flex; justify-content: center; pointer-events: none; }
-        .roulette-pocket span { margin-top: 11px; color: #fff; font-size: 10px; font-weight: 800; text-shadow: 0 1px 3px #000; }
+        .roulette-pocket span { margin-top: 18px; color: #fff; font-size: 10px; font-weight: 800; text-shadow: 0 1px 3px #000; }
         .roulette-ball { position: absolute; left: 50%; top: 50%; z-index: 4; width: 14px; height: 14px; margin: -7px; border-radius: 50%; background: radial-gradient(circle at 34% 30%, #fff, #d8dde5 54%, #808996); box-shadow: 0 4px 12px rgba(0,0,0,0.52); transform: rotate(0deg) translateY(-138px); transition: transform 3.2s cubic-bezier(.12,.72,.14,1); }
         .roulette-pointer { position: absolute; left: 50%; top: -5px; z-index: 5; width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 28px solid var(--accent); transform: translateX(-50%); filter: drop-shadow(0 4px 6px rgba(0,0,0,0.45)); }
         .roulette-result { position: absolute; left: 50%; top: 50%; z-index: 6; transform: translate(-50%, -50%); font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 800; color: #fff; text-shadow: 0 2px 4px #000; }
@@ -548,7 +549,7 @@
                 </div>
                 <h3>Final Standings</h3>
                 <div id="final-leaderboard" class="list-container"></div>
-                <button onclick="location.reload()" class="btn-gold" style="margin-top: 24px;">New Match</button>
+                <button onclick="clearSessionAndReload()" class="btn-gold" style="margin-top: 24px;">New Match</button>
             </div>
         </main>
 
@@ -568,6 +569,22 @@
     </div>
 
 <script>
+// --- THEME & SESSION PERSISTENCE ---
+function setTheme(theme) {
+    document.body.setAttribute('data-theme', theme);
+    localStorage.setItem('gamble_theme', theme);
+    playSound('click');
+}
+(function loadTheme() {
+    const savedTheme = localStorage.getItem('gamble_theme') || 'midnight';
+    document.body.setAttribute('data-theme', savedTheme);
+})();
+
+function clearSessionAndReload() {
+    localStorage.removeItem('gamble_session');
+    location.reload();
+}
+
 // --- STATE ---
 let peer = null, connections = {}, myConnection = null, isHost = false;
 let myName = "", roomId = "", myId = "";
@@ -585,17 +602,13 @@ let gameInterval = null, breakInterval = null, voteInterval = null, syncInterval
 let leaderboardCache = {};
 let myGameChoice = null;
 let skipVotes = 0;
+let voteCounts = {};
 
 setInterval(() => {
     if (Object.keys(players).length === 0) return;
     updateLeaderboard();
     if (isHost) broadcast({ type: 'state_sync', players: players });
 }, 500);
-
-function setTheme(theme) {
-    document.body.setAttribute('data-theme', theme);
-    playSound('click');
-}
 
 // --- AUDIO ENGINE (Enhanced Unique Sounds) ---
 let audioCtx = null;
@@ -638,7 +651,6 @@ function playNoise(duration, vol=0.1, delay=0, filterFreq=null) {
 function playSound(type) {
     initAudio();
     switch(type) {
-        // UI
         case 'click': playTone(1200, 0.02, 'square', 0.04); break;
         case 'hover': playTone(1600, 0.01, 'sine', 0.02); break;
         case 'tick': playTone(1000, 0.02, 'square', 0.02); break;
@@ -649,91 +661,25 @@ function playSound(type) {
             [659, 784, 988, 1318].forEach((f,i)=>playTone(f, 0.3, 'square', 0.1, i*0.15 + 0.2)); 
             break;
         case 'lose': playTone(200, 0.3, 'sawtooth', 0.08); playTone(100, 0.4, 'sawtooth', 0.08, 0.1); break;
-        
-        // Slots
-        case 'slots_spin': 
-            for(let i=0; i<5; i++) playTone(300 + i*50, 0.2, 'sawtooth', 0.03, i*0.05);
-            break;
-        case 'slots_stop': 
-            playTone(800, 0.05, 'square', 0.06); 
-            playNoise(0.1, 0.03);
-            break;
-            
-        // Blackjack
-        case 'cards_deal':
-            playNoise(0.1, 0.04, 0, 2000);
-            playTone(600, 0.03, 'sawtooth', 0.02);
-            break;
-        case 'cards_flip':
-            playNoise(0.15, 0.05, 0, 1500);
-            break;
-            
-        // Plinko
-        case 'plinko_drop':
-            playTone(1200, 0.1, 'sine', 0.05);
-            playTone(900, 0.1, 'sine', 0.04, 0.05);
-            break;
-        case 'plinko_bounce':
-            playTone(2000, 0.02, 'sine', 0.04);
-            break;
-            
-        // Tower
-        case 'tower_pick':
-            playTone(800, 0.05, 'triangle', 0.05);
-            break;
-        case 'tower_bomb':
-            playNoise(0.5, 0.2);
-            playTone(60, 0.5, 'sawtooth', 0.15);
-            break;
-            
-        // Roulette
-        case 'roulette_spin':
-            playTone(120, 2.5, 'sawtooth', 0.03);
-            break;
-        case 'roulette_ball':
-            for(let i=0; i<10; i++) playTone(1500, 0.02, 'square', 0.03, i*0.1);
-            break;
-        case 'roulette_stop':
-            playTone(1000, 0.2, 'triangle', 0.1);
-            break;
-            
-        // Keno
-        case 'keno_pick':
-            playTone(1500, 0.05, 'square', 0.04);
-            break;
-        case 'keno_draw':
-            playTone(400, 0.5, 'sine', 0.05);
-            break;
-            
-        // Mines
-        case 'mines_pick':
-            playTone(1000, 0.05, 'sine', 0.05);
-            break;
-        case 'mines_bomb':
-            playNoise(0.5, 0.25);
-            playTone(50, 0.6, 'sawtooth', 0.15);
-            break;
-            
-        // Crash
-        case 'crash_tick':
-            playTone(1000, 0.05, 'square', 0.03);
-            break;
-        case 'crash_crash':
-            playNoise(0.6, 0.3);
-            playTone(80, 0.6, 'sawtooth', 0.2);
-            break;
-            
-        // Double
-        case 'coin_flip':
-            playTone(2000, 0.1, 'sine', 0.06);
-            playTone(1500, 0.1, 'sine', 0.05, 0.05);
-            break;
-        case 'coin_land':
-            playTone(800, 0.1, 'triangle', 0.08);
-            playNoise(0.1, 0.05);
-            break;
-            
-        default: break;
+        case 'slots_spin': for(let i=0; i<5; i++) playTone(300 + i*50, 0.2, 'sawtooth', 0.03, i*0.05); break;
+        case 'slots_stop': playTone(800, 0.05, 'square', 0.06); playNoise(0.1, 0.03); break;
+        case 'cards_deal': playNoise(0.1, 0.04, 0, 2000); playTone(600, 0.03, 'sawtooth', 0.02); break;
+        case 'cards_flip': playNoise(0.15, 0.05, 0, 1500); break;
+        case 'plinko_drop': playTone(1200, 0.1, 'sine', 0.05); playTone(900, 0.1, 'sine', 0.04, 0.05); break;
+        case 'plinko_bounce': playTone(2000, 0.02, 'sine', 0.04); break;
+        case 'tower_pick': playTone(800, 0.05, 'triangle', 0.05); break;
+        case 'tower_bomb': playNoise(0.5, 0.2); playTone(60, 0.5, 'sawtooth', 0.15); break;
+        case 'roulette_spin': playTone(120, 2.5, 'sawtooth', 0.03); break;
+        case 'roulette_ball': for(let i=0; i<10; i++) playTone(1500, 0.02, 'square', 0.03, i*0.1); break;
+        case 'roulette_stop': playTone(1000, 0.2, 'triangle', 0.1); break;
+        case 'keno_pick': playTone(1500, 0.05, 'square', 0.04); break;
+        case 'keno_draw': playTone(400, 0.5, 'sine', 0.05); break;
+        case 'mines_pick': playTone(1000, 0.05, 'sine', 0.05); break;
+        case 'mines_bomb': playNoise(0.5, 0.25); playTone(50, 0.6, 'sawtooth', 0.15); break;
+        case 'crash_tick': playTone(1000, 0.05, 'square', 0.03); break;
+        case 'crash_crash': playNoise(0.6, 0.3); playTone(80, 0.6, 'sawtooth', 0.2); break;
+        case 'coin_flip': playTone(2000, 0.1, 'sine', 0.06); playTone(1500, 0.1, 'sine', 0.05, 0.05); break;
+        case 'coin_land': playTone(800, 0.1, 'triangle', 0.08); playNoise(0.1, 0.05); break;
     }
 }
 
@@ -769,7 +715,7 @@ function navClick(page) {
     playSound('click');
     if (page === 'Lobby') {
         if (confirm('Return to main menu? This will disconnect you from the current game.')) {
-            location.reload();
+            clearSessionAndReload();
         }
     } else {
         let content = '';
@@ -827,21 +773,9 @@ function hostGame() {
     isHost = true;
     maxPlayers = parseInt(document.getElementById('max-players-select').value);
     roomId = Math.random().toString(36).substr(2, 4).toUpperCase();
-    peer = new Peer(roomId);
-    peer.on('open', (id) => {
-        myId = id;
-        players[myId] = { name: myName, cash: 100, connected: true };
-        showLobby();
-    });
-    peer.on('connection', (conn) => {
-        if (Object.values(players).filter(p=>p.connected).length >= maxPlayers) {
-            conn.on('open', () => { conn.send({ type: 'lobby_full' }); conn.close(); });
-            return;
-        }
-        conn.on('open', () => { connections[conn.peer] = conn; });
-        conn.on('data', (data) => handleData(data, conn.peer));
-        conn.on('close', () => { if(players[conn.peer]) { players[conn.peer].connected = false; updateLobbyUI(); } });
-    });
+    
+    localStorage.setItem('gamble_session', JSON.stringify({ myName, roomId, isHost, maxPlayers }));
+    initPeer(true);
 }
 
 function joinGame() {
@@ -849,18 +783,61 @@ function joinGame() {
     myName = document.getElementById('name-input').value.trim() || "Player";
     roomId = document.getElementById('room-code-input').value.trim().toUpperCase();
     if(!roomId) return alert("Enter a code!");
-    peer = new Peer();
-    peer.on('open', (id) => {
-        myId = id;
-        myConnection = peer.connect(roomId, {reliable: true});
-        myConnection.on('open', () => {
-            document.getElementById('menu-screen').classList.add('hidden');
-            document.getElementById('lobby-screen').classList.remove('hidden');
-            document.getElementById('lobby-code').innerText = "Connecting...";
-            myConnection.send({ type: 'join', name: myName });
+    isHost = false;
+    
+    localStorage.setItem('gamble_session', JSON.stringify({ myName, roomId, isHost }));
+    initPeer(false);
+}
+
+function initPeer(isHostPeer) {
+    document.getElementById('menu-screen').classList.add('hidden');
+    document.getElementById('lobby-screen').classList.remove('hidden');
+    document.getElementById('lobby-code').innerText = "Connecting...";
+    
+    if (isHostPeer) {
+        peer = new Peer(roomId);
+        peer.on('open', (id) => {
+            myId = id;
+            players[myId] = { name: myName, cash: 100, connected: true };
+            showLobby();
         });
-        myConnection.on('data', (data) => handleData(data, roomId));
-    });
+        peer.on('error', (err) => {
+            console.error("Peer error:", err);
+            if(err.type === 'unavailable-id') {
+                alert("Room already exists or session conflict. Creating a new session.");
+                localStorage.removeItem('gamble_session');
+                location.reload();
+            }
+        });
+        peer.on('connection', (conn) => {
+            if (Object.values(players).filter(p=>p.connected).length >= maxPlayers) {
+                conn.on('open', () => { conn.send({ type: 'lobby_full' }); conn.close(); });
+                return;
+            }
+            conn.on('open', () => { connections[conn.peer] = conn; });
+            conn.on('data', (data) => handleData(data, conn.peer));
+            conn.on('close', () => { if(players[conn.peer]) { players[conn.peer].connected = false; updateLobbyUI(); } });
+        });
+    } else {
+        peer = new Peer();
+        peer.on('open', (id) => {
+            myId = id;
+            myConnection = peer.connect(roomId, {reliable: true});
+            myConnection.on('open', () => {
+                myConnection.send({ type: 'join', name: myName });
+            });
+            myConnection.on('data', (data) => handleData(data, roomId));
+            myConnection.on('close', () => {
+                alert("Host disconnected or session lost.");
+                clearSessionAndReload();
+            });
+        });
+        peer.on('error', (err) => {
+            console.error("Peer error:", err);
+            alert("Failed to connect to room. It may no longer exist.");
+            clearSessionAndReload();
+        });
+    }
 }
 
 function broadcast(data) {
@@ -874,11 +851,20 @@ function handleData(data, senderId) {
             players[senderId] = { name: data.name, cash: 100, connected: true };
             updateLobbyUI();
             broadcast({ type: 'lobby_update', players: players, maxPlayers: maxPlayers });
+            // If game in progress, send them current state so they don't get stuck
+            if(currentRound > 0 && document.getElementById('game-screen') && !document.getElementById('game-screen').classList.contains('hidden')) {
+                if (players[senderId]) {
+                    players[senderId].pickedGame = ALL_GAMES[Math.floor(Math.random() * ALL_GAMES.length)];
+                    broadcast({ type: 'start_play_phase', round: currentRound, games: { [senderId]: players[senderId].pickedGame } });
+                }
+            }
         } else if (data.type === 'pick_vote') {
             if(players[senderId]) players[senderId].pickedGame = data.game;
             checkPicks();
         } else if (data.type === 'vote') {
             if(players[senderId]) players[senderId].voted = data.game;
+            voteCounts[data.game] = (voteCounts[data.game] || 0) + 1;
+            broadcast({ type: 'vote_tally', counts: voteCounts });
             checkVotes(data.games);
         } else if (data.type === 'bet_update') {
             if(players[senderId]) players[senderId].cash = data.cash;
@@ -898,10 +884,15 @@ function handleData(data, senderId) {
             }
         }
     } else {
-        if (data.type === 'lobby_full') { alert("Lobby is full."); location.reload(); }
+        if (data.type === 'lobby_full') { alert("Lobby is full."); clearSessionAndReload(); }
         else if (data.type === 'lobby_update') { players = data.players; maxPlayers = data.maxPlayers; updateLobbyUI(); }
+        else if (data.type === 'vote_tally') { voteCounts = data.counts; updateVoteUI(); }
         else if (data.type === 'start_match') { players = data.players; startRound(data.round, data.games); }
-        else if (data.type === 'start_play_phase') { startPlayPhase(data.round, data.games, data.games[myId]); }
+        else if (data.type === 'start_play_phase') { 
+            // Handle case where we just joined and host sends only our game
+            if (data.games[myId]) startPlayPhase(data.round, { [myId]: data.games[myId] }, data.games[myId]);
+            else startPlayPhase(data.round, data.games, data.games[myId]); 
+        }
         else if (data.type === 'state_sync') { 
             for(let id in data.players) {
                 if (id !== myId) {
@@ -955,13 +946,14 @@ function startMatch() {
 }
 
 function startRound(round, games) {
+    voteCounts = {};
     document.getElementById('lobby-screen').classList.add('hidden');
     document.getElementById('break-screen').classList.add('hidden');
     document.getElementById('voting-screen').classList.remove('hidden');
-    document.getElementById('round-title').innerText = `Round ${round} Selection`;
+    document.getElementById('round-title').innerText = round === 3 ? "Final Round Vote" : `Round ${round} Selection`;
     document.getElementById('voting-timer').innerText = "15";
     document.getElementById('voting-timer').classList.remove('timer-warning');
-    document.getElementById('vote-instructions').innerText = "Select a game to start playing.";
+    document.getElementById('vote-instructions').innerText = round === 3 ? "Vote for the game. Majority wins. Everyone plays it!" : "Select a game to start playing.";
     myGameChoice = null;
     skipVotes = 0;
     if(players[myId]) players[myId].pickedGame = null;
@@ -978,33 +970,57 @@ function startRound(round, games) {
         if (timeLeft <= 0) { 
             clearInterval(voteInterval); 
             if(isHost) {
-                Object.keys(players).forEach(id => {
-                    if(players[id].connected && !players[id].pickedGame) {
-                        players[id].pickedGame = games[Math.floor(Math.random() * games.length)];
-                    }
-                });
-                checkPicks(true);
+                if (round === 3) {
+                    tallyVotes(games);
+                } else {
+                    Object.keys(players).forEach(id => {
+                        if(players[id].connected && !players[id].pickedGame) {
+                            players[id].pickedGame = games[Math.floor(Math.random() * games.length)];
+                        }
+                    });
+                    checkPicks(true);
+                }
             }
         }
     }, 1000);
 
     games.forEach(game => {
         let btn = document.createElement('button');
-        btn.innerHTML = `<span class="icon">${GAME_ICONS[game]}</span> ${game}`;
+        btn.innerHTML = `<span class="icon">${GAME_ICONS[game]}</span> ${game} <span class="vote-count" id="vote-count-${game}">0</span>`;
         btn.className = 'vote-btn';
+        btn.id = `vote-btn-${game}`;
         btn.onclick = () => {
             playSound('click');
             if(myGameChoice) return;
             myGameChoice = game;
-            document.getElementById('vote-instructions').innerText = `Locked in ${game}. Waiting for other players...`;
-            broadcast({ type: 'pick_vote', game: game });
-            if(isHost) {
-                if(players[myId]) players[myId].pickedGame = game;
-                checkPicks();
+            
+            if (round === 3) {
+                document.getElementById('vote-instructions').innerText = `Voted for ${game}. Waiting for nodes...`;
+                broadcast({ type: 'vote', game: game, games: games });
+                if(isHost) {
+                    if(players[myId]) players[myId].voted = game;
+                    voteCounts[game] = (voteCounts[game] || 0) + 1;
+                    updateVoteUI();
+                    checkVotes(games);
+                }
+            } else {
+                document.getElementById('vote-instructions').innerText = `Locked in ${game}. Waiting for other players...`;
+                broadcast({ type: 'pick_vote', game: game });
+                if(isHost) {
+                    if(players[myId]) players[myId].pickedGame = game;
+                    checkPicks();
+                }
             }
         };
         voteContainer.appendChild(btn);
     });
+}
+
+function updateVoteUI() {
+    for(let game in voteCounts) {
+        let el = document.getElementById(`vote-count-${game}`);
+        if(el) el.innerText = voteCounts[game];
+    }
 }
 
 function checkPicks(forceStart=false) {
@@ -1067,36 +1083,6 @@ function checkSkip() {
     }
 }
 
-function startRound3Vote(games) {
-    document.getElementById('round-title').innerText = "Final Round Vote";
-    document.getElementById('vote-instructions').innerText = "Vote for the final game. Majority wins. Tie = Random.";
-    let voteContainer = document.getElementById('vote-options');
-    voteContainer.innerHTML = '';
-    let timeLeft = 15;
-    document.getElementById('voting-timer').innerText = timeLeft;
-    document.getElementById('voting-timer').classList.remove('timer-warning');
-    if (voteInterval) clearInterval(voteInterval);
-    voteInterval = setInterval(() => {
-        timeLeft--;
-        document.getElementById('voting-timer').innerText = timeLeft;
-        if (timeLeft <= 5) { playSound('tick'); document.getElementById('voting-timer').classList.add('timer-warning'); }
-        if (timeLeft <= 0) { clearInterval(voteInterval); if(isHost) tallyVotes(games); }
-    }, 1000);
-    games.forEach(game => {
-        let btn = document.createElement('button');
-        btn.innerHTML = `<span class="icon">${GAME_ICONS[game]}</span> ${game}`;
-        btn.className = 'vote-btn';
-        btn.onclick = () => {
-            playSound('click');
-            myGameChoice = game;
-            broadcast({ type: 'vote', game: game, games: games });
-            voteContainer.innerHTML = `<p style="color: var(--text-dim); text-align: center;">Voted for ${game}. Waiting for nodes...</p>`;
-            if(isHost) checkVotes(games);
-        };
-        voteContainer.appendChild(btn);
-    });
-}
-
 function checkVotes(games) { 
     let activePlayers = Object.values(players).filter(p=>p.connected); 
     if (activePlayers.every(p => p.voted)) { 
@@ -1110,6 +1096,7 @@ function tallyVotes(games) {
     activePlayers.forEach(p => { if(p.voted) tally[p.voted] = (tally[p.voted] || 0) + 1; });
     let maxVotes = Math.max(...Object.values(tally));
     let topGames = Object.keys(tally).filter(g => tally[g] === maxVotes);
+    // Tie = 50/50 random choice among topGames
     let chosenGame = topGames[Math.floor(Math.random() * topGames.length)];
     broadcast({ type: 'vote_result', game: chosenGame });
     startRound3Game(chosenGame);
@@ -1452,16 +1439,20 @@ function renderPlinkoPegs() {
 function getPlinkoPath(targetSlot) {
     const board = document.getElementById('plinko-board');
     const rect = board.getBoundingClientRect();
-    const bucketWidth = (rect.width - 32) / PLINKO_MULTS.length;
-    let points = [{ x: rect.width / 2, y: 30 }];
-    for(let r = 0; r < 8; r++) {
-        const progress = (r + 1) / 9;
-        const idealX = 32 + targetSlot * bucketWidth + bucketWidth / 2;
-        const drift = (idealX - rect.width / 2) * progress;
-        const wobble = (Math.random() - 0.5) * (58 - r * 4);
-        points.push({ x: rect.width / 2 + drift + wobble, y: 72 + r * 34 });
+    const bucketWidth = (rect.width - 32 - 6*6) / 7; // 7 buckets, 6 gaps of 6px
+    const targetX = 16 + targetSlot * (bucketWidth + 6) + bucketWidth / 2;
+    const startX = rect.width / 2;
+    
+    let points = [{ x: startX, y: 30 }];
+    const rows = 8;
+    for(let r = 0; r < rows; r++) {
+        const progress = (r + 1) / (rows + 1);
+        let x = startX + (targetX - startX) * progress;
+        x += (Math.random() - 0.5) * 30; // small horizontal bounce
+        let y = 40 + r * 36;
+        points.push({ x, y });
     }
-    points.push({ x: 32 + targetSlot * bucketWidth + bucketWidth / 2, y: rect.height - 56 });
+    points.push({ x: targetX, y: rect.height - 60 });
     return points;
 }
 function playPlinko(btn) {
@@ -2077,6 +2068,24 @@ document.addEventListener('mouseover', (e) => {
             playSound('hover');
             hoverTimeout = setTimeout(() => { hoverTimeout = null; }, 50);
         }
+    }
+});
+
+// --- AUTO RECONNECT ON REFRESH ---
+window.addEventListener('load', () => {
+    const session = JSON.parse(localStorage.getItem('gamble_session') || 'null');
+    if (session && session.roomId && session.myName) {
+        myName = session.myName;
+        roomId = session.roomId;
+        isHost = session.isHost;
+        maxPlayers = session.maxPlayers || 4;
+        
+        document.getElementById('menu-screen').classList.add('hidden');
+        document.getElementById('lobby-screen').classList.remove('hidden');
+        document.getElementById('lobby-code').innerText = "Reconnecting...";
+        
+        // Slight delay to ensure PeerJS script is fully ready
+        setTimeout(() => initPeer(isHost), 100);
     }
 });
 </script>
