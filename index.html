@@ -165,11 +165,13 @@
         .game-header { margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
         .timer-val { font-family: 'Space Grotesk', sans-serif; font-size: 64px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; line-height: 1; letter-spacing: -0.03em; text-align: center; }
         .timer-warning { color: var(--danger); }
-        .game-subtitle { font-size: 14px; color: var(--text-dim); margin-top: 12px; font-weight: 500; text-align: center; }
+        .game-subtitle { font-size: 14px; color: var(--text-dim); margin-top: 12px; font-weight: 500; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .game-subtitle .icon { font-size: 20px; }
 
         .vote-grid { display: grid; grid-template-columns: 1fr; gap: 12px; max-width: 400px; margin: 0 auto; }
-        .vote-btn { padding: 20px; text-align: left; font-weight: 600; font-size: 16px; background: var(--surface); border: 1px solid var(--border); color: var(--text); transition: all 0.2s; }
+        .vote-btn { padding: 20px; text-align: left; font-weight: 600; font-size: 16px; background: var(--surface); border: 1px solid var(--border); color: var(--text); transition: all 0.2s; display: flex; align-items: center; gap: 12px; }
         .vote-btn:hover { background: var(--surface-2); border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+        .vote-btn .icon { font-size: 24px; }
 
         .stat-rank { font-size: 13px; color: var(--text-faint); width: 24px; font-weight: 600; }
         .stat-name { color: var(--text); font-size: 14px; font-weight: 500; flex: 1; padding-left: 12px; }
@@ -224,7 +226,7 @@
         .grid-tower { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 240px; margin: 0 auto 32px auto; }
         .grid-keno { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; width: 100%; max-width: 600px; margin: 0 auto 32px auto; }
         .grid-mines { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; max-width: 280px; margin: 0 auto 32px auto; }
-        .tile { background: var(--surface); border: 1px solid var(--border); padding: 16px 0; text-align: center; cursor: pointer; font-weight: 600; font-size: 14px; color: var(--text-dim); transition: all 0.2s; border-radius: 4px; }
+        .tile { background: var(--surface); border: 1px solid var(--border); padding: 16px 0; text-align: center; cursor: pointer; font-weight: 600; font-size: 14px; color: var(--text-dim); transition: all 0.2s; border-radius: 4px; min-height: 50px; display: flex; align-items: center; justify-content: center; }
         .tile:hover { background: var(--surface-2); color: var(--text); }
         .tile.safe { background: #4ADE80; color: #000; border-color: #4ADE80; }
         .tile.bomb { background: var(--danger); color: #fff; border-color: var(--danger); }
@@ -237,7 +239,7 @@
         .tile.selected { background: var(--accent); color: #000; border-color: var(--accent); }
         .tile.hit { background: #4ADE80; color: #000; border-color: #4ADE80; }
         .tile.disabled { pointer-events: none; opacity: 0.2; }
-        .mine-tile { height: 50px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .mine-tile { font-size: 24px; }
 
         /* Plinko */
         .plinko-board { display: flex; gap: 8px; margin: 0 auto 32px auto; width: 100%; max-width: 440px; }
@@ -440,6 +442,11 @@ let myName = "", roomId = "", myId = "";
 let players = {}; 
 let maxPlayers = 4;
 const ALL_GAMES = ['Slots', 'Blackjack', 'Plinko', 'Tower', 'Roulette', 'Balatro', 'Keno', 'Mines', 'Crash', 'Double'];
+const GAME_ICONS = {
+    'Slots': '🎰', 'Blackjack': '🃏', 'Plinko': '⬇️', 'Tower': '🗼', 
+    'Roulette': '🎡', 'Balatro': '🎴', 'Keno': '🔢', 'Mines': '💣', 
+    'Crash': '🚀', 'Double': '🪙'
+};
 let currentRound = 1;
 const roundTimers = [0, 120, 90, 60]; 
 let gameInterval = null, breakInterval = null, voteInterval = null;
@@ -639,7 +646,7 @@ function handleData(data, senderId) {
         if (data.type === 'lobby_full') { alert("Lobby is full."); location.reload(); }
         else if (data.type === 'lobby_update') { players = data.players; maxPlayers = data.maxPlayers; updateLobbyUI(); }
         else if (data.type === 'start_match') { players = data.players; startRound(data.round, data.games); }
-        else if (data.type === 'start_play_phase') { startPlayPhase(data.round, data.games, data.myGame); }
+        else if (data.type === 'start_play_phase') { startPlayPhase(data.round, data.games, data.games[myId]); }
         else if (data.type === 'state_sync') { 
             for(let id in data.players) {
                 if (id !== myId) {
@@ -727,7 +734,8 @@ function startRound(round, games) {
 
     games.forEach(game => {
         let btn = document.createElement('button');
-        btn.innerText = game; btn.className = 'vote-btn';
+        btn.innerHTML = `<span class="icon">${GAME_ICONS[game]}</span> ${game}`;
+        btn.className = 'vote-btn';
         btn.onclick = () => {
             playSound('click');
             if(myGameChoice) return;
@@ -760,9 +768,10 @@ function checkPicks(forceStart=false) {
 }
 
 function startPlayPhase(round, games, myGame) {
+    if (voteInterval) clearInterval(voteInterval);
     document.getElementById('voting-screen').classList.add('hidden');
     document.getElementById('game-screen').classList.remove('hidden');
-    document.getElementById('current-game-title').innerText = `Playing: ${myGame}`;
+    document.getElementById('current-game-title').innerHTML = `<span class="icon">${GAME_ICONS[myGame]}</span> Playing: ${myGame}`;
     
     const skipBtn = document.getElementById('skip-round-btn');
     if (skipBtn) { skipBtn.classList.remove('hidden'); skipBtn.disabled = false; skipBtn.innerText = 'Skip Round'; }
@@ -793,7 +802,10 @@ function skipRound() {
 function checkSkip() {
     let activePlayers = Object.values(players).filter(p=>p.connected).length;
     broadcast({ type: 'skip_update', count: skipVotes, total: activePlayers });
-    if (skipVotes >= activePlayers) { clearInterval(gameInterval); endRound(); }
+    if (skipVotes >= activePlayers) { 
+        if (gameInterval) clearInterval(gameInterval);
+        endRound(); 
+    }
 }
 
 function startRound3Vote(games) {
@@ -813,7 +825,8 @@ function startRound3Vote(games) {
     }, 1000);
     games.forEach(game => {
         let btn = document.createElement('button');
-        btn.innerText = game; btn.className = 'vote-btn';
+        btn.innerHTML = `<span class="icon">${GAME_ICONS[game]}</span> ${game}`;
+        btn.className = 'vote-btn';
         btn.onclick = () => {
             playSound('click');
             myGameChoice = game;
@@ -844,11 +857,12 @@ function tallyVotes(games) {
 }
 
 function startRound3Game(game) {
+    if (voteInterval) clearInterval(voteInterval);
     document.getElementById('voting-screen').classList.add('hidden');
     document.getElementById('game-screen').classList.remove('hidden');
     let btn = document.getElementById('skip-round-btn');
     if(btn) { btn.classList.remove('hidden'); btn.disabled = false; btn.innerText = 'Skip Round'; }
-    document.getElementById('current-game-title').innerText = `Playing: ${game}`;
+    document.getElementById('current-game-title').innerHTML = `<span class="icon">${GAME_ICONS[game]}</span> Playing: ${game}`;
     let timeLeft = 60;
     document.getElementById('game-timer').innerText = timeLeft;
     document.getElementById('game-timer').classList.remove('timer-warning');
@@ -868,6 +882,8 @@ function endRound() {
     let btn = document.getElementById('skip-round-btn');
     if(btn) { btn.classList.add('hidden'); btn.disabled = false; }
     
+    if (gameInterval) clearInterval(gameInterval);
+    
     if (isHost) {
         Object.values(players).forEach(p => { p.winBoost = 0; p.winPenalty = false; p.votedSkip = false; p.pickedGame = null; p.voted = null; });
         let sortedPlayers = Object.entries(players).filter(p=>p[1].connected).sort((a, b) => b[1].cash - a[1].cash);
@@ -880,7 +896,15 @@ function endRound() {
 }
 
 function showBreak(results, boostedPlayerId, nextRound) {
+    // Clear ALL intervals to prevent lingering timers (Fixes Mobile Skip Bug)
+    if (gameInterval) clearInterval(gameInterval);
+    if (voteInterval) clearInterval(voteInterval);
+    if (breakInterval) clearInterval(breakInterval);
+    
     document.getElementById('break-screen').classList.remove('hidden');
+    document.getElementById('game-screen').classList.add('hidden');
+    document.getElementById('voting-screen').classList.add('hidden');
+    
     let boostPct = nextRound === 2 ? "10%" : "15%";
     document.getElementById('break-results').innerHTML = results.map((p, i) => `<div class="list-item"><span><span class="stat-rank">${i+1}</span>${p[1].name}</span> <span class="tabular" style="color: var(--accent); font-weight: 700;">€${p[1].cash}</span></div>`).join('');
     if(players[boostedPlayerId]) document.getElementById('boost-text').innerText = `${players[boostedPlayerId].name} receives a ${boostPct} win boost next round.`;
@@ -889,7 +913,6 @@ function showBreak(results, boostedPlayerId, nextRound) {
     else document.getElementById('bailout-ui').classList.add('hidden');
     let timeLeft = 15;
     document.getElementById('next-round-timer').innerText = `Next cycle in ${timeLeft}s`;
-    if (breakInterval) clearInterval(breakInterval);
     breakInterval = setInterval(() => {
         timeLeft--;
         document.getElementById('next-round-timer').innerText = `Next cycle in ${timeLeft}s`;
@@ -915,6 +938,11 @@ function chooseBailout(amount, penalty) {
 }
 
 function showGameOver(finalPlayers) {
+    // Clear ALL intervals
+    if (gameInterval) clearInterval(gameInterval);
+    if (voteInterval) clearInterval(voteInterval);
+    if (breakInterval) clearInterval(breakInterval);
+    
     document.getElementById('break-screen').classList.add('hidden');
     document.getElementById('game-screen').classList.add('hidden');
     document.getElementById('gameover-screen').classList.remove('hidden');
