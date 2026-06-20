@@ -222,11 +222,11 @@
         .card.red { color: var(--danger); }
         .card.hold { box-shadow: 0 0 0 2px var(--accent), 0 4px 12px rgba(0,0,0,0.3); transform: translateY(-2px); }
         
-        /* Grids - Centered */
-        .grid-tower { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 240px; margin: 0 auto 32px auto; }
-        .grid-keno { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; width: 100%; max-width: 600px; margin: 0 auto 32px auto; }
-        .grid-mines { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; max-width: 280px; margin: 0 auto 32px auto; }
-        .tile { background: var(--surface); border: 1px solid var(--border); padding: 16px 0; text-align: center; cursor: pointer; font-weight: 600; font-size: 14px; color: var(--text-dim); transition: all 0.2s; border-radius: 4px; min-height: 50px; display: flex; align-items: center; justify-content: center; }
+        /* Grids - Bigger, wider, perfectly square (thick) */
+        .grid-tower { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 360px; margin: 0 auto 32px auto; }
+        .grid-keno { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; width: 100%; max-width: 600px; margin: 0 auto 32px auto; }
+        .grid-mines { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 420px; margin: 0 auto 32px auto; }
+        .tile { background: var(--surface); border: 1px solid var(--border); padding: 0; text-align: center; cursor: pointer; font-weight: 600; font-size: 20px; color: var(--text-dim); transition: all 0.2s; border-radius: 8px; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; }
         .tile:hover { background: var(--surface-2); color: var(--text); }
         .tile.safe { background: #4ADE80; color: #000; border-color: #4ADE80; }
         .tile.bomb { background: var(--danger); color: #fff; border-color: var(--danger); }
@@ -239,7 +239,7 @@
         .tile.selected { background: var(--accent); color: #000; border-color: var(--accent); }
         .tile.hit { background: #4ADE80; color: #000; border-color: #4ADE80; }
         .tile.disabled { pointer-events: none; opacity: 0.2; }
-        .mine-tile { font-size: 24px; }
+        .mine-tile { font-size: 28px; }
 
         /* Plinko */
         .plinko-board { display: flex; gap: 8px; margin: 0 auto 32px auto; width: 100%; max-width: 440px; }
@@ -1475,7 +1475,7 @@ function loadMines(area) {
     area.innerHTML += `
         ${getBalanceHTML()}
         <div id="mines-grid" class="grid-mines"></div>
-        <div class="bet-controls" id="mines-bet-ui" style="margin: 0 auto; flex-wrap: wrap; max-width: 320px;">
+        <div class="bet-controls" id="mines-bet-ui" style="margin: 0 auto; flex-wrap: wrap; max-width: 400px;">
             <input type="number" id="mines-bet" class="bet-input" value="10" min="1">
             <select id="mines-count" class="bet-input" style="width: 100px; margin:0;">
                 <option value="1">1 Mine</option>
